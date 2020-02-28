@@ -1,0 +1,12 @@
+*~
+.*.sw?
+.DS_Store
+._*
+.ackrc
+.svn
+.sw[po]
+Icon?
+coverage/
+tags
+tmp/
+.root
