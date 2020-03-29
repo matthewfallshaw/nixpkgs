@@ -35,7 +35,6 @@ self: super: {
       jq                               # command line JSON processor
       moreutils
       multimarkdown                    # extended markdown derivative
-      parallel                         # runs commands in parallel
       pwgen                            # password generator
       ripgrep                          # better version of grep
       s3cmd                            # utility for interacting with AWS S3
@@ -69,8 +68,29 @@ self: super: {
       python37Packages.pycodestyle
       python37Packages.pyflakes
       python37Packages.pylint
-
+      # lua53Packages.busted
+      # lua53Packages.checks
+      # lua53Packages.dkjson
+      # lua53Packages.fun
+      # lua53Packages.inspect
+      # lua53Packages.lua-lsp
+      # lua53Packages.lua-term
+      # lua53Packages.luacheck
+      # lua53Packages.luacov
+      # lua53Packages.luafilesystem
+      # lua53Packages.luasocket
+      # lua53Packages.luassert
+      # lua53Packages.luasystem
+      # lua53Packages.mediator_lua
+      # lua53Packages.mobdebug
+      # lua53Packages.moonscript
+      # lua53Packages.moses
+      # lua53Packages.penlight
+      # lua53Packages.say
+      # lua53Packages.std.strict
+      lua53Packages.luarocks
       # My wrapped and config derivations
+      myBat       # a better version of `cat`
       myGitEnv    # includes diff-so-fancy and hub
       myKitty     # my prefered terminal
       myNeovimEnv # includes neovim-remote
