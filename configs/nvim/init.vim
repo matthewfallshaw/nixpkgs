@@ -51,6 +51,14 @@ function! Anoremap(arg, lhs, rhs)
   endfor
 endfunction
 
+" Start new terminals in insert mode
+augroup nvimTerm
+  au TermOpen * if &buftype == 'terminal' | :startinsert | :setlocal nonumber | :setlocal norelativenumber | :setlocal signcolumn=no | endif
+augroup END
+
+" Set where splits open
+set splitbelow " open horizontal splits below instead of above which is the default
+set splitright " open vertical splits to the right instead of the left with is the default
 " python
 let g:python_host_prog = glob('~').'/.pyenv/versions/neovim2/bin/python'
 let g:python3_host_prog = glob('~').'/.pyenv/versions/neovim3/bin/python'
@@ -79,7 +87,7 @@ set termguicolors   " truecolor support
 
 " Setup color scheme
 " https://github.com/icymind/NeoSolarized
-let g:neosolarized_italic           = 1 " enable italics (must come before colorcheme command)
+let g:neosolarized_italic           = 1 " enable italics (must come before colorscheme command)
 let g:neosolarized_termBoldAsBright = 0 " don't change color of text when bolded in terminal
 colorscheme NeoSolarized                " version of solarized that works better with truecolors
 hi! link SignColumn Normal
@@ -189,7 +197,7 @@ endfunction
 " color setting in BASIC VIM CONFIG section
 nmap <silent><space><space> <Cmd>call ActiveChooseWin()<CR>
 let g:choosewin_active = 0
-let g:choosewin_label = 'TNERIAODH' " alternating on homerow for colemak (choosewin uses 'S')
+let g:choosewin_label = 'TNERIAODH'    " alternating on homerow for colemak (choosewin uses 'S')
 let g:choosewin_tabline_replace = 0    " don't use ChooseWin tabline since Airline provides numbers
 let g:choosewin_statusline_replace = 0 " don't use ChooseWin statusline, since we make our own below
 
@@ -413,8 +421,8 @@ let g:coc_global_extensions =
 \ , 'coc-emoji'
 \ ]
 
-" Hack to use coc-settings.json file with Nix
-let g:coc_user_config = json_decode(readfile($HOME . '/.config/nixpkgs/configs/nvim/coc-settings.json'))
+" Custom configuration home
+let g:coc_config_home = $HOME . '/.config/nixpkgs/configs/nvim/'
 
 " Other basic Coc.nvim config
 let g:coc_status_error_sign   = error_symbol
@@ -570,19 +578,23 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " Used for linting when no good language server is available
 " https://github.com/w0rp/ale
 
-" Disable linters for languges that have defined language servers above
+" Disable linters for languages that have defined language servers above
 let g:ale_linters =
 \ { 'c'         : []
+\ , 'fish'      : []
 \ , 'haskell'   : []
+\ , 'json'      : []
 \ , 'javascript': []
 \ , 'lua'       : []
 \ , 'sh'        : []
 \ , 'typescript': []
 \ , 'vim'       : []
+\ , 'yaml'      : []
 \ }
 
 " Configure and enable fixer
 let g:ale_fix_on_save = 1
+let g:ale_fixers = { '*' : ['remove_trailing_lines', 'trim_whitespace'] }
 let g:ale_fixers =
 \ { 'markdown'   : ['remove_trailing_lines']
 \ , '*'          : ['trim_whitespace']

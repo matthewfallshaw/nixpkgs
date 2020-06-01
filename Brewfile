@@ -9,64 +9,48 @@ tap "homebrew/services"
 # Non-nixpkgs tools
 brew "fish"
 brew "mas"
+brew "onyx"
 brew "trash"
 
-# GUI apps from Homebrew
+brew "rbenv"
+
+# Development
 cask "atom"
-cask "balenaetcher"
-cask "calibre"
 cask "dash"
 cask "db-browser-for-sqlite"
 cask "dbeaver-community"
-cask "dropbox"
-cask "epichrome"
-cask "etrecheckpro"
-cask "firefox"
 cask "font-firacode-nerd-font"
 cask "font-jetbrainsmono-nerd-font-mono"
-cask "freemind"
 cask "gitup"
-cask "google-backup-and-sync"
-cask "google-chrome"
-cask "google-drive-file-stream"
-cask "gpg-suite"
-cask "grandperspective"
 cask "growlnotify"
-cask "hammerspoon"
-cask "imageoptim"
-cask "inkscape"
 cask "insomnia"
-cask "karabiner-elements"
-cask "keybase"
-cask "keycue"
-cask "launchcontrol"
-cask "libreoffice"
+cask "iterm2"
 cask "macvim"
-cask "nvalt"
-cask "quicksilver"
-cask "rowanj-gitx"
-cask "setapp"
-cask "signal"
-cask "skyfonts"
-cask "skype"
-cask "steam"
 cask "sublime-merge"
-cask "suspicious-package"
-cask "tor-browser"
-cask "transmission"
-cask "typinator"
-cask "ubersicht"
-cask "unison"
 cask "vagrant"
-cask "vimr"
 cask "virtualbox"
 cask "virtualbox-extension-pack"
-cask "viscosity"
+cask "vimr"
 cask "visual-studio-code"
-cask "vlc"
-cask "xquartz"
-cask "yed"
 cask "zerobranestudio"
+mas "Xcode",                          id: 497799835
+
+# Crypto
+cask "electron-cash"
+cask "electrum"
+
+# Hardware hacking
+cask "arduino"
+cask "ultimaker-cura"
+cask "freecad"
+cask "meshmixer"
+cask "meshlab"
+cask "openscad-snapshot"
+cask "prusaslicer"
+mas "eDrawings",                      id: 1209754386
+
+# Services from Homebrew
+cask "markdown-service-tools"
 
 # QuickLook plugins from Homebrew
 cask "qlcolorcode"
@@ -75,24 +59,53 @@ cask "qlstephen"
 cask "quicklook-csv"
 cask "quicklook-json"
 
-# Crypto
-cask "electron-cash"
-cask "electrum"
-
-# 3D modelling
-cask "freecad"
-cask "meshmixer"
-cask "openscad-snapshot"
-cask "prusaslicer"
+# Other GUI apps
+cask "balenaetcher"
+cask "calibre"
+cask "dropbox"
+cask "epichrome"
+cask "etrecheckpro"
+cask "firefox"
+cask "freemind"
+cask "google-backup-and-sync"
+cask "google-chrome"
+cask "google-drive-file-stream"
+cask "marshallofsound-google-play-music-player"
+cask "gpg-suite"
+cask "grandperspective"
+cask "hammerspoon"
+cask "imageoptim"
+cask "inkscape"
+cask "karabiner-elements"
+cask "keybase"
+cask "keycue"
+cask "launchcontrol"
+cask "libreoffice"
+cask "nvalt"
+cask "quicksilver"
+cask "rowanj-gitx"
+cask "setapp"
+cask "signal"
+cask "skyfonts"
+cask "skype"
+cask "steam"
+cask "suspicious-package"
+cask "tor-browser"
+cask "transmission"
+cask "typinator"
+cask "ubersicht"
+cask "unison"
+cask "viscosity"
+cask "vlc"
+cask "xquartz"
+cask "yed"
 
 # GUI apps from Mac App Store
 mas "1Password",                      id: 1333542190
 mas "AVG Cleaner",                    id: 667434228
-mas "CHM Reader",                     id: 424182884
 mas "Calca",                          id: 635758264
 mas "Contacts Sync For Google Gmail", id: 451691288
 mas "Deliveries",                     id: 924726344
-mas "eDrawings",                      id: 1209754386
 mas "Evernote",                       id: 406056744
 mas "Gapplin",                        id: 768053424
 mas "GarageBand",                     id: 682658836
@@ -110,4 +123,3 @@ mas "Singlemizer",                    id: 410263119
 mas "Slack",                          id: 803453959
 mas "The Unarchiver",                 id: 425424353
 mas "Typeeto",                        id: 970502923
-mas "Xcode",                          id: 497799835

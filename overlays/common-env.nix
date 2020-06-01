@@ -26,6 +26,7 @@ self: super: {
     name = "CommonEnv";
     paths = with self.pkgs; [
       # Some basics
+      bash                             # a more up-to-date bash
       coreutils
       curl
       findutils
@@ -56,7 +57,7 @@ self: super: {
       unstable.cabal-install
       haskellPackages.hoogle
       haskellPackages.hpack
-      unstable.stack
+      stack
 
       # Language servers, linters, etc.
       unstable.ccls
@@ -89,11 +90,21 @@ self: super: {
       # lua53Packages.say
       # lua53Packages.std.strict
       lua53Packages.luarocks
+
+      # Git and tools
+      git
+      gitAndTools.diff-so-fancy # make Git diffs nicer
+      gitAndTools.hub           # Git wrapper that works adds a bunch of GitHub features
+      kitty                     # terminal
+      release-beta.neovim
+      neovim-remote
+      unstable.bat
+
       # My wrapped and config derivations
-      myBat       # a better version of `cat`
-      myGitEnv    # includes diff-so-fancy and hub
-      myKitty     # my prefered terminal
-      myNeovimEnv # includes neovim-remote
+      # myBat       # a better version of `cat`
+      # myGitEnv    # includes diff-so-fancy and hub
+      # myKitty     # my prefered terminal
+      # myNeovimEnv # includes neovim-remote
 
       # Useful nix related tools
       bundix                          # working with Ruby projects

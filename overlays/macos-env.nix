@@ -47,6 +47,7 @@ self: super: {
     ${self.pkgs.brew-bundle}/bin/brewb
     printf "\nUpdate tldr database\n"
     tldr --update
+    fish_update_completions
   '';
 
   # Cleanup all the things
@@ -67,7 +68,9 @@ self: super: {
       gnugrep
       m-cli             # useful macOS cli commands
       terminal-notifier # notifications when terminal commands finish running
+      pwgen
       myGems.vimgolf    # fun Vim puzzles
+      jdk11
 
       # My convinience shell scripts
       nixuser-rebuild-macos
