@@ -71,6 +71,10 @@ self: super: {
       pwgen
       myGems.vimgolf    # fun Vim puzzles
       jdk11
+      docker
+      docker-machine
+      docker-compose
+      # assimp
 
       # My convinience shell scripts
       nixuser-rebuild-macos

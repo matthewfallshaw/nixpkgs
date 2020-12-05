@@ -9,7 +9,6 @@ tap "homebrew/services"
 # Non-nixpkgs tools
 brew "fish"
 brew "mas"
-brew "onyx"
 brew "trash"
 
 brew "rbenv"
@@ -19,6 +18,8 @@ cask "atom"
 cask "dash"
 cask "db-browser-for-sqlite"
 cask "dbeaver-community"
+cask "docker"
+cask "java"  # required by dbeaver-community
 cask "font-firacode-nerd-font"
 cask "font-jetbrainsmono-nerd-font-mono"
 cask "gitup"
@@ -54,6 +55,7 @@ cask "markdown-service-tools"
 
 # QuickLook plugins from Homebrew
 cask "qlcolorcode"
+cask "qlimagesize"
 cask "qlmarkdown"
 cask "qlstephen"
 cask "quicklook-csv"
@@ -88,6 +90,7 @@ cask "setapp"
 cask "signal"
 cask "skyfonts"
 cask "skype"
+cask "slack"
 cask "steam"
 cask "suspicious-package"
 cask "tor-browser"
@@ -99,6 +102,11 @@ cask "viscosity"
 cask "vlc"
 cask "xquartz"
 cask "yed"
+cask "yt-music"
+
+# Other
+cask "logitech-unifying"
+cask "onyx"
 
 # GUI apps from Mac App Store
 mas "1Password",                      id: 1333542190

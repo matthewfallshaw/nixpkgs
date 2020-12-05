@@ -12,7 +12,7 @@ self: super: {
     popd
     pushd ~/.config/nixpkgs/pkgs/python-packages
     printf "\nUpdating Python package nix expressions ...\n"
-    ${super.pkgs.unstable.pypi2nix}/bin/pypi2nix --python-version python36 --requirements requirements.txt
+    ${super.pkgs.unstable.pypi2nix}/bin/pypi2nix --python-version python37 --requirements requirements.txt
     popd
   '';
 
@@ -36,6 +36,7 @@ self: super: {
       jq                               # command line JSON processor
       moreutils
       multimarkdown                    # extended markdown derivative
+      mutt                             # shell mail client
       pwgen                            # password generator
       ripgrep                          # better version of grep
       s3cmd                            # utility for interacting with AWS S3
@@ -51,9 +52,10 @@ self: super: {
       google-cloud-sdk
       nodejs-12_x
       unstable.nodePackages.serverless
+      graphviz
 
       # Haskell
-      (all-hies.unstableFallback.selection { selector = p: { inherit (p) ghc882 ghc881 ghc865; }; })
+      # (all-hies.unstableFallback.selection { selector = p: { inherit (p) ghc882 ghc881 ghc865; }; })
       unstable.cabal-install
       haskellPackages.hoogle
       haskellPackages.hpack
@@ -65,30 +67,30 @@ self: super: {
       unstable.nodePackages.typescript
       vim-vint
       watchman
-      python37Packages.flake8
-      python37Packages.pycodestyle
-      python37Packages.pyflakes
-      python37Packages.pylint
-      # lua53Packages.busted
-      # lua53Packages.checks
-      # lua53Packages.dkjson
-      # lua53Packages.fun
-      # lua53Packages.inspect
-      # lua53Packages.lua-lsp
-      # lua53Packages.lua-term
-      # lua53Packages.luacheck
-      # lua53Packages.luacov
-      # lua53Packages.luafilesystem
-      # lua53Packages.luasocket
-      # lua53Packages.luassert
-      # lua53Packages.luasystem
-      # lua53Packages.mediator_lua
-      # lua53Packages.mobdebug
-      # lua53Packages.moonscript
-      # lua53Packages.moses
-      # lua53Packages.penlight
-      # lua53Packages.say
-      # lua53Packages.std.strict
+
+      # Python
+      (self.python37.withPackages (
+        ps: with ps; [
+          flake8
+          ipython
+          jupyter
+          matplotlib
+          nose
+          numpy
+          pandas
+          pycodestyle
+          pyflakes
+          pylint
+          pytest
+          python-language-server
+          scikitlearn
+          scipy
+          sympy
+          tkinter
+        ]
+        ))
+
+      # Lua
       lua53Packages.luarocks
 
       # Git and tools
