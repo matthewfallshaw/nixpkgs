@@ -39,26 +39,6 @@
         ]
       },
       "locked": {
-        "lastModified": 1613595894,
-        "narHash": "sha256-MOk/7rCAUB5Lf4GL+HimvyAAZXYEw8gWsq5nW4PPQQA=",
-        "owner": "lnl7",
-        "repo": "nix-darwin",
-        "rev": "5c3146b75d5d478f0693d0ea6c83f1da8382ff56",
-        "type": "github"
-      },
-      "original": {
-        "owner": "lnl7",
-        "repo": "nix-darwin",
-        "type": "github"
-      }
-    },
-    "darwin_2": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
         "lastModified": 1616489387,
         "narHash": "sha256-XHhFOXMUfDZzdL+YWKB0yIBJ4a/tm+agbHV22B3husM=",
         "owner": "hardselius",
@@ -234,26 +214,6 @@
         ]
       },
       "locked": {
-        "lastModified": 1615014591,
-        "narHash": "sha256-zKLLOn6gFbI1gmlqMdIPkMJBiOmkVPIwprtvzZa1mhw=",
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "rev": "abc9d96d19e2c8a7f3a32b74894dc16ba4c25df0",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "home-manager",
-        "type": "github"
-      }
-    },
-    "home-manager_2": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
         "lastModified": 1616318638,
         "narHash": "sha256-E6ABXtzw6bHmrIirB1sJL6S2MEa3sfcvRLzRa92frCo=",
         "owner": "nix-community",
@@ -286,19 +246,17 @@
     "malo": {
       "inputs": {
         "comma": "comma",
-        "darwin": "darwin_2",
+        "darwin": "darwin",
         "fish-done": "fish-done",
         "flake-compat": "flake-compat_2",
         "flake-utils": "flake-utils_2",
         "galaxyline-nvim": "galaxyline-nvim",
-        "home-manager": "home-manager_2",
+        "home-manager": "home-manager",
         "lush-nvim": "lush-nvim",
         "moses-lua": "moses-lua",
         "neovim": "neovim",
         "nixos-stable": "nixos-stable",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
+        "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-stable-darwin": "nixpkgs-stable-darwin",
         "nvim-bufferline-lua": "nvim-bufferline-lua",
@@ -377,29 +335,13 @@
         "type": "github"
       }
     },
-    "nixos-stable_2": {
-      "locked": {
-        "lastModified": 1614975450,
-        "narHash": "sha256-guQeKuY2xJXAV8U5Wnz9h43yd80AEtnrfR7KumemBeQ=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "1ac507ba981970c8e864624542e31eb1f4049751",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-20.09",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1614684350,
-        "narHash": "sha256-8IkjOtF7nFI7xVGm541Tusy7L7a1td1dBE6gad4mVhw=",
+        "lastModified": 1616259034,
+        "narHash": "sha256-WlMIiGIXJm7J+jemzd+ksoun6znWmabCZNz76szV158=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d12574353329291e661805312544b1c68c13911e",
+        "rev": "4e0d3868c679da20108db402785f924daa1a7fb5",
         "type": "github"
       },
       "original": {
@@ -425,22 +367,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-master_2": {
-      "locked": {
-        "lastModified": 1615077771,
-        "narHash": "sha256-7Sy5colHgR3Lpwv3Uzs73yfVrBKx1JzKUhR+1huopek=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "12755505866f5c593d9fcb8b8e92c82557819152",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "master",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable-darwin": {
       "locked": {
         "lastModified": 1616305499,
@@ -448,22 +374,6 @@
         "owner": "nixos",
         "repo": "nixpkgs",
         "rev": "9b8530e3721fc008bacac61b6c50a29712ee2f2f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixpkgs-20.09-darwin",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-stable-darwin_2": {
-      "locked": {
-        "lastModified": 1614778866,
-        "narHash": "sha256-+l8uyXAxYgR3ZMUpBFs4ZVDcbLsw/TSgAwk9iNYiWNY=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "c14bb3039f25d463cd24a47d88b4a86b33561788",
         "type": "github"
       },
       "original": {
@@ -486,22 +396,6 @@
       "original": {
         "owner": "akinsho",
         "repo": "nvim-bufferline.lua",
-        "type": "github"
-      }
-    },
-    "nvim-luapad": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1615070101,
-        "narHash": "sha256-g7AlLTNeDzxB5OQKHuSjxAb+Yo9h+iCKiQM8rB/HSJQ=",
-        "owner": "rafcamlet",
-        "repo": "nvim-luapad",
-        "rev": "457712b8fe6e499cd50a9e3d2e0acc2e640e9add",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rafcamlet",
-        "repo": "nvim-luapad",
         "type": "github"
       }
     },
@@ -549,16 +443,33 @@
     "root": {
       "inputs": {
         "bufferize-vim": "bufferize-vim",
-        "darwin": "darwin",
+        "darwin": [
+          "malo",
+          "darwin"
+        ],
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
-        "home-manager": "home-manager",
+        "home-manager": [
+          "malo",
+          "home-manager"
+        ],
         "malo": "malo",
-        "nixos-stable": "nixos-stable_2",
-        "nixpkgs": "nixpkgs",
-        "nixpkgs-master": "nixpkgs-master_2",
-        "nixpkgs-stable-darwin": "nixpkgs-stable-darwin_2",
-        "nvim-luapad": "nvim-luapad",
+        "nixos-stable": [
+          "malo",
+          "nixos-stable"
+        ],
+        "nixpkgs": [
+          "malo",
+          "nixpkgs"
+        ],
+        "nixpkgs-master": [
+          "malo",
+          "nixpkgs-master"
+        ],
+        "nixpkgs-stable-darwin": [
+          "malo",
+          "nixpkgs-stable-darwin"
+        ],
         "vim-openscad": "vim-openscad"
       }
     },

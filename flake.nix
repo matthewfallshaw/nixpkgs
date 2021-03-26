@@ -2,28 +2,36 @@
   description = "Matt’s Nix system configs.";
 
   inputs = {
+    # Let Malo forge the new paths; I'll follow timidly behind
+    malo.url = "github:malob/nixpkgs";
+    # malo.inputs.nixpkgs.follows = "nixpkgs";
+
     # Package sets
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    nixpkgs-stable-darwin.url = "github:nixos/nixpkgs/nixpkgs-20.09-darwin";
-    nixos-stable.url = "github:nixos/nixpkgs/nixos-20.09";
+    nixpkgs.follows = "malo/nixpkgs";
+    nixpkgs-master.follows = "malo/nixpkgs-master";
+    nixpkgs-stable-darwin.follows = "malo/nixpkgs-stable-darwin";
+    nixos-stable.follows = "malo/nixos-stable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # nixpkgs-master.url = "github:nixos/nixpkgs/master";
+    # nixpkgs-stable-darwin.url = "github:nixos/nixpkgs/nixpkgs-20.09-darwin";
+    # nixos-stable.url = "github:nixos/nixpkgs/nixos-20.09";
 
     # Environment/system management
-    darwin.url = "github:lnl7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    darwin.follows = "malo/darwin";
+    home-manager.follows = "malo/home-manager";
+    # darwin.url = "github:lnl7/nix-darwin";
+    # darwin.inputs.nixpkgs.follows = "nixpkgs";
+    # home-manager.url = "github:nix-community/home-manager";
+    # home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Neovim plugins
     vim-openscad = { url = "github:sirtaj/vim-openscad"; flake = false; };
-    nvim-luapad = { url = "github:rafcamlet/nvim-luapad"; flake = false; };
+    # nvim-luapad = { url = "github:rafcamlet/nvim-luapad"; flake = false; };
     bufferize-vim = { url = "github:AndrewRadev/bufferize.vim"; flake = false; };
 
     # Other sources
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     flake-utils.url = "github:numtide/flake-utils";
-    malo.url = "github:malob/nixpkgs";
-    malo.inputs.nixpkgs.follows = "nixpkgs";
   };
 
 
