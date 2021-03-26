@@ -49,16 +49,18 @@
     };
 
     # Personal configuration shared between `nix-darwin` and plain `home-manager` configs.
-    homeManagerCommonConfig = with self.homeManagerModules; {
+    homeManagerCommonConfig = {
       imports = [
         ./home
-        malo.homeManagerModules.configs.git.aliases
-        malo.homeManagerModules.configs.gh.aliases
+      ] ++ ( with malo.homeManagerModules; [
+        configs.git.aliases
+        configs.gh.aliases
+        configs.starship.symbols
+        programs.neovim.extras
+        programs.kitty.extras
+      ]) ++ ( with self.homeManagerModules; [
         configs.git.osagitfilter
-        malo.homeManagerModules.configs.starship.symbols
-        malo.homeManagerModules.programs.neovim.extras
-        malo.homeManagerModules.programs.kitty.extras
-      ];
+      ]);
     };
 
     # Modules shared by most `nix-darwin` personal configurations.

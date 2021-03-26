@@ -12,7 +12,7 @@
     InitialKeyRepeat = 15;
     KeyRepeat = 2;
     NSAutomaticCapitalizationEnabled = false;
-    NSAutomaticPeriodSubstitutionEnabled = true;
+    NSAutomaticPeriodSubstitutionEnabled = false;
     _HIHideMenuBar = false;
   };
 

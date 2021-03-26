@@ -15,6 +15,9 @@ local _ENV = {}
 local M = {}
 M.lines = {}
 
+-- require 'luapad'.attach({
+--   context = { M = M }
+-- })
 
 -- Helper functions -----------------------------------------------------------------------------
 
@@ -126,14 +129,14 @@ end
 function M.New(name)
   local n = shellescape(name)
 
-  vim.cmd('mkdir('..n..')')
+  vim.cmd('Mkdir(..n..)')
   vim.cmd('edit("'..n..'/'..n..'.scad")')
 end
 
 function M.TNew(name)
   local n = shellescape(name)
 
-  vim.cmd('mkdir('..n..')')
+  vim.cmd('Mkdir(..n..)')
   vim.cmd('tabedit("'..n..'/'..n..'.scad")')
 end
 

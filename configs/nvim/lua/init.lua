@@ -533,6 +533,14 @@ whichKeyMap.w = {
   ['|'] = { ':vertical resize 106' , 'Full line-lenght' },
 }
 
+-- Buffers
+whichKeyMap.b = {
+  name = '+Buffers',
+  l = { ':bnext'     , 'Next buffer'     },
+  h = { ':bprevious' , 'Previous buffer' },
+  d = { ':bdelete' ,   'Delete buffer'   },
+}
+
 -- Git
 whichKeyMap.g = {
   name = '+Git',

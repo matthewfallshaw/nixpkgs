@@ -23,15 +23,24 @@ in
   programs.neovim.extraConfig = "lua require('init')";
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
+    # Agda programming language
     agda-vim
+    # Send vim command output to a scratch buffer
     bufferize-vim
+    # Support direnv shell contexts
     direnv-vim
+    # Support .editorconfig files
     editorconfig-vim
+    # Distraction free writing environment
     goyo-vim
+    # Colorscheme creation aid
     lush-nvim
+    # Luarocks moses only in nvim (deletion candidate)
     moses-nvim
+    # Common configs for nvim LSP
     nvim-lspconfig
-    nvim-luapad
+    # Interactive lua scratchpad
+    # nvim-luapad
     nvim-treesitter
     nvim-web-devicons
     plenary-nvim       # required for telescope-nvim and gitsigns.nvim
