@@ -55,7 +55,6 @@ in
     vim-openscad
     vim-polyglot
     vim-repeat
-    vim-rooter
     vim-surround
     vim-unimpaired
   ] ++ map (p: { plugin = p; optional = true; }) [

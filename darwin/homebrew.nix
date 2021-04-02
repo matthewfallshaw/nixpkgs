@@ -138,5 +138,5 @@
   };
 
   environment.systemPath = lib.mkIf ( builtins.elem "openscad" config.homebrew.casks )
-    [ "/Applications/OpenSCAD.app/Contents/MacOS/" "/Users/matt/bin/" ];
+    [ "/Applications/OpenSCAD.app/Contents/MacOS" ];
 }

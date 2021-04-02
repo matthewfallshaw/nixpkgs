@@ -63,6 +63,36 @@ end
 
 -- Make functions -------------------------------------------------------------------------------
 
+function M.Make()
+  local infile = expand_escape('%')
+  local outfile = expand_escape('%:r')..'.amf'
+
+  local cmd = 'openscad '..infile..' -o '..outfile
+
+  local winnr = vim.fn.win_getid()
+  local bufnr = vim.api.nvim_win_get_buf(winnr)
+
+  local job_id = vim.fn.jobstart(
+    cmd,
+    {
+      on_stderr = on_err,
+      on_stdout = on_out,
+      on_exit = on_exit,
+      stdout_buffered = true,
+      stderr_buffered = true,
+    }
+  )
+
+  M.lines.job_id = {
+    title = cmd,
+    lines = { 'Make: ', cmd, '' },
+    winnr = winnr,
+    bufnr = bufnr,
+  }
+  populate_quickfix(job_id)
+  open_quickfix_and_return()
+end
+
 function M.ReMake(name)
   local infile = expand_escape('%')
   local outfile = expand_escape('%:p:h/')..name..'.amf'

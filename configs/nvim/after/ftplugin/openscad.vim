@@ -1,5 +1,6 @@
 setlocal makeprg=openscad\ %:S\ -o\ %:r:S.amf
 
+command! -nargs=0 -bang Make      lua require 'openscad'.Make()
 command! -nargs=1 -bang ReMake    lua require 'openscad'.ReMake(<f-args>)
 command! -nargs=0 -bang MakeModes lua require 'openscad'.MakeModes()
 command! -nargs=1 -bang New       lua require 'openscad'.New(<f-args>)

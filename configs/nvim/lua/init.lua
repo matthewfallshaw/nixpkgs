@@ -61,6 +61,11 @@ local env = vim.env
 
 -- }}}
 
+-- Non-nix Config ---------------------------------------------------------------------------- {{{
+-- Plugins
+vim.api.nvim_command('source ~/.config/nvim/plugins.vim')
+-- }}}
+
 -- Basic Vim Config ---------------------------------------------------------------------------- {{{
 
 o.scrolloff  = 10   -- start scrolling when cursor is within 5 lines of the ledge
@@ -76,9 +81,10 @@ o.smartcase  = true      -- search is case sensitive only if it contains upperca
 o.inccommand = 'nosplit' -- show preview in buffer while doing find and replace
 
 -- Tab key behavior
-o.expandtab  = true      -- Convert tabs to spaces
-o.tabstop    = 2         -- Width of tab character
-o.shiftwidth = o.tabstop -- Width of auto-indents
+o.expandtab   = true      -- Convert tabs to spaces
+o.tabstop     = 2         -- How many columns of whitespace is a \t worth
+o.shiftwidth  = o.tabstop -- How many columns of whitespace is a level of indentation worth
+o.softtabstop = o.tabstop -- How many columns of whitespace is a keypress worth
 
 -- Set where splits open
 o.splitbelow = true -- open horizontal splits below instead of above which is the default

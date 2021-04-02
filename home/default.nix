@@ -49,27 +49,32 @@
 
   home.packages = with pkgs; [
     # Some basics
-    abduco # lightweight session management
-    bandwhich # display current network utilization by process
-    bottom # fancy version of `top` with ASCII graphs
-    browsh # in terminal browser
-    coreutils
-    curl
-    du-dust # fancy version of `du`
-    exa # fancy version of `ls`
-    fd # fancy version of `find`
-    htop # fancy version of `top`
-    hyperfine # benchmarking tool
-    mosh # wrapper for `ssh` that better and not dropping connections
-    nodePackages.speed-test # nice speed-test tool
-    parallel # runs commands in parallel
-    stable.procs # fancy version of `ps`
-    ripgrep # better version of `grep`
-    tealdeer # rust implementation of `tldr`
+    abduco                   # lightweight session management
+    bandwhich                # display current network utilization by process
+    bottom                   # fancy version of `top` with ASCII graphs
+    browsh                   # in terminal browser
+    coreutils                # GNU Core Utilities
+    curl                     #
+    du-dust                  # fancy version of `du`
+    exa                      # fancy version of `ls`
+    fd                       # fancy version of `find`
+    findutils                # find, locate, updatedb, xargs
+    ghc                      # Glasgow Haskell Compiler
+    htop                     # fancy version of `top`
+    hyperfine                # benchmarking tool
+    mosh                     # wrapper for `ssh` that better and not dropping connections
+    nodePackages.speed-test  # nice speed-test tool
+    parallel                 # runs commands in parallel
+    stable.procs             # fancy version of `ps`
+    ripgrep                  # better version of `grep`
+    tealdeer                 # rust implementation of `tldr`
     stable.thefuck
-    unrar # extract RAR archives
+    unrar                    # extract RAR archives
     wget
-    xz # extract XZ archives
+    xz                       # extract XZ archives
+
+    # Dependencies for non-nix tools
+    zlib                     # implicitcad dependency
 
     # Dev stuff
     (agda.withPackages (p: [ p.standard-library ]))
@@ -107,6 +112,8 @@
     prefmanager # tool for working with macOS defaults
   ];
   # }}}
+
+  home.sessionPath = [ "${config.home.homeDirectory}/.local/bin" "${config.home.homeDirectory}/bin" ];
 
   home.activation = {
     rakeDevEnvironmentBuild = lib.hm.dag.entryAfter ["writeBoundary"] ''
