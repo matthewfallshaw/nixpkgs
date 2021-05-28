@@ -17,14 +17,27 @@ in
 
   # Minimal init.vim config to load Lua config. Nix and Home Manager don't currently support
   # `init.lua`.
-  xdg.configFile."nvim/lua".source = ../configs/nvim/lua;
-  xdg.configFile."nvim/colors".source = ../configs/nvim/colors;
-  xdg.configFile."nvim/after".source = ../configs/nvim/after;
+  xdg.configFile."nvim/lua" = {
+    source = ../configs/nvim/lua;
+    recursive = true;
+  };
+  xdg.configFile."nvim/colors" = {
+    source = ../configs/nvim/colors;
+    recursive = true;
+  };
+  xdg.configFile."nvim/after" = {
+    source = ../configs/nvim/after;
+    recursive = true;
+  };
   programs.neovim.extraConfig = "lua require('init')";
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
     # Agda programming language
     agda-vim
+    # Lua ftplugins
+    astronuta-nvim
+    # Auto-pairs
+    autopairs-vim
     # Send vim command output to a scratch buffer
     bufferize-vim
     # Support direnv shell contexts
@@ -55,6 +68,7 @@ in
     vim-openscad
     vim-polyglot
     vim-repeat
+    vim-rooter
     vim-surround
     vim-unimpaired
   ] ++ map (p: { plugin = p; optional = true; }) [

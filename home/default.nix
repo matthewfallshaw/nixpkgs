@@ -55,16 +55,19 @@
     browsh                   # in terminal browser
     coreutils                # GNU Core Utilities
     curl                     #
+    dotnet-sdk               # Microsoft .NET SDK
     du-dust                  # fancy version of `du`
     exa                      # fancy version of `ls`
     fd                       # fancy version of `find`
     findutils                # find, locate, updatedb, xargs
+    fswatch                  # a file change monitor
     ghc                      # Glasgow Haskell Compiler
     htop                     # fancy version of `top`
     hyperfine                # benchmarking tool
     mosh                     # wrapper for `ssh` that better and not dropping connections
     nodePackages.speed-test  # nice speed-test tool
     parallel                 # runs commands in parallel
+    pwgen                    # password generator
     stable.procs             # fancy version of `ps`
     ripgrep                  # better version of `grep`
     tealdeer                 # rust implementation of `tldr`
@@ -73,26 +76,26 @@
     wget
     xz                       # extract XZ archives
 
-    # Dependencies for non-nix tools
-    zlib                     # implicitcad dependency
-
     # Dev stuff
     (agda.withPackages (p: [ p.standard-library ]))
-    cloc # source code line counter
-    google-cloud-sdk
+    bundler                        # ruby Bundler
+    cloc                           # source code line counter
+    gitAndTools.gh                 # github.com command line
+    google-cloud-sdk               # Google cloud sdk
     haskell-language-server
     haskellPackages.cabal-install
     haskellPackages.hoogle
     haskellPackages.hpack
-    haskellPackages.implicit-hie
+    haskellPackages.implicit       # implicitcad.org (openscad in Haskell)
+    haskellPackages.implicit-hie   # auto generate hie-bios cradles & hie.yaml
     haskellPackages.stack
-    idris2
+    idris2                         # a purely functional programming language with first class types
     jq
     nodePackages.typescript
     nodejs
     (python3.withPackages (p: with p; [ mypy pylint yapf ]))
     s3cmd
-    tickgit
+    tickgit   # view pending tasks, progress reports, completion summaries and historical data (using git history)
 
     # Lua
     lua53Packages.busted
@@ -101,16 +104,17 @@
     lua53Packages.moses
 
     # Useful nix related tools
-    cachix # adding/managing alternative binary caches hosted by Cachix
-    comma # run software from without installing it
-    lorri # improve `nix-shell` experience in combination with `direnv`
-    niv # easy dependency management for nix projects
+    cachix                          # adding/managing alternative binary caches hosted by Cachix
+    comma                           # run software from without installing it
+    lorri                           # improve `nix-shell` experience in combination with `direnv`
+    niv                             # easy dependency management for nix projects
     nodePackages.node2nix
 
   ] ++ lib.optionals stdenv.isDarwin [
     m-cli # useful macOS CLI commands
     prefmanager # tool for working with macOS defaults
   ];
+
   # }}}
 
   home.sessionPath = [ "${config.home.homeDirectory}/.local/bin" "${config.home.homeDirectory}/bin" ];

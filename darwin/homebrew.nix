@@ -29,6 +29,7 @@
     "db-browser-for-sqlite"
     "dbeaver-community"
     "docker"
+    "dotnet"
     "gitup"
     "insomnia"
     "iterm2"
@@ -47,10 +48,12 @@
     "arduino"
     # "freecad"
     "autodesk-fusion360"
+    "cncjs"
     "meshlab"
     "meshmixer"
     "openscad"
     "prusaslicer"
+    "sketchup"
     "superslicer"
     "ultimaker-cura"
 
@@ -106,7 +109,12 @@
     "yed"
 
     # Other
-    # "logitech-unifying"
+    "logitech-camera-settings"
+    "logitech-control-center"
+    # "logitech-firmwareupdatetool"
+    # "logitech-g-hub"
+    # "logitech-options"
+    "logitech-unifying"
     "onyx"
   ];
 
@@ -126,6 +134,7 @@
     Kindle = 405399194;
     "LG Screen Manager" = 1142051783;
     "Lights Switch" = 1181873676;
+    "Microsoft Remote Desktop" = 1295203466;
     Numbers = 409203825;
     Pages = 409201541;
     Pixelmator = 407963104;

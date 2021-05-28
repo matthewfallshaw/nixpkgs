@@ -25,9 +25,11 @@
     # home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Neovim plugins
-    vim-openscad = { url = "github:sirtaj/vim-openscad"; flake = false; };
-    # nvim-luapad = { url = "github:rafcamlet/nvim-luapad"; flake = false; };
+    astronuta-nvim = { url = "github:tjdevries/astronauta.nvim"; flake = false; };
+    autopairs-vim = { url = "github:jiangmiao/auto-pairs"; flake = false; };
     bufferize-vim = { url = "github:AndrewRadev/bufferize.vim"; flake = false; };
+    vim-openscad = { url = "github:sirtaj/vim-openscad"; flake = false; };
+    vim-rooter = { url = "github:airblade/vim-rooter"; flake = false; };
 
     # Other sources
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
@@ -142,9 +144,11 @@
         final: prev: {
           # Vim plugins
           vimPlugins = prev.vimPlugins // prev.lib.genAttrs [
-            "vim-openscad"
-            "nvim-luapad"
+            "astronuta-nvim"
+            "autopairs-vim"
             "bufferize-vim"
+            "vim-openscad"
+            "vim-rooter"
           ] (final.lib.buildVimPluginFromFlakeInput inputs);
         }
       )
