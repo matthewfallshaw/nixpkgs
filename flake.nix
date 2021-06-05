@@ -9,7 +9,7 @@
     # Package sets
     nixpkgs.follows = "malo/nixpkgs";
     nixpkgs-master.follows = "malo/nixpkgs-master";
-    nixpkgs-stable-darwin.follows = "malo/nixpkgs-stable-darwin";
+    nixpkgs-unstable.follows = "malo/nixpkgs-unstable";
     nixos-stable.follows = "malo/nixos-stable";
     # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # nixpkgs-master.url = "github:nixos/nixpkgs/master";
@@ -49,10 +49,12 @@
           final: prev:
           let
             system = prev.stdenv.system;
-            nixpkgs-stable = if system == "x86_64-darwin" then nixpkgs-stable-darwin else nixos-stable;
           in {
             master = nixpkgs-master.legacyPackages.${system};
-            stable = nixpkgs-stable.legacyPackages.${system};
+            unstable = nixpkgs-unstable.legacyPackages.${system};
+
+            # Packages I want on the bleeding edge
+            fish = final.unstable.fish;
           }
         )
       ];
@@ -128,6 +130,7 @@
     # Build and activate with `nix build .#home.activationPackage; ./result/activate`
     home = home-manager.lib.homeManagerConfiguration {
       system = "x86_64-linux";
+      stateVersion = "21.05";
       homeDirectory = "/home/matt";
       username = "matt";
       configuration = {

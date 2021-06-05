@@ -37,7 +37,7 @@
   # Htop
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.htop.enable
   programs.htop.enable = true;
-  programs.htop.showProgramPath = true;
+  programs.htop.settings.show_program_path = true;
 
   # Zoxide, a faster way to navigate the filesystem
   # https://github.com/ajeetdsouza/zoxide
@@ -50,36 +50,35 @@
   home.packages = with pkgs; [
     # Some basics
     abduco                   # lightweight session management
-    bandwhich                # display current network utilization by process
+    # bandwhich                # display current network utilization by process
     bottom                   # fancy version of `top` with ASCII graphs
     browsh                   # in terminal browser
     coreutils                # GNU Core Utilities
     curl                     #
-    dotnet-sdk               # Microsoft .NET SDK
     du-dust                  # fancy version of `du`
     exa                      # fancy version of `ls`
     fd                       # fancy version of `find`
     findutils                # find, locate, updatedb, xargs
     fswatch                  # a file change monitor
-    ghc                      # Glasgow Haskell Compiler
     htop                     # fancy version of `top`
     hyperfine                # benchmarking tool
-    mosh                     # wrapper for `ssh` that better and not dropping connections
+    mosh                     # wrapper for `ssh`; better and does not drop connections
     nodePackages.speed-test  # nice speed-test tool
     parallel                 # runs commands in parallel
     pwgen                    # password generator
-    stable.procs             # fancy version of `ps`
+    procs                    # fancy version of `ps`
     ripgrep                  # better version of `grep`
     tealdeer                 # rust implementation of `tldr`
-    stable.thefuck
+    thefuck                  # do what I mean on the command line
     unrar                    # extract RAR archives
-    wget
+    wget                     # get all of the things
     xz                       # extract XZ archives
 
     # Dev stuff
     (agda.withPackages (p: [ p.standard-library ]))
     bundler                        # ruby Bundler
     cloc                           # source code line counter
+    ghc                            # Glasgow Haskell Compiler
     gitAndTools.gh                 # github.com command line
     google-cloud-sdk               # Google cloud sdk
     haskell-language-server
@@ -90,12 +89,17 @@
     haskellPackages.implicit-hie   # auto generate hie-bios cradles & hie.yaml
     haskellPackages.stack
     idris2                         # a purely functional programming language with first class types
-    jq
+    jq                             # query json
     nodePackages.typescript
     nodejs
-    (python3.withPackages (p: with p; [ mypy pylint yapf ]))
+    (python3.withPackages (p: with p; [
+      mypy
+      pylint
+      yapf
+    ]))
     s3cmd
-    tickgit   # view pending tasks, progress reports, completion summaries and historical data (using git history)
+    tickgit                        # view pending tasks, progress reports, completion summaries
+                                   # and historical data (using git history)
 
     # Lua
     lua53Packages.busted
@@ -111,8 +115,8 @@
     nodePackages.node2nix
 
   ] ++ lib.optionals stdenv.isDarwin [
-    m-cli # useful macOS CLI commands
-    prefmanager # tool for working with macOS defaults
+    m-cli          # useful macOS CLI commands
+    # prefmanager    # tool for working with macOS defaults
   ];
 
   # }}}
@@ -134,6 +138,6 @@
   #
   # You can update Home Manager without changing this value. See the Home Manager release notes for
   # a list of state version changes in each release.
-  home.stateVersion = "21.03";
+  home.stateVersion = "21.05";
 }
 # vim: foldmethod=marker
