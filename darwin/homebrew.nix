@@ -25,20 +25,21 @@
   homebrew.casks = [
     # Development
     "atom"
+    "circuitjs1"
     "dash"
     "db-browser-for-sqlite"
     "dbeaver-community"
     "docker"
     "dotnet"
     "gitup"
-    "insomnia"
+    "insomnia"          # … but I hate it
     "iterm2"
-    "macvim"
+    "macvim"            # deletion candidate
     "rowanj-gitx"
     "vagrant"
     "vimr"
     "visual-studio-code"
-    "zerobranestudio"
+    "zerobranestudio"   # deletion candidate
 
     # Crypto
     "electron-cash"
@@ -48,14 +49,13 @@
     "arduino"
     # "freecad"
     "autodesk-fusion360"
-    "cncjs"
     "meshlab"
     "meshmixer"
     "openscad"
     "prusaslicer"
-    "sketchup"
+    "raspberry-pi-imager"
     "superslicer"
-    "ultimaker-cura"
+    "ultimaker-cura"    # deletion candidate
 
     # Services from Homebrew
     "markdown-service-tools"
@@ -72,14 +72,13 @@
     "balenaetcher"
     "calibre"
     "dropbox"
-    "epichrome"
     "etrecheckpro"
-    "freeplane"
+    "freeplane"         # deletion candidate
     "firefox"
     "google-chrome"
     "google-drive"
     "google-backup-and-sync"
-    "gpg-suite"
+    "gpg-suite"         # deletion candidate
     "grandperspective"
     "hammerspoon"
     "imageoptim"
@@ -88,7 +87,6 @@
     "keybase"
     "keycue"
     "launchcontrol"
-    "libreoffice"
     "nvalt"
     "quicksilver"
     "signal"
@@ -111,9 +109,6 @@
     # Other
     "logitech-camera-settings"
     "logitech-control-center"
-    # "logitech-firmwareupdatetool"
-    # "logitech-g-hub"
-    # "logitech-options"
     "logitech-unifying"
     "onyx"
   ];
@@ -140,7 +135,7 @@
     Pixelmator = 407963104;
     "Pixelmator Pro" = 1289583905;
     Slack = 803453959;
-    Vimari = 1480933944;
+    Vimari = 1480933944;            # Safari Vimium equiv
     "WiFi Explorer" = 494803304;
     "The Unarchiver" = 425424353;
     Xcode = 497799835;

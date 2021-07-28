@@ -32,7 +32,8 @@
   # https://direnv.net
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.direnv.enable
   programs.direnv.enable = true;
-  programs.direnv.enableNixDirenvIntegration = true;
+  programs.direnv.enableNixDirenvIntegration = true;  # renamed below
+  # programs.direnv.nix-direnv.enable = true;
 
   # Htop
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.htop.enable
@@ -76,8 +77,9 @@
 
     # Dev stuff
     (agda.withPackages (p: [ p.standard-library ]))
-    bundler                        # ruby Bundler
+    bundix                         # ruby Bundler
     cloc                           # source code line counter
+    dotnet-sdk                     # Microsoft .NET SDK  TODO
     ghc                            # Glasgow Haskell Compiler
     gitAndTools.gh                 # github.com command line
     google-cloud-sdk               # Google cloud sdk
@@ -88,6 +90,7 @@
     haskellPackages.implicit       # implicitcad.org (openscad in Haskell)
     haskellPackages.implicit-hie   # auto generate hie-bios cradles & hie.yaml
     haskellPackages.stack
+    home-assistant-cli             # Command-line tool for Home Assistant
     idris2                         # a purely functional programming language with first class types
     jq                             # query json
     nodePackages.typescript
@@ -122,6 +125,7 @@
   # }}}
 
   home.sessionPath = [ "${config.home.homeDirectory}/.local/bin" "${config.home.homeDirectory}/bin" ];
+  home.sessionVariables = { EDITOR = "nvim"; };
 
   home.activation = {
     rakeDevEnvironmentBuild = lib.hm.dag.entryAfter ["writeBoundary"] ''
