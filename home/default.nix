@@ -20,7 +20,7 @@
   };
   # See `./shells.nix` for more on how this is used.
   programs.fish.functions.set-bat-colors = {
-    body = ''set -xg BAT_THEME ansi-"$term_background"'';
+    body = ''set -xg BAT_THEME "Solarized ($term_background)"'';
     onVariable = "term_background";
   };
   programs.fish.interactiveShellInit = ''
@@ -32,8 +32,8 @@
   # https://direnv.net
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.direnv.enable
   programs.direnv.enable = true;
-  programs.direnv.enableNixDirenvIntegration = true;  # renamed below
-  # programs.direnv.nix-direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
+  programs.direnv.nix-direnv.enableFlakes = true;
 
   # Htop
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.htop.enable
@@ -67,6 +67,7 @@
     nodePackages.speed-test  # nice speed-test tool
     parallel                 # runs commands in parallel
     pwgen                    # password generator
+    python3Packages.shell-functools # a collection of functional programming tools for the shell
     procs                    # fancy version of `ps`
     ripgrep                  # better version of `grep`
     tealdeer                 # rust implementation of `tldr`
@@ -121,7 +122,6 @@
     m-cli          # useful macOS CLI commands
     # prefmanager    # tool for working with macOS defaults
   ];
-
   # }}}
 
   home.sessionPath = [ "${config.home.homeDirectory}/.local/bin" "${config.home.homeDirectory}/bin" ];
@@ -136,6 +136,23 @@
       ${pkgs.rubyPackages.rake}/bin/rake -f ${../configs/rakefile.darwin.rb}
     '';
   };
+
+  # Misc configuration files --------------------------------------------------------------------{{{
+
+  # https://docs.haskellstack.org/en/stable/yaml_configuration/#non-project-specific-config
+  home.file.".stack/config.yaml".text = lib.generators.toYAML {} {
+    templates = {
+      scm-init = "git";
+      params = {
+        author-name = config.programs.git.userName;
+        author-email = config.programs.git.userEmail;
+        github-username = "matthewfallshaw";
+        copyright = "MIT";
+      };
+    };
+    nix.enable = true;
+  };
+  # }}}
 
   # This value determines the Home Manager release that your configuration is compatible with. This
   # helps avoid breakage when a new Home Manager release introduces backwards incompatible changes.

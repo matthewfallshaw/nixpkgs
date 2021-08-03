@@ -11,17 +11,17 @@
     nixpkgs-master.follows = "malo/nixpkgs-master";
     nixpkgs-unstable.follows = "malo/nixpkgs-unstable";
     nixos-stable.follows = "malo/nixos-stable";
-    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-21.05-darwin";
+    # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     # nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    # nixpkgs-stable-darwin.url = "github:nixos/nixpkgs/nixpkgs-20.09-darwin";
-    # nixos-stable.url = "github:nixos/nixpkgs/nixos-20.09";
+    # nixos-stable.url = "github:nixos/nixpkgs/nixos-21.05";
 
     # Environment/system management
     darwin.follows = "malo/darwin";
     home-manager.follows = "malo/home-manager";
-    # darwin.url = "github:lnl7/nix-darwin";
+    # darwin.url = "github:LnL7/nix-darwin";
     # darwin.inputs.nixpkgs.follows = "nixpkgs";
-    # home-manager.url = "github:nix-community/home-manager";
+    # home-manager.url = "github:nix-community/home-manager/release-21.05";
     # home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # Neovim plugins
@@ -32,8 +32,15 @@
     vim-rooter = { url = "github:airblade/vim-rooter"; flake = false; };
 
     # Other sources
-    flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
+    # comma = { url = "github:Shopify/comma"; flake = false; };
+    # flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
     flake-utils.url = "github:numtide/flake-utils";
+    moses-lua = { url = "github:Yonaba/Moses"; flake = false; };
+    # neovim.url = "github:neovim/neovim?dir=contrib";
+    # neovim.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    nvim-lspinstall = { url = "github:kabouzeid/nvim-lspinstall"; flake = false; };
+    # prefmanager.url = "github:malob/prefmanager";
+    # prefmanager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
 
@@ -42,19 +49,22 @@
     # Some building blocks --------------------------------------------------------------------- {{{
 
     # Configuration for `nixpkgs` mostly used in personal configs.
-    nixpkgsConfig = with inputs; {
+    nixpkgsConfig = with inputs; rec {
       config = { allowUnfree = true; };
       overlays = malo.overlays ++ self.overlays ++ [
         (
-          final: prev:
-          let
-            system = prev.stdenv.system;
-          in {
-            master = nixpkgs-master.legacyPackages.${system};
-            unstable = nixpkgs-unstable.legacyPackages.${system};
+          final: prev: {
+            master = import nixpkgs-master { inherit (prev) system; inherit config; };
+            unstable = import nixpkgs-unstable { inherit (prev) system; inherit config; };
 
             # Packages I want on the bleeding edge
             fish = final.unstable.fish;
+            fishPlugins = final.unstable.fishPlugins;
+            kitty = final.unstable.kitty;
+            neovim = final.unstable.neovim;
+            neovim-unwrapped = final.unstable.neovim-unwrapped;
+            nixUnstable = final.unstable.nixUnstable;
+            vimPlugins = prev.vimPlugins // final.unstable.vimPlugins;
           }
         )
       ];
@@ -76,23 +86,24 @@
     };
 
     # Modules shared by most `nix-darwin` personal configurations.
-    nixDarwinCommonModules = { user }: [
+    nixDarwinCommonModules = [
       # Include extra `nix-darwin`
       malo.darwinModules.programs.nix-index
       malo.darwinModules.security.pam
+      malo.darwinModules.users
       # Main `nix-darwin` config
       ./darwin
       # `home-manager` module
       home-manager.darwinModules.home-manager
-      {
+      ( { config, lib, ... }: let inherit (config.users) primaryUser; in {
         nixpkgs = nixpkgsConfig;
         # Hack to support legacy worklows that use `<nixpkgs>` etc.
         nix.nixPath = { nixpkgs = "$HOME/.config/nixpkgs/nixpkgs.nix"; };
         # `home-manager` config
-        users.users.${user}.home = "/Users/${user}";
+        users.users.${primaryUser}.home = "/Users/${primaryUser}";
         home-manager.useGlobalPkgs = true;
-        home-manager.users.${user} = homeManagerCommonConfig;
-      }
+        home-manager.users.${primaryUser} = homeManagerCommonConfig;
+      })
     ];
     # }}}
   in {
@@ -108,8 +119,10 @@
 
       # My macOS main laptop config
       Notnux = darwin.lib.darwinSystem {
-        modules = nixDarwinCommonModules { user = "matt"; } ++ [
+        modules = nixDarwinCommonModules ++ [
           {
+            users.primaryUser = "matt";
+            networking.computerName = "notnux5";
             networking.hostName = "Notnux";
             networking.knownNetworkServices = [
               "Wi-Fi"
@@ -121,8 +134,11 @@
 
       # Config with small modifications needed/desired for CI with GitHub workflow
       githubCI = darwin.lib.darwinSystem {
-        modules = nixDarwinCommonModules { user = "runner"; } ++ [
-          ({ lib, ... }: { homebrew.enable = lib.mkForce false; })
+        modules = nixDarwinCommonModules ++ [
+          ({ lib, ... }: {
+            users.primaryUser = "runner";
+            homebrew.enable = lib.mkForce false;
+          })
         ];
       };
     };
@@ -152,16 +168,35 @@
             "bufferize-vim"
             "vim-openscad"
             "vim-rooter"
-          ] (final.lib.buildVimPluginFromFlakeInput inputs);
+            "nvim-lspinstall"
+           ] (final.lib.buildVimPluginFromFlakeInput inputs) // {
+            moses-nvim = final.lib.buildNeovimLuaPackagePluginFromFlakeInput inputs "moses-lua";
+          };
+
+          # Fixes for packages that don't build for some reason.
+          thefuck = prev.thefuck.overrideAttrs (old: { doInstallCheck = false; });
         }
       )
       # Other overlays that don't depend on flake inputs.
     ] ++ map import ((import ./lsnix.nix) ./overlays);
-    # }}}
+
+    # My `nix-darwin` modules that are pending upstream, or patched versions waiting on upstream
+    # fixes.
+    darwinModules = {
+      programs.nix-index = import ./modules/darwin/programs/nix-index.nix;
+      security.pam = import ./modules/darwin/security/pam.nix;
+      users = import ./modules/darwin/users.nix;
+    };
 
     homeManagerModules = {
       configs.git.osagitfilter = import ./home/configs/git-osagitfilter.nix;
+      configs.git.aliases = import ./home/configs/git-aliases.nix;
+      configs.gh.aliases = import ./home/configs/gh-aliases.nix;
+      configs.starship.symbols = import ./home/configs/starship-symbols.nix;
+      programs.neovim.extras = import ./modules/home/programs/neovim/extras.nix;
+      programs.kitty.extras = import ./modules/home/programs/kitty/extras.nix;
     };
+    # }}}
 
     # Add re-export `nixpkgs` packages with overlays.
     # This is handy in combination with `nix registry add my /Users/matt/.config/nixpkgs`

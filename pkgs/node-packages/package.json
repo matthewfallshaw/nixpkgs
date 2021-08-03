@@ -1,3 +1,4 @@
 [
-	"npm-check-updates"
+  "npm-check-updates",
+  "purescript-language-server"
 ]

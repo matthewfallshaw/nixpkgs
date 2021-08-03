@@ -7,7 +7,7 @@ let
     foreground = "#${main}";
 
     # Cursor
-    cursor = "#${main}";
+    cursor = "#${blue}";
     cursor_text_color = "#${base}";
 
     # Selection
@@ -27,15 +27,13 @@ in
   programs.kitty.enable = true;
 
   # General config ----------------------------------------------------------------------------- {{{
+
   programs.kitty.settings = {
-     # Fonts
-     # Recursive: https://www.recursive.design
-     # "Duotone" pre-configured version which uses Linear for normal text and Casual for italic
-     # https://github.com/arrowtype/recursive/tree/main/fonts/ArrowType-Recursive-1.064/Recursive_Code
-     font_family = "Rec Mono Duotone";
-     font_features = "RecMono-Duotone +dlig +ss10";
-     adjust_line_height = "120%";
-     disable_ligatures = "cursor"; # disable ligatures when cursor is on them
+    # https://fsd.it/shop/fonts/pragmatapro/
+    font_family = "PragmataPro Mono Liga";
+    font_size = "14.0";
+    adjust_line_height = "140%";
+    disable_ligatures = "cursor"; # disable ligatures when cursor is on them
 
     # Window layout
     hide_window_decorations = "titlebar-only";
@@ -49,6 +47,12 @@ in
     inactive_tab_font_style = "normal";
     tab_activity_symbol = "";
   };
+
+  # Change the style of italic font variants
+  programs.kitty.extraConfig = ''
+    font_features PragmataProMonoLiga-Italic +ss06
+    font_features PragmataProMonoLiga-BoldItalic +ss07
+  '';
 
   programs.kitty.extras.useSymbolsFromNerdFont = "JetBrainsMono Nerd Font";
   # }}}
