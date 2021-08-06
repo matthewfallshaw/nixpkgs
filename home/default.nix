@@ -44,6 +44,15 @@
   # https://github.com/ajeetdsouza/zoxide
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.zoxide.enable
   programs.zoxide.enable = true;
+
+  # Visual Studio Code
+  # https://code.visualstudio.com/
+  # https://nix-community.github.io/home-manager/options.html#opt-programs.vscode.enable
+  programs.vscode.enable = true;
+  programs.vscode.extensions = with pkgs.vscode-extensions; [
+    editorconfig.editorconfig
+    eamodio.gitlens
+  ];
   # }}}
 
   # Other packages ----------------------------------------------------------------------------- {{{
