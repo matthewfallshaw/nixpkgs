@@ -60,6 +60,7 @@
             # Packages I want on the bleeding edge
             fish = final.unstable.fish;
             fishPlugins = final.unstable.fishPlugins;
+            iterm2 = final.unstable.iterm2;
             kitty = final.unstable.kitty;
             neovim = final.unstable.neovim;
             neovim-unwrapped = final.unstable.neovim-unwrapped;

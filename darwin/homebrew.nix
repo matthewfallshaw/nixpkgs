@@ -55,7 +55,7 @@
     "dotnet"
     "gitup"
     "insomnia"          # … but I hate it
-    "iterm2"
+    # "iterm2"
     "macvim"            # deletion candidate
     "rowanj-gitx"
     "vagrant"
