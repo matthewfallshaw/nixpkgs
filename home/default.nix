@@ -95,6 +95,8 @@
     google-cloud-sdk               # Google cloud sdk
     haskell-language-server
     haskellPackages.cabal-install
+    haskellPackages.hapistrano     # a deployment library for Haskell applications similar to Ruby's Capistrano
+    haskellPackages.hlint          # Haskell linter
     haskellPackages.hoogle
     haskellPackages.hpack
     haskellPackages.implicit       # implicitcad.org (openscad in Haskell)
