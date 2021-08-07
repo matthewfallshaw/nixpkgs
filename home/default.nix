@@ -24,6 +24,28 @@
       body = ''set -xg BAT_THEME "Solarized ($term_background)"'';
       onVariable = "term_background";
     };
+    cdd = {
+      description = "cd into ~/code";
+      body = ''
+        set -l cdpath "$HOME/code"
+        if [ -z "$argv[1]" ]
+          cd $cdpath
+        else
+          cd $cdpath/$argv[1]
+        end
+      '';
+    };
+    cds = {
+      description = "cd into ~/source";
+      body = ''
+        set -l cdpath "$HOME/source"
+        if [ -z "$argv[1]" ]
+          cd $cdpath
+        else
+          cd $cdpath/$argv[1]
+        end
+      '';
+    };
     cdup = {
       description = "cd up n directories";
       body = ''
@@ -34,6 +56,27 @@
         cd $ups
       '';
     };
+    mcd = {
+      description = "Make a directory and cd into it";
+      body = ''
+        mkdir -p "$argv[1]"; and cd "$argv[1]"
+      '';
+    };
+    mtd = {
+      description = "Make a temp directory and cd into it";
+      body = ''
+        set -l dir (mktemp -d)
+        if test -n "$dir"
+          if test -d "$dir"
+            echo "$dir"
+            cd "$dir"
+          else
+            echo "mktemp directory $dir does not exist"
+          end
+        else
+          echo "mktemp didn't work"
+        end
+      '';
     };
   };
   programs.fish.interactiveShellInit = ''

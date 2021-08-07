@@ -103,6 +103,17 @@
     ls = "${exa}/bin/exa";
     ps = "${procs}/bin/procs";
     tb = "toggle-background";
+
+    # Gitx.app (http://rowanj.github.io/gitx/)
+    gx="gitx";
+    gxc="gitx --commit";
+    gxd="git diff --ignore-space-change | gitx --diff";
+
+    # Gitup.app (https://github.com/git-up/GitUp)
+    gu="gitup commit";
+    guc="gitup commit";
+    gum="gitup map";
+    gus="gitup stash";
   };
 
   # Configuration that should be above `loginShellInit` and `interactiveShellInit`.
