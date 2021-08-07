@@ -19,9 +19,22 @@
     style = "plain";
   };
   # See `./shells.nix` for more on how this is used.
-  programs.fish.functions.set-bat-colors = {
-    body = ''set -xg BAT_THEME "Solarized ($term_background)"'';
-    onVariable = "term_background";
+  programs.fish.functions = {
+    set-bat-colors = {
+      body = ''set -xg BAT_THEME "Solarized ($term_background)"'';
+      onVariable = "term_background";
+    };
+    cdup = {
+      description = "cd up n directories";
+      body = ''
+        set -l ups ""
+        for i in (seq 1 $argv[1])
+          set ups $ups"../"
+        end
+        cd $ups
+      '';
+    };
+    };
   };
   programs.fish.interactiveShellInit = ''
     # Set `bat` colors based on value of `$term_backdround` when shell starts up.

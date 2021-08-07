@@ -94,7 +94,6 @@
     ns = "nix search";
 
     # Other
-    ".." = "cd ..";
     ":q" = "exit";
     cat = "${bat}/bin/bat";
     du = "${du-dust}/bin/dust";
@@ -110,6 +109,13 @@
   programs.fish.shellInit = ''
     set -U fish_term24bit 1
     ${lib.optionalString pkgs.stdenv.isDarwin "set-background-to-macOS"}
+
+    # .. cds to parent, therefore ..., ...., ....., etc.
+    set -l dots "."
+    for i in (seq 1 9)
+      set dots $dots"."
+      alias $dots="cdup $i"
+    end
   '';
 
   programs.fish.interactiveShellInit = ''
