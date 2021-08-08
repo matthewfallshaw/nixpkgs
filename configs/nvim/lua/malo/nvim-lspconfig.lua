@@ -77,3 +77,12 @@ lspconf.yamlls.setup {
     },
   },
 }
+
+lspconf.hls.setup({
+  settings = {
+    haskell = {
+      hlintOn = true,
+      formattingProvider = "fourmolu"
+    }
+  }
+})

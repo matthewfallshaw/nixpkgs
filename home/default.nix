@@ -153,6 +153,7 @@
     haskellPackages.cabal-install
     haskellPackages.hapistrano     # a deployment library for Haskell applications similar to Ruby's Capistrano
     haskellPackages.hlint          # Haskell linter
+    haskellPackages.hls-hlint-plugin
     haskellPackages.hoogle
     haskellPackages.hpack
     haskellPackages.implicit       # implicitcad.org (openscad in Haskell)
