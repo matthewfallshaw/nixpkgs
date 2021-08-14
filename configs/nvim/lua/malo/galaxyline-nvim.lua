@@ -43,7 +43,32 @@ gl.section.left = {
   {
     FileName = {
       condition = condition.buffer_not_empty,
-      provider = 'FileName',
+      -- provider = 'FileName',
+      provider = function(modified_icon, readonly_icon)
+        local function file_readonly()
+          if vim.bo.filetype == 'help' then
+            return ''
+          end
+          local icon = readonly_icon or ''
+          if vim.bo.readonly == true then
+            return " " .. icon .. " "
+          end
+          return ''
+        end
+
+        local file = vim.fn.expand('%:.')
+        if vim.fn.empty(file) == 1 then return '' end
+        if string.len(file_readonly()) ~= 0 then
+          return file .. file_readonly()
+        end
+        local icon = modified_icon or ''
+        if vim.bo.modifiable then
+          if vim.bo.modified then
+            return file .. ' ' .. icon .. '  '
+          end
+        end
+        return file .. ' '
+      end,
       highlight = 'StatusLineFileName',
     }
   },
