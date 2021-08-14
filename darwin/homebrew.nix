@@ -83,6 +83,7 @@
     "markdown-service-tools"
 
     # QuickLook plugins from Homebrew
+    "betterzip"
     "qlcolorcode"
     "qlimagesize"
     "qlmarkdown"
