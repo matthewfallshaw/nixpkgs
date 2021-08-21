@@ -12,7 +12,7 @@ local expand_escape = function(...) return shellescape(expand(...)) end
 local _ENV = {}
 
 -- Init module
-local M = {}
+local M = { default_format = 'amf' }
 M.lines = {}
 
 -- require 'luapad'.attach({
@@ -63,9 +63,10 @@ end
 
 -- Make functions -------------------------------------------------------------------------------
 
-function M.Make()
+function M.Make(format)
+  local fmt = format or M.default_format
   local infile = expand_escape('%')
-  local outfile = expand_escape('%:r')..'.amf'
+  local outfile = expand_escape('%:r')..'.'..fmt
 
   local cmd = 'openscad '..infile..' -o '..outfile
 
@@ -93,9 +94,10 @@ function M.Make()
   open_quickfix_and_return()
 end
 
-function M.ReMake(name)
+function M.ReMake(name, format)
+  local fmt = format or M.default_format
   local infile = expand_escape('%')
-  local outfile = expand_escape('%:p:h/')..name..'.amf'
+  local outfile = expand_escape('%:p:h/')..name..'.'..fmt
 
   local cmd = 'openscad '..infile..' -o '..outfile
 
@@ -123,14 +125,15 @@ function M.ReMake(name)
   open_quickfix_and_return()
 end
 
-function M.MakeModes()
+function M.MakeModes(format)
+  local fmt = format or M.default_format
   local infile = expand_escape('%')
   local outfile_fragment = expand_escape('%:r')
 
   local cmd =
     [[rg "^\s*(?:else )?if ?\(MODE==\"?([^\"\)]+)\"?\).*" ]]..infile..[[ -r '$1' | rg -v '^assy|^nil|^_' ]]..
     [[| parallel ]]..
-    [[openscad -D MODE='\"{}\"' ]]..infile..[[ -o ]]..outfile_fragment..[[_{}.amf]]
+    [[openscad -D MODE='\"{}\"' ]]..infile..[[ -o ]]..outfile_fragment..[[_{}.]]..fmt
 
   local winnr = vim.fn.win_getid()
   local bufnr = vim.api.nvim_win_get_buf(winnr)
