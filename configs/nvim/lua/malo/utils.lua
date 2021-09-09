@@ -59,6 +59,13 @@ M.keymaps = _.partial(_keymaps, M.keymap)
 ---`maps` is a list of keymaps of the form `{ '[lhs]', '[rhs]' }`.
 M.bufkeymaps = _.partial(_keymaps, M.bufkeymap)
 
+---Sets global variables
+---`variables(vars:{var = ?})`
+---Where `vars` is a variable:value map.
+function M.variables(vars)
+  _.each(vars , function(v, k) vim.api.nvim_set_var(k, v) end)
+end
+
 ---Makes an autocommand group
 ---`augroup(t:{name:string, cmds:[[string]])`
 ---Where `cmds` is a list of autocommands of the form `{ '[event]', '[pattern]', '[cmd]' }`
