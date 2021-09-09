@@ -17,6 +17,7 @@ local wo = vim.wo
 local g = vim.g
 local cmd = vim.cmd
 local env = vim.env
+local api = vim.api
 
 -- TODO --------------------------------------------------------------------------------------------
 
@@ -297,9 +298,43 @@ keymaps { mode = 'v', opts = {}, maps = {
   { '<leader>c', 'gc' },
 }}
 
+-- lexima.vim
+-- Auto close pairs
+-- https://github.com/cohama/lexima.vim
+_.each( { lexima_enable_basic_rules   = 1
+        , lexima_enable_newline_rules = 1
+        , lexima_enable_endwise_rules = 1
+        }
+      , function(v, k) vim.api.nvim_set_var(k, v) end)
+--[[
+call lexima#add_rule({'char': '$', 'input_after': '$', 'filetype': 'latex'})
+call lexima#add_rule({'char': '$', 'at': '\%#\$', 'leave': 1, 'filetype': 'latex'})
+call lexima#add_rule({'char': '<BS>', 'at': '\$\%#\$', 'delete': 1, 'filetype': 'latex'})
+--]]
+
 -- vim-surround
 -- Quoting/parenthesizing made simple
 -- https://github.com/tpope/vim-surround
+
+-- vim-rooter
+-- for non-project files/directories, change to file's directory (similar to autochdir).
+_.each( { rooter_change_directory_for_non_project_files = 'current'
+        , rooter_cd_cmd                                 = 'lcd'      -- change directory for the current window only
+        , rooter_resolve_links                          = 1          -- resolve symbolic links
+        , rooter_patterns = { '.git'
+                            , '.git/'
+                            , 'Makefile'
+                            , 'Rakefile'
+                            , 'package.json'
+                            , 'manifest.json'
+                            , 'tsconfig.json'
+                            , 'package.yaml'
+                            , 'stack.yaml'
+                            , '.root' }
+        }
+  , function(v, k) api.nvim_set_var(k, v) end
+  )
+
 
 -- }}}
 

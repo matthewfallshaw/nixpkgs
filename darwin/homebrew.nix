@@ -58,6 +58,7 @@
     # "iterm2"
     "macvim"            # deletion candidate
     "rowanj-gitx"
+    "sublime-merge"
     "vagrant"
     "vimr"
     "visual-studio-code"

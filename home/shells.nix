@@ -103,6 +103,7 @@
     ls = "${exa}/bin/exa";
     ps = "${procs}/bin/procs";
     tb = "toggle-background";
+    "hass-cli" = "hass-cli --token $HASS_TOKEN --server $HASS_SERVER";
 
     # Gitx.app (http://rowanj.github.io/gitx/)
     gx="gitx";

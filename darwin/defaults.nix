@@ -13,6 +13,7 @@
     KeyRepeat = 2;
     NSAutomaticCapitalizationEnabled = false;
     NSAutomaticPeriodSubstitutionEnabled = false;
+    NSAutomaticQuoteSubstitutionEnabled = false;
     _HIHideMenuBar = false;
   };
 

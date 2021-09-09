@@ -26,7 +26,6 @@
 
     # Neovim plugins
     astronuta-nvim = { url = "github:tjdevries/astronauta.nvim"; flake = false; };
-    autopairs-vim = { url = "github:jiangmiao/auto-pairs"; flake = false; };
     bufferize-vim = { url = "github:AndrewRadev/bufferize.vim"; flake = false; };
     vim-openscad = { url = "github:sirtaj/vim-openscad"; flake = false; };
     vim-rooter = { url = "github:airblade/vim-rooter"; flake = false; };
@@ -165,7 +164,6 @@
           # Vim plugins
           vimPlugins = prev.vimPlugins // prev.lib.genAttrs [
             "astronuta-nvim"
-            "autopairs-vim"
             "bufferize-vim"
             "vim-openscad"
             "vim-rooter"

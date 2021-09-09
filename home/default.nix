@@ -119,6 +119,7 @@
     # bandwhich                # display current network utilization by process
     bottom                   # fancy version of `top` with ASCII graphs
     browsh                   # in terminal browser
+    cmake                    # cross-Platform Makefile Generator
     coreutils                # GNU Core Utilities
     curl                     #
     du-dust                  # fancy version of `du`
@@ -176,8 +177,9 @@
     # Lua
     lua53Packages.busted
     lua53Packages.fun
-    lua53Packages.std-strict
+    lua53Packages.luafilesystem
     lua53Packages.moses
+    lua53Packages.std-strict
 
     # Useful nix related tools
     cachix                          # adding/managing alternative binary caches hosted by Cachix

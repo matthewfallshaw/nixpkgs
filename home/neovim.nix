@@ -49,10 +49,10 @@ in
   programs.neovim.plugins = with pkgs.vimPlugins; [
     # Lua ftplugins
     astronuta-nvim
-    # Auto-pairs
-    autopairs-vim
     # Send vim command output to a scratch buffer
     bufferize-vim
+    # Auto close pairs
+    lexima-vim
     # Colorscheme creation aid
     lush-nvim
     # Luarocks moses only in nvim (deletion candidate)
