@@ -96,7 +96,7 @@ in
     gitsigns-nvim
     indent-blankline-nvim
     lspsaga-nvim
-    (pluginWithDeps nvim-bufferline-lua [ nvim-web-devicons ])
+    (pluginWithDeps bufferline-nvim [ nvim-web-devicons ])
     (pluginWithDeps nvim-compe [ compe-tabnine ])
     # Common configs for nvim LSP
     (pluginWithDeps nvim-lspconfig [ nvim-lspinstall ])

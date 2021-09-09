@@ -1,5 +1,5 @@
 -- Highlights for telescope.nvim
--- https://github.com/akinsho/nvim-bufferline.lua
+-- https://github.com/akinsho/bufferline.nvim
 local t = require'lush_theme.malo'
 
 return require'lush'(function()
