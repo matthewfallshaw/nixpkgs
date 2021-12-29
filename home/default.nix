@@ -89,7 +89,6 @@
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.direnv.enable
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
-  programs.direnv.nix-direnv.enableFlakes = true;
 
   # Htop
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.htop.enable
@@ -150,9 +149,9 @@
     ghc                            # Glasgow Haskell Compiler
     gitAndTools.gh                 # github.com command line
     google-cloud-sdk               # Google cloud sdk
-    haskell-language-server
     haskellPackages.cabal-install
-    haskellPackages.hapistrano     # a deployment library for Haskell applications similar to Ruby's Capistrano
+    # haskellPackages.hapistrano     # a deployment library for Haskell applications similar to Ruby's Capistrano
+    # haskell-language-server
     haskellPackages.hlint          # Haskell linter
     haskellPackages.hls-hlint-plugin
     haskellPackages.hoogle
@@ -171,15 +170,13 @@
       yapf
     ]))
     s3cmd
-    tickgit                        # view pending tasks, progress reports, completion summaries
-                                   # and historical data (using git history)
 
     # Lua
-    lua53Packages.busted
+    # lua53Packages.busted
     lua53Packages.fun
     lua53Packages.luafilesystem
-    lua53Packages.moses
-    lua53Packages.std-strict
+    # lua53Packages.moses
+    # lua53Packages.std-strict
 
     # Useful nix related tools
     cachix                          # adding/managing alternative binary caches hosted by Cachix
@@ -190,7 +187,7 @@
 
   ] ++ lib.optionals stdenv.isDarwin [
     m-cli          # useful macOS CLI commands
-    # prefmanager    # tool for working with macOS defaults
+    prefmanager    # tool for working with macOS defaults
   ];
   # }}}
 
@@ -223,12 +220,5 @@
     nix.enable = true;
   };
   # }}}
-
-  # This value determines the Home Manager release that your configuration is compatible with. This
-  # helps avoid breakage when a new Home Manager release introduces backwards incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See the Home Manager release notes for
-  # a list of state version changes in each release.
-  home.stateVersion = "21.05";
 }
 # vim: foldmethod=marker

@@ -29,5 +29,5 @@
   # be used since it tries to write to the config, which is in the store.
   imports = lib.filter lib.pathExists [ ./private.nix ];
 
-  programs.gh.gitProtocol = "ssh";
+  programs.gh.settings.git_protocol = "ssh";
 }

@@ -2,9 +2,6 @@
 
 {
   imports = [
-    # Minimal config of Nix related options and shells
-    ./bootstrap.nix
-
     # Other nix-darwin configuration
     ./homebrew.nix
     ./defaults.nix

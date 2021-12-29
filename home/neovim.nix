@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkIf;
+  inherit (lib) mkIf optional;
   nvr = "${pkgs.neovim-remote}/bin/nvr";
 
   pluginWithDeps = plugin: deps: plugin.overrideAttrs (_: { dependencies = deps; });
@@ -99,7 +99,7 @@ in
     (pluginWithDeps bufferline-nvim [ nvim-web-devicons ])
     (pluginWithDeps nvim-compe [ compe-tabnine ])
     # Common configs for nvim LSP
-    (pluginWithDeps nvim-lspconfig [ nvim-lspinstall ])
+    nvim-lspconfig
     nvim-treesitter
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
     vim-floaterm
@@ -141,14 +141,14 @@ in
 
     # Language servers
     # See `../configs/nvim/lua/init.lua` for configuration.
-    ccls
+    # ccls
     nodePackages.bash-language-server
     nodePackages.typescript-language-server
     nodePackages.vim-language-server
     nodePackages.vscode-json-languageserver
     nodePackages.yaml-language-server
     rnix-lsp
-  ] ++ lib.optional (!stdenv.isDarwin) sumneko-lua-language-server;
+  ] ++ optional (pkgs.stdenv.system != "x86_64-darwin") sumneko-lua-language-server;
   # }}}
 }
 # vim: foldmethod=marker
