@@ -128,8 +128,8 @@ keymaps { mode = 't', opts = { 'noremap' }, maps = {
 
 -- Define all `<Space>` prefixed keymaps with which-key.nvim
 -- https://github.com/folke/which-key.nvim
-cmd 'packadd which-key-nvim'
-cmd 'packadd! gitsigns-nvim' -- needed for some mappings
+cmd 'packadd which-key.nvim'
+cmd 'packadd! gitsigns.nvim' -- needed for some mappings
 local wk = require 'which-key'
 wk.setup { plugins = { spelling = { enabled = true } } }
 

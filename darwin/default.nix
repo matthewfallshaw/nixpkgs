@@ -18,7 +18,7 @@
   # Issue: https://github.com/nix-community/home-manager/issues/1341
   environment.systemPackages = with pkgs; [
     kitty
-    # iterm2
+    iterm2
     terminal-notifier
   ];
   # https://github.com/nix-community/home-manager/issues/423
