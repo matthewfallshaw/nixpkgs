@@ -102,13 +102,13 @@
         ];
       };
 
-      NotnuxM1 = darwinSystem {
+      notnux6 = darwinSystem {
         system = "aarch64-darwin";
         modules = nixDarwinCommonModules ++ [
           {
             users.primaryUser = "matt";
-            networking.computerName = "notnux5-M1";
-            networking.hostName = "NotnuxM1";
+            networking.computerName = "notnux6";
+            networking.hostName = "notnux6";
             networking.knownNetworkServices = [
               "Wi-Fi"
               "USB 10/100/1000 LAN"

@@ -180,7 +180,7 @@
 
     # Useful nix related tools
     cachix                          # adding/managing alternative binary caches hosted by Cachix
-    comma                           # run software from without installing it
+    # comma                           # run software from without installing it
     lorri                           # improve `nix-shell` experience in combination with `direnv`
     niv                             # easy dependency management for nix projects
     nodePackages.node2nix
@@ -194,15 +194,15 @@
   home.sessionPath = [ "${config.home.homeDirectory}/.local/bin" "${config.home.homeDirectory}/bin" ];
   home.sessionVariables = { EDITOR = "nvim"; };
 
-  home.activation = {
-    rakeDevEnvironmentBuild = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      ${pkgs.rubyPackages.rake}/bin/rake -f ${../configs/rakefile.rb}
-    '';
-  } // lib.optionalAttrs pkgs.stdenv.isDarwin {
-    rakeDevEnvironmentBuildDarwin = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      ${pkgs.rubyPackages.rake}/bin/rake -f ${../configs/rakefile.darwin.rb}
-    '';
-  };
+#  home.activation = {
+#    rakeDevEnvironmentBuild = lib.hm.dag.entryAfter ["writeBoundary"] ''
+#      ${pkgs.rubyPackages.rake}/bin/rake -f ${../configs/rakefile.rb}
+#    '';
+#  } // lib.optionalAttrs pkgs.stdenv.isDarwin {
+#    rakeDevEnvironmentBuildDarwin = lib.hm.dag.entryAfter ["writeBoundary"] ''
+#      ${pkgs.rubyPackages.rake}/bin/rake -f ${../configs/rakefile.darwin.rb}
+#    '';
+#  };
 
   # Misc configuration files --------------------------------------------------------------------{{{
 

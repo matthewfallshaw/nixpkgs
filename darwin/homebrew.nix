@@ -1,12 +1,12 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   mkIfCaskPresent = cask: lib.mkIf (lib.any (x: x == cask) config.homebrew.casks);
   brewBinPrefix = if pkgs.system == "aarch64-darwin" then "/opt/homebrew/bin" else "/usr/local/bin";
 in
 {
-  # homebrew.enable = true;
-  homebrew.enable = false;
+  homebrew.enable = true;
+  # homebrew.enable = false;
   homebrew.brewPrefix = brewBinPrefix;
   homebrew.autoUpdate = true;
   homebrew.cleanup = "zap";
