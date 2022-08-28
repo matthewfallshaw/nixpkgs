@@ -5,6 +5,10 @@ let
   brewBinPrefix = if pkgs.system == "aarch64-darwin" then "/opt/homebrew/bin" else "/usr/local/bin";
 in
 {
+  environment.shellInit = ''
+    eval "$(${brewBinPrefix}/brew shellenv)"
+  '';
+
   homebrew.enable = true;
   # homebrew.enable = false;
   homebrew.brewPrefix = brewBinPrefix;
@@ -33,7 +37,7 @@ in
     Gapplin = 768053424;
     GarageBand = 682658836;
     "Icon Slate" = 439697913;
-    iMovie = 408981434;
+    # iMovie = 408981434;
     Keynote = 409183694;
     Kindle = 405399194;
     "LG Screen Manager" = 1142051783;
@@ -43,7 +47,7 @@ in
     Pages = 409201541;
     Pixelmator = 407963104;
     "Pixelmator Pro" = 1289583905;
-    Slack = 803453959;
+    # Slack = 803453959;
     Vimari = 1480933944;            # Safari Vimium equiv
     "WiFi Explorer" = 494803304;
     "The Unarchiver" = 425424353;
@@ -54,15 +58,16 @@ in
     # Development
     "atom"
     "circuitjs1"
-    "dash"
     "db-browser-for-sqlite"
     "dbeaver-community"
     "docker"
     "dotnet"
+    # "github"            # GitHub Desktop
     "gitup"
     "insomnia"          # … but I hate it
     # "iterm2"
     "macvim"            # deletion candidate
+    "paraview"
     "rowanj-gitx"
     "sublime-merge"
     "vagrant"
@@ -79,11 +84,11 @@ in
     # "freecad"
     "autodesk-fusion360"
     "meshlab"
-    "meshmixer"
+    # "meshmixer"
     "openscad"
     "prusaslicer"
     "raspberry-pi-imager"
-    "superslicer"
+    # "superslicer"
     "ultimaker-cura"    # deletion candidate
 
     # Services from Homebrew
@@ -105,12 +110,13 @@ in
     "etrecheckpro"
     "freeplane"         # deletion candidate
     "firefox"
+    "fujitsu-scansnap-home"
     "google-chrome"
     "google-drive"
-    "google-backup-and-sync"
     "gpg-suite"         # deletion candidate
     "grandperspective"
     "hammerspoon"
+    "horos"             # Dicom & medical viewer
     "imageoptim"
     "inkscape"
     "karabiner-elements"
@@ -120,11 +126,12 @@ in
     "nvalt"
     "quicksilver"
     "signal"
-    "skyfonts"
+    "shortcutdetective"
     "skype"
     "spotify"
     "steam"
     "suspicious-package"
+    "tableau-reader"
     "toggl-track"
     "tor-browser"
     "transmission"
@@ -133,20 +140,27 @@ in
     "unison"
     "viscosity"
     "vlc"
+    "webcatalog"
     "xquartz"
     "yed"
+    "yt-music"
 
     # Other
     "logitech-camera-settings"
-    "logitech-control-center"
+    "logitech-options"
     "logitech-unifying"
     "onyx"
+
+    "wkhtmltopdf"
   ];
 
   # TODO: Check whether these are in `nixpkgs`
   homebrew.brews = [
     # "rbenv"
     "trash"
+    "switchaudio-osx"
+    "mupdf-tools"
+    "rtl_433"
   ];
 
   environment.systemPath = mkIfCaskPresent "openscad"

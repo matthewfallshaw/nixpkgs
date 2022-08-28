@@ -1,4 +1,6 @@
 [
   "npm-check-updates",
-  "purescript-language-server"
+  "purescript-language-server",
+  "@tuyapi/cli",
+  "clipdown"
 ]

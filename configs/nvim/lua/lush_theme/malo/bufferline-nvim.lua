@@ -1,7 +1,7 @@
 -- Custom highlights for bufferline.nvim
 -- https://github.com/akinsho/bufferline.nvim
 --
--- nvim-bufferline.lua isn't setup to manage it's highlights in this way, but the way they provide
+-- bufferline.nvim isn't setup to manage it's highlights in this way, but the way they provide
 -- does not work well with colorschemes that have dynamic colors, like colors that change based on
 -- `vim.o.background`'s value. In order to be able to define the hightlights directly, the following
 -- needs to be added: `vim.cmd 'au! BufferlineColors ColorScheme'`.

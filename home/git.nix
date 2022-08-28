@@ -9,7 +9,10 @@
   programs.git.extraConfig = {
     core.editor = "${pkgs.neovim-remote}/bin/nvr --remote-wait-silent -cc split";
     diff.colorMoved = "default";
+    init.defaultBranch = "main";
     pull.rebase = true;
+    branch.autosetuprebase = "always";
+    rebase.autoStash = true;
   };
   programs.git.ignores = [".DS_Store"];
   programs.git.userEmail = "m@fallshaw.me";

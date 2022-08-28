@@ -61,6 +61,67 @@ local function on_err(job_id, data, event)
   populate_quickfix(job_id)
 end
 
+-- Keymaps -----------------------------------------------------------------------------------------
+
+local utils = require 'malo.utils'
+local bufkeymaps = utils.bufkeymaps
+
+---@type fun(s:string)
+local function with_crs(s)
+  return string.gsub(s, '[\n\r]', '<CR>')
+end
+
+bufkeymaps{ mode = 'i', opts = { 'noremap' }, maps = {
+
+  { ';;b', with_crs [[
+include <BOSL2/std.scad>
+MODE="assy"; // [ "assy", "help" ]
+
+]] },
+
+  { ';;n', with_crs [[
+include <NopSCADlib/lib.scad>
+// include <NopSCADlib/vitamins/stepper_motors.scad>
+<ESC>cc
+]] },
+
+  { ';;s', with_crs [[
+include <stdlib.scad>
+
+// Fragment arc count: Circles have $fa segments; arcs have 360/$fa angles
+<ESC>cc$fa=12;  // [16, 32, 64, 128, 256]
+
+// Fragment size: Maximum size for line fragments
+<ESC>cc$fs=2;   // [0.1, 0.25, 0.5, 1, 2, 5, 10]
+
+// Override $fs, use $fn for $fa
+<ESC>cc$fn=0;  // [0, 16, 32, 64, 128, 256]
+
+// BIGNUM=100;
+<ESC>cc
+
+MODE = "assy"; // [ part, assy, help ]
+MODES = [ "part", "assy", str("help") ];
+if(MODE=="assy") assy();
+else if(MODE=="part") part();
+else assert(false, str("Unrecognised MODE: ", MODE, "; Available modes: ", MODES));
+
+
+module part() {
+}
+
+module assy() {
+  part();
+}<ESC><<4k<<O
+]] },
+
+  { ';;A', with_crs [[anchor=CENTER, spin=0, orient=UP]] },
+
+  { ';;a', with_crs [[anchor=anchor, spin=spin, orient=orient]] },
+
+} }
+
+
 -- Make functions -------------------------------------------------------------------------------
 
 function M.Make(format)

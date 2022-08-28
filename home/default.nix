@@ -19,65 +19,9 @@
     style = "plain";
   };
   # See `./shells.nix` for more on how this is used.
-  programs.fish.functions = {
-    set-bat-colors = {
-      body = ''set -xg BAT_THEME "Solarized ($term_background)"'';
-      onVariable = "term_background";
-    };
-    cdd = {
-      description = "cd into ~/code";
-      body = ''
-        set -l cdpath "$HOME/code"
-        if [ -z "$argv[1]" ]
-          cd $cdpath
-        else
-          cd $cdpath/$argv[1]
-        end
-      '';
-    };
-    cds = {
-      description = "cd into ~/source";
-      body = ''
-        set -l cdpath "$HOME/source"
-        if [ -z "$argv[1]" ]
-          cd $cdpath
-        else
-          cd $cdpath/$argv[1]
-        end
-      '';
-    };
-    cdup = {
-      description = "cd up n directories";
-      body = ''
-        set -l ups ""
-        for i in (seq 1 $argv[1])
-          set ups $ups"../"
-        end
-        cd $ups
-      '';
-    };
-    mcd = {
-      description = "Make a directory and cd into it";
-      body = ''
-        mkdir -p "$argv[1]"; and cd "$argv[1]"
-      '';
-    };
-    mtd = {
-      description = "Make a temp directory and cd into it";
-      body = ''
-        set -l dir (mktemp -d)
-        if test -n "$dir"
-          if test -d "$dir"
-            echo "$dir"
-            cd "$dir"
-          else
-            echo "mktemp directory $dir does not exist"
-          end
-        else
-          echo "mktemp didn't work"
-        end
-      '';
-    };
+  programs.fish.functions.set-bat-colors = {
+    body = ''set -xg BAT_THEME "Solarized ($term_background)"'';
+    onVariable = "term_background";
   };
   programs.fish.interactiveShellInit = ''
     # Set `bat` colors based on value of `$term_backdround` when shell starts up.
@@ -145,9 +89,11 @@
     (agda.withPackages (p: [ p.standard-library ]))
     bundix                         # ruby Bundler
     cloc                           # source code line counter
+    cocoapods                      # dependency manager for Swift and Objective-C Cocoa projects
     dotnet-sdk                     # Microsoft .NET SDK  TODO
     ghc                            # Glasgow Haskell Compiler
     gitAndTools.gh                 # github.com command line
+    # github-desktop
     google-cloud-sdk               # Google cloud sdk
     haskellPackages.cabal-install
     # haskellPackages.hapistrano     # a deployment library for Haskell applications similar to Ruby's Capistrano
@@ -177,6 +123,9 @@
     lua53Packages.luafilesystem
     # lua53Packages.moses
     # lua53Packages.std-strict
+
+    # Hardware hacking
+    # fritzing
 
     # Useful nix related tools
     cachix                          # adding/managing alternative binary caches hosted by Cachix
@@ -219,6 +168,9 @@
     };
     nix.enable = true;
   };
+
+  # Stop `parallel` from displaying citation warning
+  home.file.".parallel/will-cite".text = "";
   # }}}
 }
 # vim: foldmethod=marker

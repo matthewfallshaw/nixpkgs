@@ -3,6 +3,7 @@
 {
   system.defaults.NSGlobalDomain = {
     "com.apple.trackpad.scaling" = "3.0";
+    # AppleInterfaceStyleSwitchesAutomatically = true;
     AppleKeyboardUIMode = 3;
     AppleMeasurementUnits = "Centimeters";
     AppleMetricUnits = 1;

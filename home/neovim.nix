@@ -1,7 +1,10 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkIf optional;
+  inherit (lib) getName mkIf optional;
+  inherit (config.lib.file) mkOutOfStoreSymlink;
+  nixConfigDir = "${config.home.homeDirectory}/.config/nixpkgs";
+
   nvr = "${pkgs.neovim-remote}/bin/nvr";
 
   pluginWithDeps = plugin: deps: plugin.overrideAttrs (_: { dependencies = deps; });
@@ -32,22 +35,27 @@ in
 
   # Minimal init.vim config to load Lua config. Nix and Home Manager don't currently support
   # `init.lua`.
-  xdg.configFile."nvim/lua" = {
-    source = ../configs/nvim/lua;
+  xdg.configFile."nvim/after" = {
+    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/after";
     recursive = true;
   };
   xdg.configFile."nvim/colors" = {
-    source = ../configs/nvim/colors;
+    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/colors";
     recursive = true;
   };
-  xdg.configFile."nvim/after" = {
-    source = ../configs/nvim/after;
+  xdg.configFile."nvim/ftdetect" = {
+    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/ftdetect";
     recursive = true;
   };
+  xdg.configFile."nvim/lua" = {
+    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/lua";
+    recursive = true;
+  };
+  xdg.configFile."nvim/plugins.vim".source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/plugins.vim";
   programs.neovim.extraConfig = "lua require('init')";
 
   programs.neovim.plugins = with pkgs.vimPlugins; [
-    # Lua ftplugins
+    # Lua Keymap DSL
     astronuta-nvim
     # Send vim command output to a scratch buffer
     bufferize-vim
@@ -57,8 +65,6 @@ in
     lush-nvim
     # Luarocks moses only in nvim (deletion candidate)
     moses-nvim
-    # Interactive lua scratchpad
-    # nvim-luapad
     # plenary-nvim       # required for telescope-nvim and gitsigns.nvim
     # popup-nvim         # required for telescope-nvim
     Recover-vim
@@ -88,6 +94,8 @@ in
     direnv-vim
     # Distraction free writing environment
     goyo-vim
+    # Interactive lua scratchpad
+    # nvim-luapad
     vim-fugitive
   ] ++ map nonVSCodePluginWithConfig [
     # Support .editorconfig files
@@ -145,6 +153,7 @@ in
     nodePackages.bash-language-server
     nodePackages.typescript-language-server
     nodePackages.vim-language-server
+    nodePackages.vscode-langservers-extracted
     nodePackages.vscode-json-languageserver
     nodePackages.yaml-language-server
     rnix-lsp

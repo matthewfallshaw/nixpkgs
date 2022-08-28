@@ -14,6 +14,8 @@ SYMLINKS_FORCED = {
   '~/Library/Application Support/Typinator' => '~/Google Drive/system/Library/Application Support/Typinator',
   '~/Library/Application Support/Keycue' => '~/Google Drive/system/Library/Application Support/Keycue',
   '~/Library/Application Support/nvALT' => '~/Google Drive/system/Library/Application Support/nvALT',
+  '~/Library/Application Support/SuperSlicer' => '~/Google Drive/system/Library/Application Support/SuperSlicer',
+  '~/Library/Application Support/Dash' => '~/Google Drive/system/Library/Application Support/Dash',
 }
 COPY = {
 }

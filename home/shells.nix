@@ -11,6 +11,64 @@
   # Fish functions ----------------------------------------------------------------------------- {{{
 
   programs.fish.functions = {
+    set-bat-colors = {
+      body = ''set -xg BAT_THEME "Solarized ($term_background)"'';
+      onVariable = "term_background";
+    };
+    cdd = {
+      description = "cd into ~/code";
+      body = ''
+        set -l cdpath "$HOME/code"
+        if [ -z "$argv[1]" ]
+          cd $cdpath
+        else
+          cd $cdpath/$argv[1]
+        end
+      '';
+    };
+    cds = {
+      description = "cd into ~/source";
+      body = ''
+        set -l cdpath "$HOME/source"
+        if [ -z "$argv[1]" ]
+          cd $cdpath
+        else
+          cd $cdpath/$argv[1]
+        end
+      '';
+    };
+    cdup = {
+      description = "cd up n directories";
+      body = ''
+        set -l ups ""
+        for i in (seq 1 $argv[1])
+          set ups $ups"../"
+        end
+        cd $ups
+      '';
+    };
+    mcd = {
+      description = "Make a directory and cd into it";
+      body = ''
+        mkdir -p "$argv[1]"; and cd "$argv[1]"
+      '';
+    };
+    mtd = {
+      description = "Make a temp directory and cd into it";
+      body = ''
+        set -l dir (mktemp -d)
+        if test -n "$dir"
+          if test -d "$dir"
+            echo "$dir"
+            cd "$dir"
+          else
+            echo "mktemp directory $dir does not exist"
+          end
+        else
+          echo "mktemp didn't work"
+        end
+      '';
+    };
     # Toggles `$term_background` between "light" and "dark". Other Fish functions trigger when this
     # variable changes. We use a universal variable so that all instances of Fish have the same
     # value for the variable.
@@ -104,6 +162,8 @@
     ps = "${procs}/bin/procs";
     tb = "toggle-background";
     "hass-cli" = "hass-cli --token $HASS_TOKEN --server $HASS_SERVER";
+    sd = "smerge mergetool";
+    smergediff = "smerge mergetool";
 
     # Gitx.app (http://rowanj.github.io/gitx/)
     gx="gitx";
@@ -128,6 +188,9 @@
       set dots $dots"."
       alias $dots="cdup $i"
     end
+
+    set -xg HASS_TOKEN (security find-generic-password -a utilities -s HomeAssistantToken -w)
+    set -xg HASS_SERVER "http://homeassistant.local:8123"
   '';
 
   programs.fish.interactiveShellInit = ''

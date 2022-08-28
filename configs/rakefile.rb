@@ -19,6 +19,7 @@ end
 SYMLINKS = {
   '~/.dotfiles_secrets' => '~/Google Drive/system/home/dotfiles_secrets',
   '~/CAD/' => '~/Documents/CAD/',
+  '~/Google Drive/' => '~/Volumes/GoogleDrive/',
 }
 SYMLINKS.each do |l,t|
   file l => t do
