@@ -41,7 +41,6 @@ in
     Keynote = 409183694;
     Kindle = 405399194;
     "LG Screen Manager" = 1142051783;
-    "Lights Switch" = 1181873676;
     "Microsoft Remote Desktop" = 1295203466;
     Numbers = 409203825;
     Pages = 409201541;
@@ -67,11 +66,12 @@ in
     "insomnia"          # … but I hate it
     # "iterm2"
     "macvim"            # deletion candidate
+    "meld"              # visual diff and merge tool
+    "neovide"
     "paraview"
     "rowanj-gitx"
     "sublime-merge"
     "vagrant"
-    "vimr"
     "visual-studio-code"
     "zerobranestudio"   # deletion candidate
 
@@ -81,7 +81,7 @@ in
 
     # Hardware hacking
     "arduino"
-    # "freecad"
+    "freecad"
     "autodesk-fusion360"
     "meshlab"
     # "meshmixer"
@@ -104,6 +104,7 @@ in
     "quicklook-json"
 
     # Other GUI apps
+    "adobe-acrobat-reader"
     "balenaetcher"
     "calibre"
     "dropbox"
@@ -150,6 +151,7 @@ in
     "logitech-options"
     "logitech-unifying"
     "onyx"
+    "macfuse"
 
     "wkhtmltopdf"
   ];
@@ -161,6 +163,7 @@ in
     "switchaudio-osx"
     "mupdf-tools"
     "rtl_433"
+    # "ext4fuse"
   ];
 
   environment.systemPath = mkIfCaskPresent "openscad"

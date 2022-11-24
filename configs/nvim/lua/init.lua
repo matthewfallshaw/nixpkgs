@@ -49,6 +49,15 @@ local api = vim.api
 vim.api.nvim_command('source ~/.config/nvim/plugins.vim')
 -- }}}
 
+-- Neovide ----------------------------------------------------------------------------------- {{{
+if g.neovide then
+  o.guifont = 'JetBrainsMono Nerd Font:h11'
+  g.neovide_input_use_logo = true
+  g.neovide_cursor_animation_length = 0.01
+  g.neovide_cursor_trail_size = 0.4
+end
+-- }}}
+
 -- Basic Vim Config --------------------------------------------------------------------------------
 
 o.scrolloff  = 10   -- start scrolling when cursor is within 5 lines of the ledge

@@ -47,8 +47,16 @@ in
     source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/ftdetect";
     recursive = true;
   };
+  xdg.configFile."nvim/ftplugin" = {
+    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/ftplugin";
+    recursive = true;
+  };
   xdg.configFile."nvim/lua" = {
     source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/lua";
+    recursive = true;
+  };
+  xdg.configFile."nvim/syntax" = {
+    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/syntax";
     recursive = true;
   };
   xdg.configFile."nvim/plugins.vim".source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/plugins.vim";

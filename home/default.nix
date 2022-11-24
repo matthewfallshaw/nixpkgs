@@ -75,9 +75,11 @@
     mosh                     # wrapper for `ssh`; better and does not drop connections
     nodePackages.speed-test  # nice speed-test tool
     parallel                 # runs commands in parallel
+    perl534Packages.vidir    # a great way to bulk edit filenames
     pwgen                    # password generator
     python3Packages.shell-functools # a collection of functional programming tools for the shell
     procs                    # fancy version of `ps`
+    rdfind                   # find duplicate files and optionally replace them with {hard|sym}links
     ripgrep                  # better version of `grep`
     tealdeer                 # rust implementation of `tldr`
     thefuck                  # do what I mean on the command line
@@ -97,7 +99,6 @@
     google-cloud-sdk               # Google cloud sdk
     haskellPackages.cabal-install
     # haskellPackages.hapistrano     # a deployment library for Haskell applications similar to Ruby's Capistrano
-    # haskell-language-server
     haskellPackages.hlint          # Haskell linter
     haskellPackages.hls-hlint-plugin
     haskellPackages.hoogle
@@ -105,6 +106,7 @@
     haskellPackages.implicit       # implicitcad.org (openscad in Haskell)
     haskellPackages.implicit-hie   # auto generate hie-bios cradles & hie.yaml
     haskellPackages.stack
+    # haskell-language-server
     home-assistant-cli             # Command-line tool for Home Assistant
     idris2                         # a purely functional programming language with first class types
     jq                             # query json
@@ -112,9 +114,12 @@
     nodejs
     (python3.withPackages (p: with p; [
       mypy
+      numpy
+      pandas
       pylint
       yapf
     ]))
+    # R
     s3cmd
 
     # Lua
