@@ -14,31 +14,31 @@ in
   lua53Packages = prev.lua53Packages // {
     # nix shell nixpkgs#luarocks-nix nixpkgs#nix-prefetch-git --command luarocks nix fun
 
-    fun = buildLuarocksPackage {
-      pname = "fun";
-      version = "0.1.3-1";
-      knownRockspec = (fetchurl {
-        url    = "https://luarocks.org/fun-0.1.3-1.rockspec";
-        sha256 = "03bimwzz9qwcs759ld69bljvnaim7dlsppg4w1hgxmvm6f2c8058";
-      }).outPath;
-      src = fetchgit ( removeAttrs (builtins.fromJSON ''{
-        "url": "git://github.com/luafun/luafun.git",
-        "rev": "e248e007be4d3474224277f6ba50f53d4121bfe0",
-        "date": "2017-05-30T16:51:24+03:00",
-        "path": "/nix/store/cclijs9k6yfmhilxzsdzqs9m9nsb35ac-luafun",
-        "sha256": "0p13mqsry36q7y8wjrd6zad7n6a9g1fsznnbswi6ygkajkzvsygl",
-        "fetchSubmodules": true,
-        "deepClone": false,
-        "leaveDotGit": false
-      }
-      '') ["date" "path"]) ;
-      propagatedBuildInputs = [ lua ];
-      meta = with lib; {
-        homepage = "https://luafun.github.io/";
-        description = "High-performance functional programming library for Lua";
-        license.fullName = "MIT/X11";
-      };
-    };
+    # fun = buildLuarocksPackage {
+    #   pname = "fun";
+    #   version = "0.1.3-1";
+    #   knownRockspec = (fetchurl {
+    #     url    = "https://luarocks.org/fun-0.1.3-1.rockspec";
+    #     sha256 = "03bimwzz9qwcs759ld69bljvnaim7dlsppg4w1hgxmvm6f2c8058";
+    #   }).outPath;
+    #   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+    #     "url": "git://github.com/luafun/luafun.git",
+    #     "rev": "e248e007be4d3474224277f6ba50f53d4121bfe0",
+    #     "date": "2017-05-30T16:51:24+03:00",
+    #     "path": "/nix/store/cclijs9k6yfmhilxzsdzqs9m9nsb35ac-luafun",
+    #     "sha256": "0p13mqsry36q7y8wjrd6zad7n6a9g1fsznnbswi6ygkajkzvsygl",
+    #     "fetchSubmodules": true,
+    #     "deepClone": false,
+    #     "leaveDotGit": false
+    #   }
+    #   '') ["date" "path"]) ;
+    #   propagatedBuildInputs = [ lua ];
+    #   meta = with lib; {
+    #     homepage = "https://luafun.github.io/";
+    #     description = "High-performance functional programming library for Lua";
+    #     license.fullName = "MIT/X11";
+    #   };
+    # };
 
     std-strict = buildLuarocksPackage {
       pname = "std.strict";

@@ -123,7 +123,7 @@
 
     # Lua
     # lua53Packages.busted
-    lua53Packages.fun
+    # lua53Packages.fun
     lua53Packages.luafilesystem
     # lua53Packages.moses
     # lua53Packages.std-strict
