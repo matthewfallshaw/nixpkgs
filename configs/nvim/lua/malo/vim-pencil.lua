@@ -5,5 +5,8 @@ vim.cmd 'packadd vim-pencil'
 
 vim.g['pencil#wrapModeDefault'] = 'soft' -- default is 'hard'
 require'malo.utils'.augroup { name = 'Pencil', cmds = {
-  { 'FileType', 'markdown,mkd,text', 'call pencil#init() | setlocal spell' }
+  { 'FileType', {
+    pattern = 'markdown,mkd,text',
+    command = 'call pencil#init() | setlocal spell',
+  }},
 }}

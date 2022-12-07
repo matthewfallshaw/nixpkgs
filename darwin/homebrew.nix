@@ -12,10 +12,11 @@ in
   homebrew.enable = true;
   # homebrew.enable = false;
   homebrew.brewPrefix = brewBinPrefix;
-  homebrew.autoUpdate = true;
-  homebrew.cleanup = "zap";
+  homebrew.onActivation.autoUpdate = true;
+  homebrew.onActivation.cleanup = "zap";
+  # homebrew.onActivation.upgrade = true;
   homebrew.global.brewfile = true;
-  homebrew.global.noLock = true;
+  homebrew.global.lockfiles = false;
 
   homebrew.taps = [
     "homebrew/cask"
@@ -27,7 +28,7 @@ in
   ];
 
   homebrew.masApps = {
-    "1Password" = 1333542190;
+    # "1Password" = 1333542190;
     "Accelerate for Safari" = 1459809092;
     "AVG Cleaner" = 667434228;
     Calca = 635758264;
@@ -104,6 +105,8 @@ in
     "quicklook-json"
 
     # Other GUI apps
+    "1password"
+    "1password-cli"
     "adobe-acrobat-reader"
     "balenaetcher"
     "calibre"

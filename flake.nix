@@ -51,27 +51,46 @@
     # Personal configuration shared between `nix-darwin` and plain `home-manager` configs.
     homeManagerStateVersion = "22.05";
     homeManagerCommonConfig = {
-      imports = attrValues malo.homeManagerModules ++ attrValues self.homeManagerModules ++ [
+      imports = attrValues {
+        inherit (malo.homeManagerModules)
+          programs-neovim-extras
+          programs-kitty-extras
+          home-user-info
+          colors
+          malo-colors
+          ;
+      }++ attrValues self.homeManagerModules ++ [
         ./home
         { home.stateVersion = homeManagerStateVersion; }
       ];
     };
 
+    primaryUserInfo = {
+      username = "matt";
+      fullName = "Matt Fallshaw";
+      email = "m@fallshaw.me";
+      nixConfigDirectory = "/Users/matt/.config/nixpkgs";
+    };
+
     # Modules shared by most `nix-darwin` personal configurations.
-    nixDarwinCommonModules = attrValues malo.darwinModules ++ [
+    nixDarwinCommonModules = attrValues {
+      inherit (malo.darwinModules)
+        users-primaryUser
+        malo-bootstrap
+        ;
+    } ++ [
       # Main `nix-darwin` config
       ./darwin
-      (import "${malo}/darwin/bootstrap.nix")
       # `home-manager` module
       home-manager.darwinModules.home-manager
-      ( { config, lib, ... }: let inherit (config.users) primaryUser; in {
+      ( { config, lib, ... }: let inherit (config.users.primaryUser) username; in {
         nixpkgs = nixpkgsConfig;
         # Hack to support legacy worklows that use `<nixpkgs>` etc.
         nix.nixPath = { nixpkgs = "$HOME/.config/nixpkgs/nixpkgs.nix"; };
         # `home-manager` config
-        users.users.${primaryUser}.home = "/Users/${primaryUser}";
+        users.users.${username}.home = "/Users/${username}";
         home-manager.useGlobalPkgs = true;
-        home-manager.users.${primaryUser} = homeManagerCommonConfig;
+        home-manager.users.${username} = homeManagerCommonConfig;
         # Add a registry entry for this flake
         nix.registry.my.flake = self;
       })
@@ -91,7 +110,7 @@
         system = "x86_64-darwin";
         modules = nixDarwinCommonModules ++ [
           {
-            users.primaryUser = "matt";
+            users.primaryUser = primaryUserInfo;
             networking.computerName = "notnux5";
             networking.hostName = "Notnux";
             networking.knownNetworkServices = [
@@ -106,7 +125,7 @@
         system = "aarch64-darwin";
         modules = nixDarwinCommonModules ++ [
           {
-            users.primaryUser = "matt";
+            users.primaryUser = primaryUserInfo;
             networking.computerName = "notnux6";
             networking.hostName = "notnux6";
             networking.knownNetworkServices = [

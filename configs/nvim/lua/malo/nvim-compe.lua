@@ -9,7 +9,7 @@ vim.o.completeopt = 'menuone,noselect'
 vim.o.shortmess   = vim.o.shortmess .. 'c' -- don't show extra message when using completion
 
 -- Use <Tab> and <S-Tab> to navigate through popup menu, <CR> to confirm.
-utils.keymaps { mode = 'i', opts = { 'noremap', 'expr' }, maps = {
+utils.keymaps { modes = 'i', opts = { noremap=true, expr=true }, maps = {
   { '<Tab>'   , [[pumvisible() ? "\<C-n>" : "\<Tab>"]]   },
   { '<S-Tab>' , [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]] },
   { '<CR>'    , [[compe#confirm('<CR>')]] },

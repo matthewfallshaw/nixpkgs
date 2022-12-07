@@ -1,13 +1,13 @@
 local s = require'malo.utils'.symbols
-
 -- Tabline
 -- bufferline.nvim
 -- https://github.com/akinsho/bufferline.nvim
 vim.cmd 'packadd bufferline.nvim'
 
-require'bufferline.config'.set {
+require 'bufferline'.setup {
   options = {
-    view = 'multiwindow',
+    themable = true,
+    -- view = 'multiwindow',
     separator_style = 'slant',
     diagnostics = 'nvim_lsp',
     diagnostics_indicator = function(_, level)
@@ -17,8 +17,46 @@ require'bufferline.config'.set {
         s.infoShape
       )
     end,
+    custom_areas = { right = function() return { { text = ' ' .. os.date('%H:%M') } } end }
+  },
+  -- Highlights or mostly defined in `../lush_theme/malo/bufferline-nvim.lua` but the following is
+  -- required to get icon highlights to display correctly, since `bufferline.nvim` generates them
+  -- on the fly based on these values.
+  highlights = {
+    background = {
+      bg = {
+        attribute = 'bg',
+        highlight = 'Normal',
+      },
+      fg = {
+        attribute = 'fg',
+        highlight = 'Comment',
+      },
+    },
+    buffer_visible = {
+      bg = {
+        attribute = 'bg',
+        highlight = 'StatusLine',
+      },
+      fg = {
+        attribute = 'fg',
+        highlight = 'Comment',
+      },
+    },
+    buffer_selected = {
+      bg = {
+        attribute = 'bg',
+        highlight = 'StatusLine',
+      },
+      fg = {
+        attribute = 'fg',
+        highlight = 'StrongFg',
+      },
+      underline = true,
+      sp = {
+        attribute = 'fg',
+        highlight = 'BlueFg',
+      },
+    },
   },
 }
--- Colors are taken care of directly in colorscheme, this hack is needed for that.
-require'bufferline'.__load()
-vim.cmd 'au! BufferlineColors ColorScheme'

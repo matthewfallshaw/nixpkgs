@@ -77,7 +77,6 @@
     parallel                 # runs commands in parallel
     perl534Packages.vidir    # a great way to bulk edit filenames
     pwgen                    # password generator
-    python3Packages.shell-functools # a collection of functional programming tools for the shell
     procs                    # fancy version of `ps`
     rdfind                   # find duplicate files and optionally replace them with {hard|sym}links
     ripgrep                  # better version of `grep`
@@ -88,7 +87,6 @@
     xz                       # extract XZ archives
 
     # Dev stuff
-    (agda.withPackages (p: [ p.standard-library ]))
     bundix                         # ruby Bundler
     cloc                           # source code line counter
     cocoapods                      # dependency manager for Swift and Objective-C Cocoa projects
@@ -105,9 +103,10 @@
     haskellPackages.hpack
     haskellPackages.implicit       # implicitcad.org (openscad in Haskell)
     haskellPackages.implicit-hie   # auto generate hie-bios cradles & hie.yaml
-    haskellPackages.stack
+    stack
     # haskell-language-server
     home-assistant-cli             # Command-line tool for Home Assistant
+    html-tidy
     idris2                         # a purely functional programming language with first class types
     jq                             # query json
     nodePackages.typescript

@@ -9,8 +9,6 @@ local keymap = utils.keymap
 local keymaps = utils.keymaps
 local bufkeymaps = utils.bufkeymaps
 local s = utils.symbols
-local _ = require 'moses'
-
 -- Add some aliases for Neovim Lua API
 local o = vim.o
 local wo = vim.wo
@@ -55,6 +53,11 @@ if g.neovide then
   g.neovide_input_use_logo = true
   g.neovide_cursor_animation_length = 0.01
   g.neovide_cursor_trail_size = 0.4
+
+  api.nvim_set_keymap('',  '<D-v>', '"+p<CR>', { noremap = true, silent = false})
+  api.nvim_set_keymap('!', '<D-v>', '<C-R>+',  { noremap = true, silent = true})
+  api.nvim_set_keymap('t', '<D-v>', '<C-R>+',  { noremap = true, silent = true})
+  api.nvim_set_keymap('v', '<D-v>', '<C-R>+',  { noremap = true, silent = true})
 end
 -- }}}
 
@@ -87,11 +90,20 @@ o.splitright = true -- open vertical splits to the right instead of the left wit
 if g.vscode == nil then
   augroup { name = 'VimBasics', cmds = {
     -- Check if file has changed on disk, if it has and buffer has no changes, reload it
-    { 'BufEnter,FocusGained,CursorHold,CursorHoldI', '*', 'checktime' },
+    { 'BufEnter,FocusGained,CursorHold,CursorHoldI', {
+      pattern = '*',
+      command = 'checktime',
+    }},
     -- Remove trailing whitespace before write
-    { 'BufWritePre', '*', [[%s/\s\+$//e]] },
+    { 'BufWritePre', {
+      pattern = '*',
+      command = [[%s/\s\+$//e]],
+    }},
     -- Highlight yanked text
-    { 'TextYankPost', '*', [[silent! lua vim.highlight.on_yank {higroup='Search', timeout=150}]] },
+    { 'TextYankPost', {
+      pattern = '*',
+      command = [[silent! lua vim.highlight.on_yank {higroup='Search', timeout=150}]],
+    }},
   }}
 end
 
@@ -121,12 +133,15 @@ cmd 'colorscheme malo'
 
 augroup { name = 'NeovimTerm', cmds = {
   -- Set options for terminal buffers
-  { 'TermOpen', '*', 'setlocal nonumber | setlocal norelativenumber | setlocal signcolumn=no' },
+  { 'TermOpen', {
+    pattern = '*',
+    command = 'setlocal nonumber | setlocal norelativenumber | setlocal signcolumn=no',
+  }},
 }}
 
 -- Leader only used for this one case
 g.mapleader = ','
-keymaps { mode = 't', opts = { 'noremap' }, maps = {
+keymaps { modes = 't', opts = { noremap = true }, maps = {
   -- Enter normal mode in terminal using `<ESC>` like everywhere else.
   { '<ESC>', [[<C-\><C-n>]] },
   -- Sometimes you want to send `<ESC>` to the terminal though.
@@ -301,21 +316,19 @@ wk.register ({
 -- vim-commentary
 -- Comment stuff out (easily)
 -- https://github.com/tpope/vim-commentary
-keymaps { mode = 'n', opts = {}, maps = {
+keymaps { modes = 'n', opts = {}, maps = {
   { '<leader>c', 'gcc' },
 }}
-keymaps { mode = 'v', opts = {}, maps = {
+keymaps { modes = 'v', opts = {}, maps = {
   { '<leader>c', 'gc' },
 }}
 
 -- lexima.vim
 -- Auto close pairs
 -- https://github.com/cohama/lexima.vim
-_.each( { lexima_enable_basic_rules   = 1
-        , lexima_enable_newline_rules = 1
-        , lexima_enable_endwise_rules = 1
-        }
-      , function(v, k) vim.api.nvim_set_var(k, v) end)
+g.lexima_enable_basic_rules   = 1
+g.lexima_enable_newline_rules = 1
+g.lexima_enable_endwise_rules = 1
 --[[
 call lexima#add_rule({'char': '$', 'input_after': '$', 'filetype': 'latex'})
 call lexima#add_rule({'char': '$', 'at': '\%#\$', 'leave': 1, 'filetype': 'latex'})
@@ -328,42 +341,39 @@ call lexima#add_rule({'char': '<BS>', 'at': '\$\%#\$', 'delete': 1, 'filetype': 
 
 -- vim-rooter
 -- for non-project files/directories, change to file's directory (similar to autochdir).
-_.each( { rooter_change_directory_for_non_project_files = 'current'
-        , rooter_cd_cmd                                 = 'lcd'      -- change directory for the current window only
-        , rooter_resolve_links                          = 1          -- resolve symbolic links
-        , rooter_patterns = { '.git'
-                            , '.git/'
-                            , 'Makefile'
-                            , 'Rakefile'
-                            , 'package.json'
-                            , 'manifest.json'
-                            , 'tsconfig.json'
-                            , 'package.yaml'
-                            , 'stack.yaml'
-                            , '.root' }
-        }
-  , function(v, k) api.nvim_set_var(k, v) end
-  )
-
+g.rooter_change_directory_for_non_project_files = 'current'
+g.rooter_cd_cmd        = 'lcd'      -- change directory for the current window only
+g.rooter_resolve_links = 1          -- resolve symbolic links
+g.rooter_patterns = { '.git'
+                        , '.git/'
+                        , 'Makefile'
+                        , 'Rakefile'
+                        , 'package.json'
+                        , 'manifest.json'
+                        , 'tsconfig.json'
+                        , 'package.yaml'
+                        , 'stack.yaml'
+                        , '.root'
+		        }
 
 -- }}}
 
 -- Custom mappings ------------------------------------------------------------------------------- {{{
-keymaps { mode = 'c', opts = { 'noremap' }, maps = {
+keymaps { modes = 'c', opts = { noremap = true }, maps = {
   -- Moving around in the command window
   { '<C-A>', '<Home>' },
   { '<C-E>', '<End>' },
 }}
-keymaps { mode = 'i', opts = {}, maps = {
+keymaps { modes = 'i', opts = {}, maps = {
   -- New line below, above
   { '<S-CR>', '<ESC>o' },
   { '<C-CR>', '<ESC>O' },
 }}
-keymaps { mode = 'n', opts = { 'noremap' }, maps = {
+keymaps { modes = 'n', opts = { noremap = true }, maps = {
   -- Substitute the word under the cursor
   { '<leader>s', [[:%s/\C\<<C-r><C-w>\>//gc<Left><Left><Left>]] },
 }}
-keymaps { mode = 'v', opts = { 'noremap' }, maps = {
+keymaps { modes = 'v', opts = { noremap = true }, maps = {
   -- Subsititute the visually selected word
   { '<leader>s', [[y:%s/\C\<<C-r>"\>//gc<Left><Left><Left>]] },
 }}

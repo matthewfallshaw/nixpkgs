@@ -62,6 +62,9 @@ in
   xdg.configFile."nvim/plugins.vim".source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/plugins.vim";
   programs.neovim.extraConfig = "lua require('init')";
 
+  # Add `penlight` Lua module package since I used in the above configs
+  programs.neovim.extraLuaPackages = [ pkgs.lua51Packages.penlight ];
+
   programs.neovim.plugins = with pkgs.vimPlugins; [
     # Lua Keymap DSL
     astronuta-nvim
@@ -72,7 +75,7 @@ in
     # Colorscheme creation aid
     lush-nvim
     # Luarocks moses only in nvim (deletion candidate)
-    moses-nvim
+    # moses-nvim
     # plenary-nvim       # required for telescope-nvim and gitsigns.nvim
     # popup-nvim         # required for telescope-nvim
     Recover-vim
@@ -96,8 +99,6 @@ in
     which-key-nvim
     zoomwintab-vim
   ] ++ map nonVSCodePlugin [
-    # Agda programming language
-    agda-vim
     # Support direnv shell contexts
     direnv-vim
     # Distraction free writing environment
@@ -116,7 +117,7 @@ in
     (pluginWithDeps nvim-compe [ compe-tabnine ])
     # Common configs for nvim LSP
     nvim-lspconfig
-    nvim-treesitter
+    nvim-treesitter.withAllGrammars
     (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
     vim-floaterm
     vim-pencil

@@ -19,5 +19,8 @@ function FloatTermKeymaps ()
 end
 
 utils.augroup { name = 'FloatTermKeyMaps', cmds = {
-  { 'FileType', 'floaterm', 'lua FloatTermKeymaps()' }
+  { 'FileType', {
+    pattern = 'floaterm',
+    callback = FloatTermKeymaps,
+  }},
 }}
