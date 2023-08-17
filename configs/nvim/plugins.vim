@@ -58,4 +58,3 @@ nnoremap <silent><space>gb  <Cmd>Gblame<CR>
 nnoremap <silent><space>gs  <Cmd>Gstatus<CR>
 nnoremap <silent><space>gds <Cmd>Ghdiffsplit<CR>
 nnoremap <silent><space>gdv <Cmd>Gvdiffsplit<CR>
-

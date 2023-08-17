@@ -54,10 +54,20 @@ if g.neovide then
   g.neovide_cursor_animation_length = 0.01
   g.neovide_cursor_trail_size = 0.4
 
-  api.nvim_set_keymap('',  '<D-v>', '"+p<CR>', { noremap = true, silent = false})
-  api.nvim_set_keymap('!', '<D-v>', '<C-R>+',  { noremap = true, silent = true})
-  api.nvim_set_keymap('t', '<D-v>', '<C-R>+',  { noremap = true, silent = true})
-  api.nvim_set_keymap('v', '<D-v>', '<C-R>+',  { noremap = true, silent = true})
+  api.nvim_set_keymap('',  '<D-v>', '"+p',          { noremap = true, silent = false})
+  api.nvim_set_keymap('!', '<D-v>', '<C-R><C-O>+',  { noremap = true, silent = false})
+  api.nvim_set_keymap('t', '<D-v>', '<C-R><C-O>+',  { noremap = true, silent = false})
+  api.nvim_set_keymap('v', '<D-c>', '"+y',          { noremap = true, silent = false})
+
+  api.nvim_set_keymap('', '<D-s>', ':w<CR>',            { noremap = true, silent = false})
+end
+if g.vscode then
+  api.nvim_set_keymap('',  '<D-v>', '"+p',          { noremap = true, silent = false})
+  api.nvim_set_keymap('!', '<D-v>', '<C-R><C-O>+',  { noremap = true, silent = false})
+  api.nvim_set_keymap('t', '<D-v>', '<C-R><C-O>+',  { noremap = true, silent = false})
+  api.nvim_set_keymap('v', '<D-c>', '"+y',          { noremap = true, silent = false})
+
+  api.nvim_set_keymap('', '<D-s>', ':w<CR>',            { noremap = true, silent = false})
 end
 -- }}}
 

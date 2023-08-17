@@ -1,6 +1,13 @@
 -- Setup Environment -------------------------------------------------------------------------------
 
-_ = require 'moses'
+-- _ = require 'moses'
+local _ = {
+  append = function(array, other)
+    local t = {}
+    for i,v in ipairs(array) do t[i] = v end
+    for i,v in ipairs(other) do t[#t+1] = v end
+  end
+}
 
 -- Create locals for all needed globals so we have access to them
 local vim = vim

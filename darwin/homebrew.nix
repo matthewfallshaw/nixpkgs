@@ -120,6 +120,7 @@ in
     "gpg-suite"         # deletion candidate
     "grandperspective"
     "hammerspoon"
+    "hugin"
     "horos"             # Dicom & medical viewer
     "imageoptim"
     "inkscape"
@@ -136,6 +137,7 @@ in
     "steam"
     "suspicious-package"
     "tableau-reader"
+    "todoist"
     "toggl-track"
     "tor-browser"
     "transmission"
@@ -145,6 +147,7 @@ in
     "viscosity"
     "vlc"
     "webcatalog"
+    "gcenx/wine/unofficial-wineskin"
     "xquartz"
     "yed"
     "yt-music"
@@ -157,16 +160,20 @@ in
     "macfuse"
 
     "wkhtmltopdf"
+
+    "microsoft-edge"
   ];
 
   # TODO: Check whether these are in `nixpkgs`
   homebrew.brews = [
-    # "rbenv"
-    "trash"
-    "switchaudio-osx"
-    "mupdf-tools"
-    "rtl_433"
+    "alerter"
     # "ext4fuse"
+    "mupdf-tools"
+    "ocrmypdf"
+    "rtl_433"
+    # "rbenv"
+    "switchaudio-osx"
+    "trash"
   ];
 
   environment.systemPath = mkIfCaskPresent "openscad"

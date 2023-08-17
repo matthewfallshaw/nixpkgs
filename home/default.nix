@@ -87,15 +87,17 @@
     xz                       # extract XZ archives
 
     # Dev stuff
-    bundix                         # ruby Bundler
+    bundix                         # ruby nixified executable generator
     cloc                           # source code line counter
     cocoapods                      # dependency manager for Swift and Objective-C Cocoa projects
     dotnet-sdk                     # Microsoft .NET SDK  TODO
     ghc                            # Glasgow Haskell Compiler
     gitAndTools.gh                 # github.com command line
     # github-desktop
+    git-lfs                        # git large file store
     google-cloud-sdk               # Google cloud sdk
     haskellPackages.cabal-install
+    # haskellPackages.ghcup
     # haskellPackages.hapistrano     # a deployment library for Haskell applications similar to Ruby's Capistrano
     haskellPackages.hlint          # Haskell linter
     haskellPackages.hls-hlint-plugin
@@ -110,6 +112,9 @@
     idris2                         # a purely functional programming language with first class types
     jq                             # query json
     nodePackages.typescript
+    nodePackages.npm-check-updates
+    nodePackages.rollup
+    nodePackages.yarn
     nodejs
     (python3.withPackages (p: with p; [
       mypy
@@ -119,6 +124,7 @@
       yapf
     ]))
     # R
+    ruby
     s3cmd
 
     # Lua
@@ -137,7 +143,6 @@
     lorri                           # improve `nix-shell` experience in combination with `direnv`
     niv                             # easy dependency management for nix projects
     nodePackages.node2nix
-
   ] ++ lib.optionals stdenv.isDarwin [
     m-cli          # useful macOS CLI commands
     prefmanager    # tool for working with macOS defaults

@@ -84,6 +84,7 @@ in
     vim-cool
     vim-eunuch
     vim-haskell-module-name
+    indent-blankline-nvim   # TESTING
     vim-openscad
     vim-repeat
     vim-rooter
@@ -111,7 +112,7 @@ in
     editorconfig-vim
     (pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
     gitsigns-nvim
-    indent-blankline-nvim
+    # indent-blankline-nvimvscode
     lspsaga-nvim
     (pluginWithDeps bufferline-nvim [ nvim-web-devicons ])
     (pluginWithDeps nvim-compe [ compe-tabnine ])
