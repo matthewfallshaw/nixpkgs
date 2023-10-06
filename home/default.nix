@@ -80,6 +80,7 @@
     procs                    # fancy version of `ps`
     rdfind                   # find duplicate files and optionally replace them with {hard|sym}links
     ripgrep                  # better version of `grep`
+    smartmontools            #
     tealdeer                 # rust implementation of `tldr`
     thefuck                  # do what I mean on the command line
     unrar                    # extract RAR archives
@@ -120,6 +121,7 @@
       mypy
       numpy
       pandas
+      pandas-stubs
       pylint
       yapf
     ]))
