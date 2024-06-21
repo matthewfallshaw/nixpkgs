@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
+
+let
+  inherit (lib) elem optionalString;
+  inherit (config.home.user-info) nixConfigDirectory;
+in
 
 {
   # Fish Shell
@@ -96,13 +101,6 @@
     # Sets Fish Shell to light or dark colorscheme based on `$term_background`.
     set-shell-colors = {
       body = ''
-        # Use correct theme for `btm`
-        if test "$term_background" = light
-          alias btm "btm --color default-light"
-        else
-          alias btm "btm --color default"
-        end
-
         # Set LS_COLORS
         set -xg LS_COLORS (${pkgs.vivid}/bin/vivid generate solarized-$term_background)
 
@@ -131,6 +129,25 @@
         set -g fish_pager_color_selected_prefix      $background
         set -g fish_pager_color_selected_completion  $background
         set -g fish_pager_color_selected_description $background
+      '' + optionalString config.programs.bat.enable ''
+
+        # Use correct theme for `bat`.
+        set -xg BAT_THEME "Solarized ($term_background)"
+      '' + optionalString (elem pkgs.bottom config.home.packages) ''
+
+        # Use correct theme for `btm`.
+        if test "$term_background" = light
+          alias btm "btm --color default-light"
+        else
+          alias btm "btm --color default"
+        end
+      '' + optionalString config.programs.neovim.enable ''
+
+      # Set `background` of all running Neovim instances.
+      for server in (${pkgs.neovim-remote}/bin/nvr --serverlist)
+        ${pkgs.neovim-remote}/bin/nvr -s --nostart --servername $server \
+          -c "set background=$term_background" &
+      end
       '';
       onVariable = "term_background";
     };
@@ -142,9 +159,9 @@
   # Aliases
   programs.fish.shellAliases = with pkgs; {
     # Nix related
-    drb = "darwin-rebuild build --flake ~/.config/nixpkgs/";
-    drs = "darwin-rebuild switch --flake ~/.config/nixpkgs/";
-    flakeup = "nix flake update --recreate-lock-file ~/.config/nixpkgs/";
+    drb = "darwin-rebuild build --flake ${nixConfigDirectory}";
+    drs = "darwin-rebuild switch --flake ${nixConfigDirectory}";
+    flakeup = "nix flake update ${nixConfigDirectory}";
     nb = "nix build";
     nd = "nix develop";
     nf = "nix flake";
@@ -158,7 +175,7 @@
     g = "${gitAndTools.git}/bin/git";
     la = "ll -a";
     ll = "ls -l --time-style long-iso --icons";
-    ls = "${exa}/bin/exa";
+    ls = "${eza}/bin/eza";
     ps = "${procs}/bin/procs";
     tb = "toggle-background";
     "hass-cli" = "hass-cli --token $HASS_TOKEN --server $HASS_SERVER";
@@ -180,7 +197,7 @@
   # Configuration that should be above `loginShellInit` and `interactiveShellInit`.
   programs.fish.shellInit = ''
     set -U fish_term24bit 1
-    ${lib.optionalString pkgs.stdenv.isDarwin "set-background-to-macOS"}
+    ${optionalString pkgs.stdenv.isDarwin "set-background-to-macOS"}
 
     # .. cds to parent, therefore ..., ...., ....., etc.
     set -l dots "."
@@ -191,7 +208,10 @@
 
     set -xg HASS_TOKEN (security find-generic-password -a utilities -s HomeAssistantToken -w)
     set -xg HASS_SERVER "http://homeassistant.local:8123"
+
+    fish_add_path -a ~/.local/bin ~/bin
   '';
+
 
   programs.fish.interactiveShellInit = ''
     set -g fish_greeting ""
@@ -214,25 +234,6 @@
     set -g fish_color_cancel       red       # color of the '^C' indicator on a canceled command
   '';
   # }}}
-
-  # Starship Prompt
-  # https://rycee.gitlab.io/home-manager/options.html#opt-programs.starship.enable
-  programs.starship.enable = true;
-
-  # Starship settings -------------------------------------------------------------------------- {{{
-
-  programs.starship.settings = {
-    # See docs here: https://starship.rs/config/
-    # Symbols config configured in Flake.
-
-    battery.display.threshold = 25; # display battery information if charge is <= 25%
-    directory.fish_style_pwd_dir_length = 1; # turn on fish directory truncation
-    directory.truncation_length = 2; # number of directories not to truncate
-    gcloud.disabled = true; # annoying to always have on
-    hostname.style = "bold green"; # don't like the default
-    memory_usage.disabled = true; # because it includes cached memory it's reported as full a lot
-    username.style_user = "bold blue"; # don't like the default
-  };
-  # }}}
 }
 # vim: foldmethod=marker
+

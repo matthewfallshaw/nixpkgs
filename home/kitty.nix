@@ -40,7 +40,7 @@
   # }}}
 
   # Colors config ------------------------------------------------------------------------------ {{{
-  programs.kitty.extras.colors = with pkgs.lib.colors; {
+  programs.kitty.extras.colors = {
     enable = true;
 
     # Background dependent colors

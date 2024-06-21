@@ -5,10 +5,8 @@ package.path = package.path ..
 -- Add my personal helpers
 local utils = require 'malo.utils'
 local augroup = utils.augroup
-local keymap = utils.keymap
 local keymaps = utils.keymaps
-local bufkeymaps = utils.bufkeymaps
-local s = utils.symbols
+
 -- Add some aliases for Neovim Lua API
 local o = vim.o
 local wo = vim.wo
@@ -22,7 +20,6 @@ local api = vim.api
 -- - Flesh out custom colorscheme
 --   - Revisit Pmenu highlights:
 --   - Experiment with `Diff` highlights to look more like `delta`'s output.
---   - Set `g:terminal_color` values.
 --   - Decide on whether I want to include a bunch of language specific highlights
 --   - Figure out what to do with `tree-sitter` highlights.
 --   - Stretch
@@ -39,7 +36,6 @@ local api = vim.api
 -- - Other
 --   - Figure out how to get Lua LSP to be aware Nvim plugins. Why aren't they on `package.path`?
 --   - Play around with `tree-sitter`.
---   - Look into replacing floaterm-vim with vim-toggleterm.lua.
 
 
 -- Non-nix Config ---------------------------------------------------------------------------- {{{
@@ -87,7 +83,7 @@ o.smartcase  = true      -- search is case sensitive only if it contains upperca
 o.inccommand = 'nosplit' -- show preview in buffer while doing find and replace
 
 -- Tab key behavior
-o.expandtab   = true      -- Convert tabs to spaces
+o.expandtab  = true      -- Convert tabs to spaces
 o.tabstop     = 2         -- How many columns of whitespace is a \t worth
 o.shiftwidth  = o.tabstop -- How many columns of whitespace is a level of indentation worth
 o.softtabstop = o.tabstop -- How many columns of whitespace is a keypress worth
@@ -99,20 +95,20 @@ o.splitright = true -- open vertical splits to the right instead of the left wit
 -- Some basic autocommands
 if g.vscode == nil then
   augroup { name = 'VimBasics', cmds = {
-    -- Check if file has changed on disk, if it has and buffer has no changes, reload it
-    { 'BufEnter,FocusGained,CursorHold,CursorHoldI', {
+    {{ 'BufEnter', 'FocusGained', 'CursorHold', 'CursorHoldI' }, {
       pattern = '*',
+      desc = 'Check if file has changed on disk, if it has and buffer has no changes, reload it.',
       command = 'checktime',
     }},
-    -- Remove trailing whitespace before write
-    { 'BufWritePre', {
+    { 'BufWritePre' , {
       pattern = '*',
+      desc = 'Remove trailing whitespace before write.',
       command = [[%s/\s\+$//e]],
     }},
-    -- Highlight yanked text
     { 'TextYankPost', {
       pattern = '*',
-      command = [[silent! lua vim.highlight.on_yank {higroup='Search', timeout=150}]],
+      desc = 'Highlight yanked text.',
+      callback = function() vim.highlight.on_yank { higroup='Search', timeout=150 } end,
     }},
   }}
 end
@@ -122,29 +118,32 @@ end
 
 -- Set UI related options
 o.termguicolors   = true
-o.showmode        = false -- don't show -- INSERT -- etc.
-wo.colorcolumn    = '100' -- show column boarder
-wo.cursorline     = true  -- highlight current line
-wo.number         = true  -- display numberline
-wo.relativenumber = true  -- relative line numbers
-wo.signcolumn     = 'yes' -- always have signcolumn open to avoid thing shifting around all the time
+o.showmode        = false    -- don't show -- INSERT -- etc.
+wo.colorcolumn    = '100'    -- show column boarder
+wo.number         = true     -- display numberline
+wo.relativenumber = true     -- relative line numbers
+wo.cursorline     = true     -- highlight current line
+wo.cursorlineopt  = 'number' -- only highlight the number of the cursorline
+wo.signcolumn     = 'yes'    -- always have signcolumn open to avoid thing shifting around all the time
 o.fillchars       = 'stl: ,stlnc: ,vert:·,eob: ' -- No '~' on lines after end of file, other stuff
 
 -- Set colorscheme
-require'malo.theme'.extraLushSpecs = {
-  'lush_theme.malo.bufferline-nvim',
-  'lush_theme.malo.statusline',
-  'lush_theme.malo.telescope-nvim',
-}
-cmd 'colorscheme malo'
+if g.vscode == nil then
+  require'malo.theme'.extraLushSpecs = {
+    'lush_theme.malo.bufferline-nvim',
+    'lush_theme.malo.statusline',
+    'lush_theme.malo.telescope-nvim',
+  }
+  cmd 'colorscheme malo'
+end
 
 
 -- Terminal ----------------------------------------------------------------------------------------
 
 augroup { name = 'NeovimTerm', cmds = {
-  -- Set options for terminal buffers
   { 'TermOpen', {
     pattern = '*',
+    desc = 'Set options for terminal buffers.',
     command = 'setlocal nonumber | setlocal norelativenumber | setlocal signcolumn=no',
   }},
 }}
@@ -158,7 +157,6 @@ keymaps { modes = 't', opts = { noremap = true }, maps = {
   { '<leader><ESC>', '<ESC>' },
 }}
 
-
 -- WhichKey maps -----------------------------------------------------------------------------------
 
 -- Define all `<Space>` prefixed keymaps with which-key.nvim
@@ -170,7 +168,7 @@ wk.setup { plugins = { spelling = { enabled = true } } }
 
 -- Spaced prefiexd in Normal mode
 wk.register ({
-  [' '] = { '<Cmd>packadd vim-floaterm | FloatermToggle<CR>', 'Toggle floating terminal' },
+  [' '] = { '<Cmd>exe v:count1 . "ToggleTerm"<CR>', 'Toggle floating terminal' },
 
   -- Tabs
   t = {
@@ -212,7 +210,7 @@ wk.register ({
     T = { '<Cmd>wincmd T<CR>' , 'Move to new tab'          },
     r = { '<Cmd>wincmd r<CR>' , 'Rotate clockwise'         },
     R = { '<Cmd>wincmd R<CR>' , 'Rotate counter-clockwise' },
-    z = { '<Cmd>packadd zoomwintab-vim | ZoomWinTabToggle<CR>', 'Toggle zoom' },
+    z = { '<Cmd>packadd zoomwintab.vim | ZoomWinTabToggle<CR>', 'Toggle zoom' },
     -- Resize
     ['='] = { '<Cmd>wincmd =<CR>'            , 'All equal size'   },
     ['-'] = { '<Cmd>resize -5<CR>'           , 'Decrease height'  },
@@ -249,7 +247,7 @@ wk.register ({
       s = { '<Cmd>Telescope git_status<CR>'  , 'Status'         },
       c = { '<Cmd>Telescope git_commits<CR>' , 'Commits'        },
       C = { '<Cmd>Telescope git_commits<CR>' , 'Buffer commits' },
-      b = { '<Cmd>Telescope git_branches<CR>' , 'Branches'       },
+      b = { '<Cmd>Telescope git_branches<CR>' , 'Branches'      },
     },
     -- Other
     v = { '<Cmd>!gh repo view --web<CR>' , 'View on GitHub' },
@@ -258,15 +256,15 @@ wk.register ({
   -- Language server
   l = {
     name = '+LSP',
-    h = { '<Cmd>Lspsaga hover_doc<CR>'            , 'Hover'                   },
-    d = { vim.lsp.buf.definition                  , 'Jump to definition'      },
-    D = { vim.lsp.buf.declaration                 , 'Jump to declaration'     },
-    a = { '<Cmd>Lspsaga code_action<CR>'          , 'Code action'             },
-    f = { vim.lsp.buf.formatting                  , 'Format'                  },
-    r = { '<Cmd>Lspsaga rename<CR>'               , 'Rename'                  },
-    t = { vim.lsp.buf.type_definition             , 'Jump to type definition' },
-    n = { '<Cmd>Lspsaga diagnostic_jump_next<CR>' , 'Jump to next diagnostic' },
-    N = { '<Cmd>Lspsaga diagnostic_jump_prev<CR>' , 'Jump to prev diagnostic' },
+    h = { '<Cmd>Lspsaga hover_doc<CR>'   , 'Hover'                   },
+    d = { vim.lsp.buf.definition         , 'Jump to definition'      },
+    D = { vim.lsp.buf.declaration        , 'Jump to declaration'     },
+    a = { '<Cmd>Lspsaga code_action<CR>' , 'Code action'             },
+    f = { vim.lsp.buf.format             , 'Format'                  },
+    r = { '<Cmd>Lspsaga rename<CR>'      , 'Rename'                  },
+    t = { vim.lsp.buf.type_definition    , 'Jump to type definition' },
+    n = { function() vim.diagnostic.goto_next({float = false}) end, 'Jump to next diagnostic' },
+    N = { function() vim.diagnostic.goto_prev({float = false}) end, 'Jump to next diagnostic' },
     l = {
       name = '+Lists',
       a = { '<Cmd>Telescope lsp_code_actions<CR>'       , 'Code actions'         },
@@ -306,7 +304,7 @@ wk.register ({
       t = { '<Cmd>Telescope filetypes<CR>'       , 'Filetypes'       },
     },
     s = { function() require'telescope.builtin'.symbols(require'telescope.themes'.get_dropdown({sources = {'emoji', 'math'}})) end, 'Symbols' },
-    z = { function() require'telescope'.extensions.z.list({cmd = {'fish', '-c', 'zq -ls'}}) end, 'Z' },
+    z = { '<Cmd>Telescope zoxide list<CR>', 'Z' },
     ['?'] = { '<Cmd>Telescope help_tags<CR>', 'Vim help' },
   }
 

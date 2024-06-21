@@ -1,22 +1,22 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
   # Git
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.git.enable
-  # Aliases config imported in flake.
+  # Aliases config in ./configs/git-aliases.nix
   programs.git.enable = true;
 
   programs.git.extraConfig = {
-    core.editor = "${pkgs.neovim-remote}/bin/nvr --remote-wait-silent -cc split";
     diff.colorMoved = "default";
-    init.defaultBranch = "main";
     pull.rebase = true;
-    branch.autosetuprebase = "always";
-    rebase.autoStash = true;
   };
-  programs.git.ignores = [".DS_Store"];
-  programs.git.userEmail = "m@fallshaw.me";
-  programs.git.userName = "Matthew Fallshaw";
+
+  programs.git.ignores = [
+    ".DS_Store"
+  ];
+
+  programs.git.userEmail = config.home.user-info.email;
+  programs.git.userName = config.home.user-info.fullName;
   programs.git.attributes = ["*.scpt filter=osa"];
 
   # Enhanced diffs
@@ -25,12 +25,7 @@
 
   # GitHub CLI
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.gh.enable
-  # Aliases config imported in flake.
+  # Aliases config in ./gh-aliases.nix
   programs.gh.enable = true;
-
-  # `$GITHUB_TOKEN` which `gh` uses for authentication is set in `./private.nix`. `gh auth` can't
-  # be used since it tries to write to the config, which is in the store.
-  imports = lib.filter lib.pathExists [ ./private.nix ];
-
   programs.gh.settings.git_protocol = "ssh";
 }

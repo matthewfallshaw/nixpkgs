@@ -4,6 +4,7 @@ local s = require'malo.utils'.symbols
 -- https://github.com/akinsho/bufferline.nvim
 vim.cmd 'packadd bufferline.nvim'
 
+require 'scope'.setup()
 require 'bufferline'.setup {
   options = {
     themable = true,
