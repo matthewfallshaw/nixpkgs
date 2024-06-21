@@ -1,31 +1,86 @@
 { config, pkgs, lib, ... }:
-
+# Let-In ----------------------------------------------------------------------------------------{{{
 let
-  inherit (lib) getName mkIf optional;
+  inherit (lib) concatStringsSep optional;
   inherit (config.lib.file) mkOutOfStoreSymlink;
-  nixConfigDir = "${config.home.homeDirectory}/.config/nixpkgs";
+  inherit (config.home.user-info) nixConfigDirectory;
 
-  nvr = "${pkgs.neovim-remote}/bin/nvr";
+  mkLuaTableFromList = x: "{" + lib.concatMapStringsSep "," (y: "'${y}'") x + "}";
+  mkNeovimAutocmd = { event, pattern, callback ? "" }: ''
+    vim.api.nvim_create_autocmd(${mkLuaTableFromList event}, {
+      pattern = ${mkLuaTableFromList pattern},
+      callback = ${callback},
+    })'';
+  requireConf = p: "require 'malo.${builtins.replaceStrings [ "." ] [ "-" ] p.pname}'";
 
-  pluginWithDeps = plugin: deps: plugin.overrideAttrs (_: { dependencies = deps; });
+  # Function to create `programs.neovim.plugins` entries inspired by `packer.nvim`.
+  packer =
+    { use
+      # Plugins that this plugin depends on.
+    , deps ? [ ]
+      # Used to manually specify that the plugin shouldn't be loaded at start up.
+    , opt ? false
+      # Whether to load the plugin when using VS Code with `vscode-neovim`.
+    , vscode ? false
+      # Code to run before the plugin is loaded.
+    , setup ? ""
+      # Code to run after the plugin is loaded.
+    , config ? ""
+      # The following all imply lazy-loading and imply `opt = true`.
+      # `FileType`s which load the plugin.
+    , ft ? [ ]
+      # Autocommand events which load the plugin.
+    , event ? [ ]
+    }:
+    let
+      loadFunctionName = "load_${builtins.replaceStrings [ "." "-" ] [ "_" "_" ] use.pname}";
+      autoload = !opt && vscode && ft == [ ] && event == [ ];
+      configFinal =
+        concatStringsSep "\n" (
+          optional (!autoload && !opt) "vim.cmd 'packadd ${use.pname}'"
+          ++ optional (config != "") config
+        );
+    in
+    {
+      plugin = use.overrideAttrs (old: {
+        dependencies = lib.unique (old.dependencies or [ ] ++ deps);
+      });
+      optional = !autoload;
+      type = "lua";
+      config = if (setup == "" && configFinal == "") then null else
+      (
+        concatStringsSep "\n"
+          (
+            [ "\n-- ${use.pname or use.name}" ]
+            ++ optional (setup != "") setup
 
-  nonVSCodePluginWithConfig = plugin: {
-    plugin = plugin;
-    optional = true;
-    config = ''
-      if !exists('g:vscode')
-        lua require('malo.' .. string.gsub('${plugin.pname}', '%.', '-'))
-      endif
-    '';
-  };
+            # If the plugin isn't always loaded at startup
+            ++ optional (!autoload) (concatStringsSep "\n" (
+              [ "local ${loadFunctionName} = function()" ]
+              ++ optional (!vscode) "if vim.g.vscode == nil then"
+              ++ [ configFinal ]
+              ++ optional (!vscode) "end"
+              ++ [ "end" ]
+              ++ optional (ft == [ ] && event == [ ]) "${loadFunctionName}()"
+              ++ optional (ft != [ ]) (mkNeovimAutocmd {
+                event = [ "FileType" ];
+                pattern = ft;
+                callback = loadFunctionName;
+              })
+              ++ optional (event != [ ]) (mkNeovimAutocmd {
+                inherit event;
+                pattern = [ "*" ];
+                callback = loadFunctionName;
+              })
+            ))
 
-  nonVSCodePlugin = plugin: {
-    plugin = plugin;
-    optional = true;
-    config = ''if !exists('g:vscode') | packadd ${plugin.pname} | endif'';
-  };
+            # If the plugin is always loaded at startup
+            ++ optional (autoload && configFinal != "") configFinal
+          )
+      );
+    };
 in
-
+# }}}
 {
   # Neovim
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.neovim.enable
@@ -33,141 +88,145 @@ in
 
   # Config and plugins ------------------------------------------------------------------------- {{{
 
-  # Minimal init.vim config to load Lua config. Nix and Home Manager don't currently support
-  # `init.lua`.
-  xdg.configFile."nvim/after" = {
-    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/after";
-    recursive = true;
-  };
-  xdg.configFile."nvim/colors" = {
-    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/colors";
-    recursive = true;
-  };
-  xdg.configFile."nvim/ftdetect" = {
-    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/ftdetect";
-    recursive = true;
-  };
-  xdg.configFile."nvim/ftplugin" = {
-    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/ftplugin";
-    recursive = true;
-  };
-  xdg.configFile."nvim/lua" = {
-    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/lua";
-    recursive = true;
-  };
-  xdg.configFile."nvim/syntax" = {
-    source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/syntax";
-    recursive = true;
-  };
-  xdg.configFile."nvim/plugins.vim".source = mkOutOfStoreSymlink "${nixConfigDir}/configs/nvim/plugins.vim";
+  # Put neovim configuration located in this repository into place in a way that edits to the
+  # configuration don't require rebuilding the `home-manager` environment to take effect.
+  xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/lua";
+  xdg.configFile."nvim/colors".source =
+    mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/colors";
+
+  # Load the `init` module from the above configs
   programs.neovim.extraConfig = "lua require('init')";
 
+  # Add NodeJs since it's required by some plugins I use.
+  programs.neovim.withNodeJs = true;
   # Add `penlight` Lua module package since I used in the above configs
-  programs.neovim.extraLuaPackages = [ pkgs.lua51Packages.penlight ];
+  # programs.neovim.extraLuaPackages = [ pkgs.lua51Packages.penlight ];
+  programs.neovim.extraLuaPackages = ps: [ ps.penlight ];
 
-  programs.neovim.plugins = with pkgs.vimPlugins; [
-    # Lua Keymap DSL
-    astronuta-nvim
-    # Send vim command output to a scratch buffer
-    bufferize-vim
-    # Auto close pairs
-    lexima-vim
-    # Colorscheme creation aid
-    lush-nvim
-    # Luarocks moses only in nvim (deletion candidate)
-    # moses-nvim
-    # plenary-nvim       # required for telescope-nvim and gitsigns.nvim
-    # popup-nvim         # required for telescope-nvim
-    Recover-vim
-    tabular
-    vim-commentary
-    vim-cool
-    vim-eunuch
-    vim-haskell-module-name
-    indent-blankline-nvim   # TESTING
-    vim-openscad
-    vim-repeat
-    vim-rooter
-    vim-surround
-    vim-unimpaired
-  ] ++ map (p: { plugin = p; optional = true; }) [
-    # barbar-nvim
-    # completion-buffers
-    # completion-nvim
-    # completion-tabnine
-    telescope-symbols-nvim
-    telescope-z-nvim
-    which-key-nvim
-    zoomwintab-vim
-  ] ++ map nonVSCodePlugin [
-    # Support direnv shell contexts
-    direnv-vim
-    # Distraction free writing environment
-    goyo-vim
-    # Interactive lua scratchpad
-    # nvim-luapad
-    vim-fugitive
-  ] ++ map nonVSCodePluginWithConfig [
-    # Support .editorconfig files
-    editorconfig-vim
-    (pluginWithDeps galaxyline-nvim [ nvim-web-devicons ])
-    gitsigns-nvim
-    # indent-blankline-nvimvscode
-    lspsaga-nvim
-    (pluginWithDeps bufferline-nvim [ nvim-web-devicons ])
-    (pluginWithDeps nvim-compe [ compe-tabnine ])
-    # Common configs for nvim LSP
-    nvim-lspconfig
-    nvim-treesitter.withAllGrammars
-    (pluginWithDeps telescope-nvim [ nvim-web-devicons ])
-    vim-floaterm
-    vim-pencil
-    vim-polyglot
+  # Add plugins using my `packer` function.
+  programs.neovim.plugins = with pkgs.vimPlugins; map packer [
+
+    # Appearance, interface, UI, etc.
+    {
+      use = bufferline-nvim;
+      deps = [ nvim-web-devicons scope-nvim ];
+      config = requireConf bufferline-nvim;
+    }
+    { use = galaxyline-nvim; deps = [ nvim-web-devicons ]; config = requireConf galaxyline-nvim; }
+    { use = gitsigns-nvim; config = requireConf gitsigns-nvim; }
+    { use = goyo-vim; }
+    { use = indent-blankline-nvim; config = requireConf indent-blankline-nvim; }
+    { use = lush-nvim; vscode = true; }      # Colorscheme creation aid
+    {
+      use = telescope-nvim;
+      config = requireConf telescope-nvim;
+      deps = [
+        nvim-web-devicons
+        telescope-file-browser-nvim
+        telescope-fzf-native-nvim
+        telescope_hoogle
+        telescope-symbols-nvim
+        telescope-zoxide
+      ];
+    }
+    { use = toggleterm-nvim; config = requireConf toggleterm-nvim; }
+    { use = zoomwintab-vim; opt = true; }
+
+    # Completions
+    { use = copilot-vim; }
+    { use = coq_nvim; opt = true; deps = [ coq-artifacts coq-thirdparty ]; config = requireConf coq_nvim; }
+
+    # Language servers, linters, etc.
+    {
+      use = lsp_lines-nvim;
+      config = ''
+        require'lsp_lines'.setup()
+        vim.diagnostic.config({ virtual_lines = { only_current_line = true } })'';
+    }
+    { use = lspsaga-nvim; config = requireConf lspsaga-nvim; }
+    { use = null-ls-nvim; config = requireConf null-ls-nvim; }
+    { use = nvim-lspconfig; deps = [ neodev-nvim ]; config = requireConf nvim-lspconfig; }
+    { use = vim-openscad; }
+
+    # Language support/utilities
+    {
+      use = nvim-treesitter.withAllGrammars;
+      config = requireConf nvim-treesitter;
+    }
+    { use = vim-haskell-module-name; vscode = true; }
+    { use = vim-polyglot; config = requireConf vim-polyglot; }
+
+    # Editor behavior
+    { use = comment-nvim; config = "require'comment'.setup()"; }
+    # { use = vim-commentary; }
+    { use = editorconfig-vim; setup = "vim.g.EditorConfig_exclude_patterns = { 'fugitive://.*' }"; }  # Support .editorconfig files
+    { use = tabular; vscode = true; }
+    { use = vim-surround; vscode = true; }
+    { use = nvim-lastplace; config = "require'nvim-lastplace'.setup()"; }
+    {
+      use = vim-pencil;
+      setup = "vim.g['pencil#wrapModeDefault'] = 'soft'";
+      config = "vim.fn['pencil#init'](); vim.wo.spell = true";
+      ft = [ "markdown" "text" ];
+    }
+    { use = lexima-vim; }  # Auto close pairs
+    { use = Recover-vim; }
+    { use = vim-cool; }  # disables search highlighting when you are done searching and re-enables it when you search again
+    { use = vim-repeat; }
+    { use = vim-rooter; }
+    { use = vim-unimpaired; }
+
+    # Misc
+    { use = direnv-vim; }
+    { use = vim-eunuch; vscode = true; }  # UNIX shell commands
+    { use = vim-fugitive; }  # Git
+    { use = which-key-nvim; opt = true; }
+    { use = bufferize-vim; }  # Send vim command output to a scratch buffer
   ];
-  # }}}
 
-  # Shell related ------------------------------------------------------------------------------ {{{
-
-  # From personal addon module `./modules/programs/neovim/extras.nix`
+  # From personal addon module `../modules/home/programs/neovim/extras.nix`
   programs.neovim.extras.termBufferAutoChangeDir = true;
   programs.neovim.extras.nvrAliases.enable = true;
+  programs.neovim.extras.defaultEditor = true;
 
-  programs.fish.functions.set-nvim-background = mkIf config.programs.neovim.enable {
-    # See `./shells.nix` for more on how this is used.
-    body = ''
-      # Set `background` of all running Neovim instances base on `$term_background`.
-      for server in (${nvr} --serverlist)
-        ${nvr} -s --nostart --servername $server -c "set background=$term_background" &
-      end
-    '';
-    onVariable = "term_background";
-  };
-
-  programs.fish.interactiveShellInit = mkIf config.programs.neovim.enable ''
-    # Run Neovim related functions on init for their effects, and to register them so they are
-    # triggered when the relevant event happens or variable changes.
-    set-nvim-background
-  '';
   # }}}
 
   # Required packages -------------------------------------------------------------------------- {{{
 
   programs.neovim.extraPackages = with pkgs; [
     neovim-remote
-    gcc         # needed for nvim-treesitter
-    tree-sitter # needed for nvim-treesitter
 
-    # Language servers
-    # See `../configs/nvim/lua/init.lua` for configuration.
-    # ccls
+    # Language servers, linters, etc.
+    # See `../configs/nvim/lua/malo/nvim-lspconfig.lua` and
+    # `../configs/nvim/lua/malo/null-ls-nvim.lua` for configuration.
+
+    # C/C++/Objective-C
+    ccls
+
+    # Bash
     nodePackages.bash-language-server
+    shellcheck
+
+    # Javascript/Typescript
     nodePackages.typescript-language-server
+
+    # Nix
+    deadnix
+    statix
+    nil
+    nixpkgs-fmt
+
+    # Vim
     nodePackages.vim-language-server
+
+    #Other
+    (agda.withPackages (p: [ p.standard-library ]))
+    cornelis
     nodePackages.vscode-langservers-extracted
-    nodePackages.vscode-json-languageserver
     nodePackages.yaml-language-server
-    rnix-lsp
-  ] ++ optional (pkgs.stdenv.system != "x86_64-darwin") sumneko-lua-language-server;
+    proselint
+    sumneko-lua-language-server
+  ];
   # }}}
 }
 # vim: foldmethod=marker

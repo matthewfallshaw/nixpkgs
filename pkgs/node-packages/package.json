@@ -1,6 +1,9 @@
-[
-  "npm-check-updates",
-  "purescript-language-server",
-  "@tuyapi/cli",
-  "clipdown"
-]
+{
+  "name": "mandatory-name",
+  "dependencies": {
+    "npm-check-updates": ">=16.14.0",
+    "purescript-language-server": ">=0.18.0",
+    "@tuyapi/cli": ">=1.18.0",
+    "clipdown": ">=1.0.0"
+  }
+}

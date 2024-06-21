@@ -1,12 +1,6 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
-  imports = [
-    # Other nix-darwin configuration
-    ./homebrew.nix
-    ./defaults.nix
-  ];
-
   # Networking
   networking.dns = [
     "1.1.1.1"
@@ -18,13 +12,12 @@
   # Issue: https://github.com/nix-community/home-manager/issues/1341
   environment.systemPackages = with pkgs; [
     kitty
-    iterm2
     terminal-notifier
   ];
+  programs.nix-index.enable = true;
 
   # Fonts
-  fonts.fontDir.enable= true;
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
      recursive
      (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
    ];
@@ -35,9 +28,4 @@
 
   # Add ability to used TouchID for sudo authentication
   security.pam.enableSudoTouchIdAuth = true;
-
-  # Lorri daemon
-  # https://github.com/target/lorri
-  # Used in conjuction with Direnv which is installed in `../home/default.nix`.
-  services.lorri.enable = true;
 }

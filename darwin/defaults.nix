@@ -1,5 +1,3 @@
-{ ... }:
-
 {
   system.defaults.NSGlobalDomain = {
     "com.apple.trackpad.scaling" = 3.0;
@@ -32,6 +30,11 @@
     expose-group-by-app = false;
     mru-spaces = false;
     tilesize = 32;
+    # Disable all hot corners
+    wvous-bl-corner = 1;
+    wvous-br-corner = 1;
+    wvous-tl-corner = 1;
+    wvous-tr-corner = 1;
   };
 
   # Login and lock screen
