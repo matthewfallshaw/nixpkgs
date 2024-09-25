@@ -4,14 +4,19 @@
   inputs = {
     # Package sets
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-22.05-darwin";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixos-stable.url = "github:NixOS/nixpkgs/nixos-22.05";
+    nixos-stable.url = "github:NixOS/nixpkgs/nixos-23.11";
 
     # Environment/system management
     darwin.url = "github:LnL7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
     home-manager.url = "github:nix-community/home-manager";
+    # _1password-shell-plugins = {
+    #   url = "github:1Password/shell-plugins";
+    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
+    #   inputs.flake-utils.follows = "flake-utils";
+    # };
 
     # Neovim plugins
 
@@ -48,7 +53,7 @@
         ];
       };
 
-      homeManagerStateVersion = "24.05";
+      homeManagerStateVersion = "24.11";
 
       primaryUserInfo = {
         username = "matt";

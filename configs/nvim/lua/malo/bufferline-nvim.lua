@@ -8,8 +8,10 @@ require 'scope'.setup()
 require 'bufferline'.setup {
   options = {
     themable = true,
+    offsets = { { filetype = 'no-neck-pain' } },
     -- view = 'multiwindow',
     separator_style = 'slant',
+    close_icon = s.close,
     diagnostics = 'nvim_lsp',
     diagnostics_indicator = function(_, level)
       return ' ' .. (

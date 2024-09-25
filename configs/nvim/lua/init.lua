@@ -43,33 +43,27 @@ local api = vim.api
 vim.api.nvim_command('source ~/.config/nvim/plugins.vim')
 -- }}}
 
--- Neovide ----------------------------------------------------------------------------------- {{{
+-- Neovide or VSCode Config ------------------------------------------------------------------- {{{
 if g.neovide then
   o.guifont = 'JetBrainsMono Nerd Font:h11'
   g.neovide_input_use_logo = true
   g.neovide_cursor_animation_length = 0.01
   g.neovide_cursor_trail_size = 0.4
-
-  api.nvim_set_keymap('',  '<D-v>', '"+p',          { noremap = true, silent = false})
-  api.nvim_set_keymap('!', '<D-v>', '<C-R><C-O>+',  { noremap = true, silent = false})
-  api.nvim_set_keymap('t', '<D-v>', '<C-R><C-O>+',  { noremap = true, silent = false})
-  api.nvim_set_keymap('v', '<D-c>', '"+y',          { noremap = true, silent = false})
-
-  api.nvim_set_keymap('', '<D-s>', ':w<CR>',            { noremap = true, silent = false})
 end
-if g.vscode then
-  api.nvim_set_keymap('',  '<D-v>', '"+p',          { noremap = true, silent = false})
-  api.nvim_set_keymap('!', '<D-v>', '<C-R><C-O>+',  { noremap = true, silent = false})
-  api.nvim_set_keymap('t', '<D-v>', '<C-R><C-O>+',  { noremap = true, silent = false})
-  api.nvim_set_keymap('v', '<D-c>', '"+y',          { noremap = true, silent = false})
+if g.neovide or g.vscode then
+  -- Common key mappings for Neovide and VSCode
+  api.nvim_set_keymap('',  '<D-v>', '"+p',         { noremap = true, silent = false })
+  api.nvim_set_keymap('!', '<D-v>', '"+gP',        { noremap = true, silent = false })
+  api.nvim_set_keymap('t', '<D-v>', '"+p',         { noremap = true, silent = false })
+  api.nvim_set_keymap('v', '<D-c>', '"+y',         { noremap = true, silent = false })
 
-  api.nvim_set_keymap('', '<D-s>', ':w<CR>',            { noremap = true, silent = false})
+  api.nvim_set_keymap('',  '<D-s>', ':w<CR>',      { noremap = true, silent = false })
 end
 -- }}}
 
 -- Basic Vim Config --------------------------------------------------------------------------------
 
-o.scrolloff  = 10   -- start scrolling when cursor is within 5 lines of the ledge
+o.scrolloff  = 10   -- start scrolling when cursor is within 5 lines of the edge
 o.linebreak  = true -- soft wraps on words not individual chars
 o.mouse      = 'a'  -- enable mouse support in all modes
 o.updatetime = 300
@@ -78,7 +72,7 @@ o.exrc       = true -- allow project specific config in .nvimrc or .exrc files
 o.foldenable = false
 
 -- Search and replace
-o.ignorecase = true      -- make searches with lower case characters case insensative
+o.ignorecase = true      -- make searches with lower case characters case insensitive
 o.smartcase  = true      -- search is case sensitive only if it contains uppercase chars
 o.inccommand = 'nosplit' -- show preview in buffer while doing find and replace
 
@@ -119,7 +113,7 @@ end
 -- Set UI related options
 o.termguicolors   = true
 o.showmode        = false    -- don't show -- INSERT -- etc.
-wo.colorcolumn    = '100'    -- show column boarder
+wo.colorcolumn    = '100'    -- show column border
 wo.number         = true     -- display numberline
 wo.relativenumber = true     -- relative line numbers
 wo.cursorline     = true     -- highlight current line
@@ -166,158 +160,140 @@ cmd 'packadd! gitsigns.nvim' -- needed for some mappings
 local wk = require 'which-key'
 wk.setup { plugins = { spelling = { enabled = true } } }
 
--- Spaced prefiexd in Normal mode
-wk.register ({
-  [' '] = { '<Cmd>exe v:count1 . "ToggleTerm"<CR>', 'Toggle floating terminal' },
+-- Space-prefixed mappings in Normal mode
+wk.add({
+
+  -- Toggle floating terminal
+  { '  ', '<Cmd>exe v:count1 . "ToggleTerm"<CR>', desc = "Toggle floating terminal" },
 
   -- Tabs
-  t = {
-    name = '+Tabs',
-    n = { '<Cmd>tabnew +term<CR>'  , 'New with terminal' },
-    o = { '<Cmd>tabonly<CR>'       , 'Close all other'   },
-    q = { '<Cmd>tabclose<CR>'      , 'Close'             },
-    l = { '<Cmd>tabnext<CR>'       , 'Next'              },
-    h = { '<Cmd>tabprevious<CR>'   , 'Previous'          },
-  },
+  { ' t', group = "Tabs" },
+  { ' tn', '<Cmd>tabnew +term<CR>' , desc = 'New with terminal' },
+  { ' to', '<Cmd>tabonly<CR>'      , desc = 'Close all other' },
+  { ' tq', '<Cmd>tabclose<CR>'     , desc = 'Close' },
+  { ' tl', '<Cmd>tabnext<CR>'      , desc = 'Next' },
+  { ' th', '<Cmd>tabprevious<CR>'  , desc = 'Previous' },
 
-  -- Windows/splits
-  ['-']  = { '<Cmd>new +term<CR>'           , 'New terminal below'               },
-  ['_']  = { '<Cmd>botright new +term<CR>'  , 'New termimal below (full-width)'  },
-  ['\\'] = { '<Cmd>vnew +term<CR>'          , 'New terminal right'               },
-  ['|']  = { '<Cmd>botright vnew +term<CR>' , 'New termimal right (full-height)' },
-  w = {
-    name = '+Windows',
-    -- Split creation
-    s = { '<Cmd>split<CR>'  , 'Split below'     },
-    v = { '<Cmd>vsplit<CR>' , 'Split right'     },
-    q = { '<Cmd>q<CR>'      , 'Close'           },
-    o = { '<Cmd>only<CR>'   , 'Close all other' },
-    -- Navigation
-    k = { '<Cmd>wincmd k<CR>' , 'Go up'           },
-    j = { '<Cmd>wincmd j<CR>' , 'Go down'         },
-    h = { '<Cmd>wincmd h<CR>' , 'Go left'         },
-    l = { '<Cmd>wincmd l<CR>' , 'Go right'        },
-    w = { '<Cmd>wincmd w<CR>' , 'Go down/right'   },
-    W = { '<Cmd>wincmd W<CR>' , 'Go up/left'      },
-    t = { '<Cmd>wincmd t<CR>' , 'Go top-left'     },
-    b = { '<Cmd>wincmd b<CR>' , 'Go bottom-right' },
-    p = { '<Cmd>wincmd p<CR>' , 'Go to previous'  },
-    -- Movement
-    K = { '<Cmd>wincmd k<CR>' , 'Move to top'              },
-    J = { '<Cmd>wincmd J<CR>' , 'Move to bottom'           },
-    H = { '<Cmd>wincmd H<CR>' , 'Move to left'             },
-    L = { '<Cmd>wincmd L<CR>' , 'Move to right'            },
-    T = { '<Cmd>wincmd T<CR>' , 'Move to new tab'          },
-    r = { '<Cmd>wincmd r<CR>' , 'Rotate clockwise'         },
-    R = { '<Cmd>wincmd R<CR>' , 'Rotate counter-clockwise' },
-    z = { '<Cmd>packadd zoomwintab.vim | ZoomWinTabToggle<CR>', 'Toggle zoom' },
-    -- Resize
-    ['='] = { '<Cmd>wincmd =<CR>'            , 'All equal size'   },
-    ['-'] = { '<Cmd>resize -5<CR>'           , 'Decrease height'  },
-    ['+'] = { '<Cmd>resize +5<CR>'           , 'Increase height'  },
-    ['<'] = { '<Cmd><C-w>5<<CR>'             , 'Decrease width'   },
-    ['>'] = { '<Cmd><C-w>5><CR>'             , 'Increase width'   },
-    ['|'] = { '<Cmd>vertical resize 106<CR>' , 'Full line-lenght' },
-  },
+  -- Windows/Splits
+  { ' -', '<Cmd>new +term<CR>'           , desc = 'New terminal below' },
+  { ' _', '<Cmd>botright new +term<CR>'  , desc = 'New terminal below (full-width)' },
+  { ' \\', '<Cmd>vnew +term<CR>'         , desc = 'New terminal right' },
+  { ' |', '<Cmd>botright vnew +term<CR>' , desc = 'New terminal right (full-height)' },
+
+  { ' w', group = "Windows" },
+  -- Split creation
+  { ' ws', '<Cmd>split<CR>'  , desc = 'Split below' },
+  { ' wv', '<Cmd>vsplit<CR>' , desc = 'Split right' },
+  { ' wq', '<Cmd>q<CR>'      , desc = 'Close' },
+  { ' wo', '<Cmd>only<CR>'   , desc = 'Close all other' },
+  -- Navigation
+  { ' wk', '<Cmd>wincmd k<CR>' , desc = 'Go up' },
+  { ' wj', '<Cmd>wincmd j<CR>' , desc = 'Go down' },
+  { ' wh', '<Cmd>wincmd h<CR>' , desc = 'Go left' },
+  { ' wl', '<Cmd>wincmd l<CR>' , desc = 'Go right' },
+  { ' ww', '<Cmd>wincmd w<CR>' , desc = 'Go down/right' },
+  { ' wW', '<Cmd>wincmd W<CR>' , desc = 'Go up/left' },
+  { ' wt', '<Cmd>wincmd t<CR>' , desc = 'Go top-left' },
+  { ' wb', '<Cmd>wincmd b<CR>' , desc = 'Go bottom-right' },
+  { ' wp', '<Cmd>wincmd p<CR>' , desc = 'Go to previous' },
+  -- Movement
+  { ' wK', '<Cmd>wincmd K<CR>' , desc = 'Move to top' },
+  { ' wJ', '<Cmd>wincmd J<CR>' , desc = 'Move to bottom' },
+  { ' wH', '<Cmd>wincmd H<CR>' , desc = 'Move to left' },
+  { ' wL', '<Cmd>wincmd L<CR>' , desc = 'Move to right' },
+  { ' wT', '<Cmd>wincmd T<CR>' , desc = 'Move to new tab' },
+  { ' wr', '<Cmd>wincmd r<CR>' , desc = 'Rotate clockwise' },
+  { ' wR', '<Cmd>wincmd R<CR>' , desc = 'Rotate counter-clockwise' },
+  { ' wz', '<Cmd>packadd zoomwintab.vim | ZoomWinTabToggle<CR>', desc = 'Toggle zoom' },
+  -- Resize
+  { ' w=', '<Cmd>wincmd =<CR>'            , desc = 'All equal size' },
+  { ' w-', '<Cmd>resize -5<CR>'           , desc = 'Decrease height' },
+  { ' w+', '<Cmd>resize +5<CR>'           , desc = 'Increase height' },
+  { ' w<', '<Cmd><C-w>5<<CR>'             , desc = 'Decrease width' },
+  { ' w>', '<Cmd><C-w>5><CR>'             , desc = 'Increase width' },
+  { ' w|', '<Cmd>vertical resize 106<CR>' , desc = 'Full line-length' },
 
   -- Git
-  g = {
-    name = '+Git',
-    -- vim-fugitive
-    b = { '<Cmd>Gblame<CR>' , 'Blame'  },
-    s = { '<Cmd>Git<CR>'    , 'Status' },
-    d = {
-      name = '+Diff',
-      s = { '<Cmd>Ghdiffsplit<CR>' , 'Split horizontal' },
-      v = { '<Cmd>Gvdiffsplit<CR>' , 'Split vertical'   },
-    },
-    -- gitsigns.nvim
-    h = {
-      name = '+Hunks',
-      s = { require'gitsigns'.stage_hunk      , 'Stage'      },
-      u = { require'gitsigns'.undo_stage_hunk , 'Undo stage' },
-      r = { require'gitsigns'.reset_hunk      , 'Reset'      },
-      n = { require'gitsigns'.next_hunk       , 'Go to next' },
-      N = { require'gitsigns'.prev_hunk       , 'Go to prev' },
-      p = { require'gitsigns'.preview_hunk    , 'Preview'    },
-    },
-    -- telescope.nvim lists
-    l = {
-      name = '+Lists',
-      s = { '<Cmd>Telescope git_status<CR>'  , 'Status'         },
-      c = { '<Cmd>Telescope git_commits<CR>' , 'Commits'        },
-      C = { '<Cmd>Telescope git_commits<CR>' , 'Buffer commits' },
-      b = { '<Cmd>Telescope git_branches<CR>' , 'Branches'      },
-    },
-    -- Other
-    v = { '<Cmd>!gh repo view --web<CR>' , 'View on GitHub' },
-  },
+  { ' g', group = "Git" },
+  { ' gb', '<Cmd>Gblame<CR>' , desc = 'Blame' },
+  { ' gs', '<Cmd>Git<CR>'    , desc = 'Status' },
+  -- Git Diff
+  { ' gd', group = '+Diff' },
+  { ' gds', '<Cmd>Ghdiffsplit<CR>' , desc = 'Split horizontal' },
+  { ' gdv', '<Cmd>Gvdiffsplit<CR>' , desc = 'Split vertical' },
+  -- Git Hunks
+  { ' gh', group = '+Hunks' },
+  { ' ghs', require'gitsigns'.stage_hunk      , desc = 'Stage' },
+  { ' ghu', require'gitsigns'.undo_stage_hunk , desc = 'Undo stage' },
+  { ' ghr', require'gitsigns'.reset_hunk      , desc = 'Reset' },
+  { ' ghn', require'gitsigns'.next_hunk       , desc = 'Go to next' },
+  { ' ghN', require'gitsigns'.prev_hunk       , desc = 'Go to prev' },
+  { ' ghp', require'gitsigns'.preview_hunk    , desc = 'Preview' },
+  -- Git Lists
+  { ' gl', group = '+Lists' },
+  { ' gls', '<Cmd>Telescope git_status<CR>'    , desc = 'Status' },
+  { ' glc', '<Cmd>Telescope git_commits<CR>'   , desc = 'Commits' },
+  { ' glC', '<Cmd>Telescope git_bcommits<CR>'  , desc = 'Buffer commits' },
+  { ' glb', '<Cmd>Telescope git_branches<CR>'  , desc = 'Branches' },
+  -- Other Git
+  { ' gv', '<Cmd>!gh repo view --web<CR>' , desc = 'View on GitHub' },
 
-  -- Language server
-  l = {
-    name = '+LSP',
-    h = { '<Cmd>Lspsaga hover_doc<CR>'   , 'Hover'                   },
-    d = { vim.lsp.buf.definition         , 'Jump to definition'      },
-    D = { vim.lsp.buf.declaration        , 'Jump to declaration'     },
-    a = { '<Cmd>Lspsaga code_action<CR>' , 'Code action'             },
-    f = { vim.lsp.buf.format             , 'Format'                  },
-    r = { '<Cmd>Lspsaga rename<CR>'      , 'Rename'                  },
-    t = { vim.lsp.buf.type_definition    , 'Jump to type definition' },
-    n = { function() vim.diagnostic.goto_next({float = false}) end, 'Jump to next diagnostic' },
-    N = { function() vim.diagnostic.goto_prev({float = false}) end, 'Jump to next diagnostic' },
-    l = {
-      name = '+Lists',
-      a = { '<Cmd>Telescope lsp_code_actions<CR>'       , 'Code actions'         },
-      A = { '<Cmd>Telescope lsp_range_code_actions<CR>' , 'Code actions (range)' },
-      r = { '<Cmd>Telescope lsp_references<CR>'         , 'References'           },
-      s = { '<Cmd>Telescope lsp_document_symbols<CR>'   , 'Documents symbols'    },
-      S = { '<Cmd>Telescope lsp_workspace_symbols<CR>'  , 'Workspace symbols'    },
-    },
-  },
+  -- LSP
+  { ' l', group = '+LSP' },
+  { ' lh', vim.lsp.buf.hover               , desc = 'Hover' },
+  { ' ld', vim.lsp.buf.definition          , desc = 'Jump to definition' },
+  { ' lD', vim.lsp.buf.declaration         , desc = 'Jump to declaration' },
+  { ' lca', vim.lsp.buf.code_action        , desc = 'Code action' },
+  { ' lcl', vim.lsp.codelens.run           , desc = 'Code lens' },
+  { ' lf', vim.lsp.buf.format              , desc = 'Format' },
+  { ' lr', vim.lsp.buf.rename              , desc = 'Rename' },
+  { ' lt', vim.lsp.buf.type_definition     , desc = 'Jump to type definition' },
+  { ' ln', function() vim.diagnostic.goto_next({float = false}) end, desc = 'Jump to next diagnostic' },
+  { ' lN', function() vim.diagnostic.goto_prev({float = false}) end, desc = 'Jump to previous diagnostic' },
+  -- LSP Lists
+  { ' ll', group = '+Lists' },
+  { ' lla', '<Cmd>Telescope lsp_code_actions<CR>'       , desc = 'Code actions' },
+  { ' llA', '<Cmd>Telescope lsp_range_code_actions<CR>' , desc = 'Code actions (range)' },
+  { ' llr', '<Cmd>Telescope lsp_references<CR>'         , desc = 'References' },
+  { ' lls', '<Cmd>Telescope lsp_document_symbols<CR>'   , desc = 'Document symbols' },
+  { ' llS', '<Cmd>Telescope lsp_workspace_symbols<CR>'  , desc = 'Workspace symbols' },
 
-  -- Seaching with telescope.nvim
-  s = {
-    name = '+Search',
-    b = { '<Cmd>Telescope file_browser<CR>'              , 'File Browser'           },
-    f = { '<Cmd>Telescope find_files_workspace<CR>'      , 'Files in workspace'     },
-    F = { '<Cmd>Telescope find_files<CR>'                , 'Files in cwd'           },
-    g = { '<Cmd>Telescope live_grep_workspace<CR>'       , 'Grep in workspace'      },
-    G = { '<Cmd>Telescope live_grep<CR>'                 , 'Grep in cwd'            },
-    l = { '<Cmd>Telescope current_buffer_fuzzy_find<CR>' , 'Buffer lines'           },
-    o = { '<Cmd>Telescope oldfiles<CR>'                  , 'Old files'              },
-    t = { '<Cmd>Telescope builtin<CR>'                   , 'Telescope lists'        },
-    w = { '<Cmd>Telescope grep_string_workspace<CR>'     , 'Grep word in workspace' },
-    W = { '<Cmd>Telescope grep_string<CR>'               , 'Grep word in cwd'       },
-    v = {
-      name = '+Vim',
-      a = { '<Cmd>Telescope autocommands<CR>'    , 'Autocommands'    },
-      b = { '<Cmd>Telescope buffers<CR>'         , 'Buffers'         },
-      c = { '<Cmd>Telescope commands<CR>'        , 'Commands'        },
-      C = { '<Cmd>Telescope command_history<CR>' , 'Command history' },
-      h = { '<Cmd>Telescope highlights<CR>'      , 'Highlights'      },
-      q = { '<Cmd>Telescope quickfix<CR>'        , 'Quickfix list'   },
-      l = { '<Cmd>Telescope loclist<CR>'         , 'Location list'   },
-      m = { '<Cmd>Telescope keymaps<CR>'         , 'Keymaps'         },
-      s = { '<Cmd>Telescope spell_suggest<CR>'   , 'Spell suggest'   },
-      o = { '<Cmd>Telescope vim_options<CR>'     , 'Options'         },
-      r = { '<Cmd>Telescope registers<CR>'       , 'Registers'       },
-      t = { '<Cmd>Telescope filetypes<CR>'       , 'Filetypes'       },
-    },
-    s = { function() require'telescope.builtin'.symbols(require'telescope.themes'.get_dropdown({sources = {'emoji', 'math'}})) end, 'Symbols' },
-    z = { '<Cmd>Telescope zoxide list<CR>', 'Z' },
-    ['?'] = { '<Cmd>Telescope help_tags<CR>', 'Vim help' },
-  }
+  -- Searching with telescope.nvim
+  { ' s', group = '+Search' },
+  { ' sb', '<Cmd>Telescope file_browser<CR>'              , desc = 'File Browser' },
+  { ' sf', '<Cmd>Telescope find_files_workspace<CR>'      , desc = 'Files in workspace' },
+  { ' sF', '<Cmd>Telescope find_files<CR>'                , desc = 'Files in cwd' },
+  { ' sg', '<Cmd>Telescope live_grep_workspace<CR>'       , desc = 'Grep in workspace' },
+  { ' sG', '<Cmd>Telescope live_grep<CR>'                 , desc = 'Grep in cwd' },
+  { ' sl', '<Cmd>Telescope current_buffer_fuzzy_find<CR>' , desc = 'Buffer lines' },
+  { ' so', '<Cmd>Telescope oldfiles<CR>'                  , desc = 'Old files' },
+  { ' st', '<Cmd>Telescope builtin<CR>'                   , desc = 'Telescope lists' },
+  { ' sw', '<Cmd>Telescope grep_string_workspace<CR>'     , desc = 'Grep word in workspace' },
+  { ' sW', '<Cmd>Telescope grep_string<CR>'               , desc = 'Grep word in cwd' },
+  -- Telescope Vim
+  { ' sv', group = '+Vim' },
+  { ' sva', '<Cmd>Telescope autocommands<CR>'    , desc = 'Autocommands' },
+  { ' svb', '<Cmd>Telescope buffers<CR>'         , desc = 'Buffers' },
+  { ' svc', '<Cmd>Telescope commands<CR>'        , desc = 'Commands' },
+  { ' svC', '<Cmd>Telescope command_history<CR>' , desc = 'Command history' },
+  { ' svh', '<Cmd>Telescope highlights<CR>'      , desc = 'Highlights' },
+  { ' svq', '<Cmd>Telescope quickfix<CR>'        , desc = 'Quickfix list' },
+  { ' svl', '<Cmd>Telescope loclist<CR>'         , desc = 'Location list' },
+  { ' svm', '<Cmd>Telescope keymaps<CR>'         , desc = 'Keymaps' },
+  { ' svs', '<Cmd>Telescope spell_suggest<CR>'   , desc = 'Spell suggest' },
+  { ' svo', '<Cmd>Telescope vim_options<CR>'     , desc = 'Options' },
+  { ' svr', '<Cmd>Telescope registers<CR>'       , desc = 'Registers' },
+  { ' svt', '<Cmd>Telescope filetypes<CR>'       , desc = 'Filetypes' },
+  -- Other searches
+  { ' ss', function() require'telescope.builtin'.symbols(require'telescope.themes'.get_dropdown({sources = {'emoji', 'math'}})) end, desc = 'Symbols' },
+  { ' sz', '<Cmd>Telescope zoxide list<CR>', desc = 'Z' },
+  { ' s?', '<Cmd>Telescope help_tags<CR>', desc = 'Vim help' },
+})
 
-}, { prefix = ' ' })
-
--- Spaced prefiexd in mode Visual mode
-wk.register ({
-  l = {
-    name = '+LSP',
-    a = { ':<C-U>Lspsaga range_code_action<CR>' , 'Code action (range)' , mode = 'v' },
-  },
-}, { prefix = ' ' })
-
+-- Visual mode mappings
+wk.add({
+  { ' la', vim.lsp.buf.range_code_action, desc = 'Code action (range)', mode = 'v' },
+})
 
 -- Misc ---------------------------------------------------------------------------------------- {{{
 
@@ -382,7 +358,7 @@ keymaps { modes = 'n', opts = { noremap = true }, maps = {
   { '<leader>s', [[:%s/\C\<<C-r><C-w>\>//gc<Left><Left><Left>]] },
 }}
 keymaps { modes = 'v', opts = { noremap = true }, maps = {
-  -- Subsititute the visually selected word
+  -- Substitute the visually selected word
   { '<leader>s', [[y:%s/\C\<<C-r>"\>//gc<Left><Left><Left>]] },
 }}
 

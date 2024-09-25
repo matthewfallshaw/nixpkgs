@@ -4,8 +4,16 @@
 --
 -- Note that all languag e servers aside from `sumneko_lua` are installed via Nix. See:
 -- `../../../../home/neovim.nix`.
+local s = require'malo.utils'.symbols
 local foreach = require 'pl.tablex'.foreach
 local augroup = require 'malo.utils'.augroup
+
+-- Configure diagnostic icons
+local signs = { Error = s.error, Warn = s.warning, Hint = s.question, Info = s.info }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
 
 -- Configures `sumneko_lua` properly for Neovim config editing when it makes sense.
 require 'neodev'.setup {
@@ -20,6 +28,7 @@ require 'neodev'.setup {
 }
 
 local lspconf = require 'lspconfig'
+require('telescope').load_extension('ht')
 
 local function on_attach(client, bufnr)
   if client.server_capabilities.documentHighlightProvider then
@@ -38,26 +47,38 @@ local function on_attach(client, bufnr)
   end
 end
 
-local servers_config = {
-  bashls = {},
-  ccls = {},
-  hls = {},
-  jsonls = {},
-
-  nil_ls = {
-    settings ={
-      ['nil'] = {
-        formatting = {
-          command = { 'nixpkgs-fmt' },
+vim.g.haskell_tools = {
+  hls = require'cmp_nvim_lsp'.default_capabilities {
+    on_attach = on_attach,
+    settings = {
+      haskell = {
+        checkProject = true,
+        formattingProvider = 'ormolu',
+        plugin = {
+          rename = {
+            config = {
+              crossModule = true,
+            },
+          },
         },
       },
     },
   },
+}
 
-  pyright = {},
-  sourcekit = {},
+local servers_config = {
+  bashls = {},
+  ccls = {},
 
-  sumneko_lua = {
+  denols = {
+    setup = {
+      root_dir = lspconf.util.root_pattern("deno.json", "deno.jsonc"),
+    },
+  },
+
+  jsonls = {},
+
+  lua_ls = {
     settings = {
       Lua = {
         telemetry = {
@@ -67,7 +88,31 @@ local servers_config = {
     },
   },
 
-  tsserver = {},
+  nil_ls = {
+    settings ={
+      ['nil'] = {
+        formatting = {
+          command = { 'nixpkgs-fmt' },
+        },
+        nix = {
+          flake = {
+            autoArchive = true,
+            autoEvalInputs = true,
+          },
+        },
+      },
+    },
+  },
+
+  pyright = {},
+  sourcekit = {},
+
+  tsserver = {
+    setup = {
+      root_dir = lspconf.util.root_pattern("package.json"),
+      single_file_support = false,
+    },
+  },
 
   vimls = {
     init_options = {
@@ -102,10 +147,8 @@ local servers_config = {
   },
 }
 
-local coq = require 'coq'
-
 foreach(servers_config, function(v, k)
-  lspconf[k].setup(coq.lsp_ensure_capabilities(
+  lspconf[k].setup(require'cmp_nvim_lsp'.default_capabilities(
    vim.tbl_extend('error', v, { on_attach = on_attach })
   ))
 end)

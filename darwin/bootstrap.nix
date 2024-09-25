@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # Nix configuration ------------------------------------------------------------------------------
@@ -15,7 +20,7 @@
 
     trusted-users = [ "@admin" ];
 
-    # auto-optimise-store = true;
+    # https://github.com/NixOS/nix/issues/7273
     auto-optimise-store = false;
 
     experimental-features = [
@@ -23,14 +28,20 @@
       "flakes"
     ];
 
-    extra-platforms = lib.mkIf (pkgs.system == "aarch64-darwin") [ "x86_64-darwin" "aarch64-darwin" ];
+    extra-platforms = lib.mkIf (pkgs.system == "aarch64-darwin") [
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+
+    # Recommended when using `direnv` etc.
+    keep-derivations = true;
+    keep-outputs = true;
   };
 
   nix.configureBuildUsers = true;
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
-
 
   # Shells -----------------------------------------------------------------------------------------
 

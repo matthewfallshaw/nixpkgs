@@ -7,3 +7,7 @@ private.nix
 
 .DS_Store
 result
+result-*
+
+.direnv
+.envrc
