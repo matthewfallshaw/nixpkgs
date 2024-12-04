@@ -148,18 +148,14 @@ in
         use = gitsigns-nvim;
         config = requireConf gitsigns-nvim;
       }
-      { use = goyo-vim; }
       {
         use = indent-blankline-nvim;
+        vscode = false;
         config = requireConf indent-blankline-nvim;
       }
       {
         use = lush-nvim;
         vscode = true;
-      }
-      {
-        use = no-neck-pain-nvim;
-        config = requireConf no-neck-pain-nvim;
       }
       {
         use = noice-nvim;
@@ -237,6 +233,7 @@ in
       # Language support/utilities
       {
         use = nvim-treesitter.withAllGrammars;
+        vscode = false;
         config = requireConf nvim-treesitter;
       }
       {

@@ -59,6 +59,26 @@ if g.neovide or g.vscode then
 
   api.nvim_set_keymap('',  '<D-s>', ':w<CR>',      { noremap = true, silent = false })
 end
+if g.vscode then
+  -- Disable visual features that VSCode handles
+  wo.number = false
+  wo.relativenumber = false
+  wo.cursorline = false
+  wo.colorcolumn = ''
+  wo.signcolumn = 'no'
+
+  -- Disable treesitter highlighting in VSCode
+  vim.g.loaded_treesitter = 1
+
+  -- Disable certain features that might conflict
+  vim.g.loaded_indent_blankline = 1
+
+  -- Prevent theme-related issues
+  o.termguicolors = false
+
+  -- Disable diagnostic virtual lines if they're enabled
+  vim.diagnostic.config({ virtual_lines = false })
+end
 -- }}}
 
 -- Basic Vim Config --------------------------------------------------------------------------------
