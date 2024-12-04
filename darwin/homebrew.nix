@@ -76,7 +76,6 @@ in
     "gitup"
     # "iterm2"
     "macvim"            # deletion candidate
-    "meld"              # visual diff and merge tool
     "neovide"
     "paraview"
     "sublime-merge"
@@ -89,10 +88,9 @@ in
     "electrum"
 
     # Hardware hacking
-    "arduino"
-    "freecad"
     # "autodesk-fusion360"
-    "meshlab"
+    "freecad"
+    "kicad"
     # "meshmixer"
     "openscad"
     "prusaslicer"
@@ -106,7 +104,6 @@ in
     # QuickLook plugins from Homebrew
     "betterzip"
     "qlcolorcode"
-    "qlimagesize"
     "qlmarkdown"
     "qlstephen"
     "quicklook-csv"
@@ -126,7 +123,6 @@ in
     "google-drive"
     "grandperspective"
     "hammerspoon"
-    "hugin"
     "horos"             # Dicom & medical viewer
     "imageoptim"
     "inkscape"
@@ -166,8 +162,6 @@ in
     "onyx"
     "macfuse"
 
-    "wkhtmltopdf"
-
     "microsoft-edge"
   ];
 
@@ -197,7 +191,8 @@ in
     "trash"
   ];
 
-  # Include OpenSCAD path in environment.systemPath if OpenSCAD cask is present
-  environment.systemPath = mkIf (caskPresent "openscad")
-    [ "/Applications/OpenSCAD.app/Contents/MacOS" ];
+  # Include OpenSCAD path in environment.systemPath if OpenSCAD cask is present in homebrew.nix
+  environment.systemPath = if (caskPresent "openscad")
+    then [ "/Applications/OpenSCAD.app/Contents/MacOS" ]
+    else [];
 }

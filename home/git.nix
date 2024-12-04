@@ -9,6 +9,7 @@
   programs.git.extraConfig = {
     diff.colorMoved = "default";
     pull.rebase = true;
+    init.defaultBranch = "main";
   };
 
   programs.git.ignores = [

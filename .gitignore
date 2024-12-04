@@ -11,3 +11,4 @@ result-*
 
 .direnv
 .envrc
+nixpkgs.code-workspace

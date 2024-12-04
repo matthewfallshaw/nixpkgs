@@ -5,6 +5,7 @@
     AppleKeyboardUIMode = 3;
     AppleMeasurementUnits = "Centimeters";
     AppleMetricUnits = 1;
+    ApplePressAndHoldEnabled = false;
     AppleShowAllExtensions = true;
     AppleShowScrollBars = "Automatic";
     AppleTemperatureUnit = "Celsius";
