@@ -42,7 +42,6 @@ in
   homebrew.masApps = {
     # "1Password" = 1333542190;
     "Accelerate for Safari" = 1459809092;
-    "AVG Cleaner" = 667434228;
     Calca = 635758264;
     "Contacts Sync For Google Gmail" = 451691288;
     # Evernote = 406056744;

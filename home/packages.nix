@@ -50,7 +50,7 @@ in
   # https://code.visualstudio.com/
   # https://nix-community.github.io/home-manager/options.html#opt-programs.vscode.enable
   programs.vscode.enable = true;
-  programs.vscode.extensions = with pkgs.vscode-extensions; [
+  programs.vscode.profiles.default.extensions = with pkgs.vscode-extensions; [
     editorconfig.editorconfig
     eamodio.gitlens
   ];
@@ -105,6 +105,7 @@ in
       # Dev stuff
       inherit (pkgs)
         bundix # ruby nixified executable generator
+        claude-code # Claude AI code assistant
         cloc # source code line counter
         deno
         # dotnet-sdk # Microsoft .NET SDK  TODO
@@ -113,6 +114,7 @@ in
         # git-lfs # git large file store
         # github-desktop
         # github-copilot-cli
+        gnupg
         google-clasp # Google Apps Script command line tools
         google-cloud-sdk
         graphviz
@@ -122,6 +124,7 @@ in
         # idris2
         jq # query json
         nodejs
+        pnpm # fast, disk space efficient (nodejs) package manager
         ruby
         # R
         s3cmd
@@ -159,6 +162,7 @@ in
       ;
       inherit (pkgs.haskellPackages)
         cabal-install
+        hlint
         hoogle
         hpack
         implicit-hie

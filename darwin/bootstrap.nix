@@ -38,10 +38,9 @@
     keep-outputs = true;
   };
 
-  nix.configureBuildUsers = true;
+  # Enable the nix daemon
+  nix.enable = true;
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
 
   # Shells -----------------------------------------------------------------------------------------
 
