@@ -149,7 +149,8 @@ in
     "viscosity"
     "vlc"
     "webcatalog"
-    "gcenx/wine/wineskin"
+    # "gcenx/wine/wineskin"
+    "Kegworks-App/kegworks/kegworks"   # successor to wineskin ?
     "xquartz"
     "yed"
     "yt-music"

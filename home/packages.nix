@@ -109,6 +109,7 @@ in
         cloc # source code line counter
         deno
         # dotnet-sdk # Microsoft .NET SDK  TODO
+        esphome # ESPHome command line tools
         # fritzing # Hardware hacking
         # ghc # Glasgow Haskell Compiler
         # git-lfs # git large file store
