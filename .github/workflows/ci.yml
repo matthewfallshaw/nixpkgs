@@ -21,10 +21,10 @@ jobs:
     steps:
 
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Install Nix
-      uses: cachix/install-nix-action@v17
+      uses: cachix/install-nix-action@v27
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -61,10 +61,10 @@ jobs:
     steps:
 
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Install Nix
-      uses: cachix/install-nix-action@v17
+      uses: cachix/install-nix-action@v27
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -72,4 +72,4 @@ jobs:
     - name: Build and switch to home-manager env
       run: |
         # Build and switch to home-manager env
-        nix build .#homeConfigurations.matt.activationPackage; ./result/activate
+        nix build .#homeConfigurations.runner.activationPackage; ./result/activate

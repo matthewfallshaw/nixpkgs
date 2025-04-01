@@ -327,7 +327,6 @@ in
       vim-language-server
 
       #Other
-      cornelis
       yaml-language-server
       sumneko-lua-language-server
       vscode-langservers-extracted
