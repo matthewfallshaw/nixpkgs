@@ -70,9 +70,8 @@ in
     "db-browser-for-sqlite"
     "dbeaver-community"
     "docker"
-    "dotnet"
+    # "dotnet"
     # "github"            # GitHub Desktop
-    "gitup"
     # "iterm2"
     "macvim"            # deletion candidate
     "neovide"
