@@ -57,5 +57,7 @@
   # Finder
   system.defaults.finder = {
     FXEnableExtensionChangeWarning = true;
+    NewWindowTarget = "Home";
+    ShowPathbar = true;
   };
 }
