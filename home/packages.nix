@@ -95,7 +95,7 @@ in
         rdfind # find duplicate files and optionally replace them with {hard|sym}links
         ripgrep # better version of `grep`
         tealdeer # rust implementation of `tldr`
-        thefuck # do what I mean on the command line
+        pay-respects # do what I mean on the command line (replacement for thefuck)
         unrar # extract RAR archives
         upterm # secure terminal sharing
         wget # get all of the things
@@ -137,7 +137,7 @@ in
       # ;
       inherit (pkgs.nodePackages)
         npm-check-updates
-        rollup
+        # rollup
         # speed-test # nice speed-test tool
         yarn
       ;

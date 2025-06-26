@@ -7,6 +7,8 @@ let
 in
 
 {
+  system.primaryUser = "matt";
+
   environment.shellInit = mkIf brewEnabled ''
     eval "$(${config.homebrew.brewPrefix}/brew shellenv)"
   '';

@@ -1,4 +1,6 @@
 {
+  system.primaryUser = "matt";
+
   system.defaults.NSGlobalDomain = {
     "com.apple.trackpad.scaling" = 3.0;
     # AppleInterfaceStyleSwitchesAutomatically = true;
@@ -16,14 +18,6 @@
     NSAutomaticPeriodSubstitutionEnabled = false;
     NSAutomaticQuoteSubstitutionEnabled = false;
     _HIHideMenuBar = false;
-  };
-
-  # Firewall
-  system.defaults.alf = {
-    globalstate = 1;
-    allowsignedenabled = 1;
-    allowdownloadsignedenabled = 1;
-    stealthenabled = 1;
   };
 
   # Dock and Mission Control
@@ -59,5 +53,14 @@
     FXEnableExtensionChangeWarning = true;
     NewWindowTarget = "Home";
     ShowPathbar = true;
+  };
+
+  # Firewall - updated for newer nix-darwin
+  networking.applicationFirewall = {
+    enable = true;
+    blockAllIncoming = false;
+    allowSigned = true;
+    allowSignedApp = true;
+    enableStealthMode = true;
   };
 }
