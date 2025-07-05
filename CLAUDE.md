@@ -81,3 +81,4 @@ The flake is registered as `my` in the nix registry, allowing:
 
 ## General
 - Seek to actually understand what's going on. Don't just hack around a problem by building an overlay. Try to keep the codebase simple, but actually fixing problems at the root.
+- **IMPORTANT**: Nix flakes use git to determine what files exist. New files must be `git add`ed before nix will see them, even if they're not committed yet.

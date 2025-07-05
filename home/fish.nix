@@ -160,7 +160,7 @@ in
   programs.fish.shellAliases = with pkgs; {
     # Nix related
     drb = "darwin-rebuild build --flake ${nixConfigDirectory}";
-    drs = "darwin-rebuild switch --flake ${nixConfigDirectory}";
+    drs = "sudo darwin-rebuild switch --flake ${nixConfigDirectory}";
     flakeup = "nix flake update ${nixConfigDirectory}";
     nb = "nix build";
     nd = "nix develop";
