@@ -6,7 +6,13 @@
 }:
 # Let-In ----------------------------------------------------------------------------------------{{{
 let
-  inherit (lib) attrValues concatStringsSep optional;
+  inherit (lib)
+    attrValues
+    concatStringsSep
+    mapAttrsToList
+    optional
+    removePrefix
+    ;
   inherit (config.lib.file) mkOutOfStoreSymlink;
   inherit (config.home.user-info) nixConfigDirectory;
 
@@ -103,6 +109,9 @@ let
             ++ optional (autoload && configFinal != "") configFinal
           ));
     };
+
+  mkVimColorVariable = k: v: ''let g:theme_${k} = "${v}"'';
+  colorSetToVimscript = colors: concatStringsSep "\n" (mapAttrsToList mkVimColorVariable colors);
 in
 # }}}
 {
@@ -116,13 +125,20 @@ in
   # configuration don't require rebuilding the `home-manager` environment to take effect.
   xdg.configFile."nvim/plugins.vim".source = mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/plugins.vim";
   xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/lua";
-  xdg.configFile."nvim/colors".source = mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/colors";
+  xdg.configFile."nvim/colors".source =
+    mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/colors";
 
   # Load the `init` module from the above configs
-  programs.neovim.extraConfig = "lua require('init')";
+  programs.neovim.extraConfig = ''
+    ${colorSetToVimscript config.colors.malo-ok-solar-light.colors}
+    ${colorSetToVimscript config.colors.malo-ok-solar-light.namedColors}
+
+    lua require('init')
+  '';
 
   # Add NodeJs since it's required by some plugins I use.
   programs.neovim.withNodeJs = true;
+
   # Add `penlight` Lua module package since I used in the above configs
   programs.neovim.extraLuaPackages = ps: [ ps.penlight ];
 
@@ -232,69 +248,7 @@ in
 
       # Language support/utilities
       {
-        use = nvim-treesitter.withPlugins (plugins: with plugins; [
-          # Add commonly used grammars here
-          tree-sitter-bash
-          tree-sitter-bibtex
-          tree-sitter-c
-          tree-sitter-c-sharp
-          tree-sitter-clojure
-          tree-sitter-cmake
-          tree-sitter-comment
-          tree-sitter-commonlisp
-          tree-sitter-cpp
-          tree-sitter-css
-          tree-sitter-cue
-          tree-sitter-dart
-          tree-sitter-dockerfile
-          tree-sitter-dot
-          tree-sitter-elisp
-          tree-sitter-elixir
-          tree-sitter-elm
-          tree-sitter-embedded-template
-          tree-sitter-erlang
-          tree-sitter-fish
-          tree-sitter-go
-          tree-sitter-graphql
-          tree-sitter-haskell
-          tree-sitter-hjson
-          tree-sitter-html
-          tree-sitter-http
-          tree-sitter-java
-          tree-sitter-javascript
-          tree-sitter-jsdoc
-          tree-sitter-json
-          tree-sitter-json5
-          tree-sitter-kotlin
-          tree-sitter-latex
-          tree-sitter-llvm
-          tree-sitter-lua
-          tree-sitter-make
-          tree-sitter-markdown
-          tree-sitter-markdown-inline
-          tree-sitter-nix
-          tree-sitter-org-nvim
-          tree-sitter-perl
-          tree-sitter-php
-          tree-sitter-python
-          tree-sitter-ql
-          tree-sitter-ql-dbscheme
-          tree-sitter-query
-          tree-sitter-r
-          tree-sitter-regex
-          tree-sitter-ruby
-          tree-sitter-rust
-          tree-sitter-scala
-          tree-sitter-scheme
-          tree-sitter-scss
-          tree-sitter-sql
-          tree-sitter-toml
-          tree-sitter-tsx
-          tree-sitter-typescript
-          tree-sitter-vim
-          tree-sitter-yaml
-          # Excluding tree-sitter-ocamllex as it's causing hash mismatch issues
-        ]);
+        use = nvim-treesitter.withAllGrammars;
         vscode = false;
         config = requireConf nvim-treesitter;
       }

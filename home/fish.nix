@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) elem optionalString;
@@ -11,7 +16,8 @@ in
   programs.fish.enable = true;
 
   # Add Fish plugins
-  home.packages = [ pkgs.fishPlugins.done ];
+  home.packages = [
+  ];
 
   # Fish functions ----------------------------------------------------------------------------- {{{
 
@@ -74,6 +80,19 @@ in
         end
       '';
     };
+
+    # TODO: Replace with Ghostty's native command completion notifications when available
+    # Custom notification function using escape sequences - avoids done plugin conflicts
+    notify-done = {
+      body = ''
+        if test $CMD_DURATION -gt 10000
+          set -l cmd_time (math $CMD_DURATION / 1000)
+          printf '\e]777;notify;Ghostty;Command finished - Took %ss\e\\' $cmd_time
+        end
+      '';
+      onEvent = "fish_postexec";
+    };
+
     # Toggles `$term_background` between "light" and "dark". Other Fish functions trigger when this
     # variable changes. We use a universal variable so that all instances of Fish have the same
     # value for the variable.
@@ -93,62 +112,62 @@ in
       if defaults read -g AppleInterfaceStyle &>/dev/null
         set -U term_background dark
       else
-        # set -U term_background light
-        set -U term_background dark
+        set -U term_background light
       end
     '';
 
     # Sets Fish Shell to light or dark colorscheme based on `$term_background`.
     set-shell-colors = {
-      body = ''
-        # Set LS_COLORS
-        set -xg LS_COLORS (${pkgs.vivid}/bin/vivid generate solarized-$term_background)
+      body =
+        ''
+          # Set color variables
+          if test "$term_background" = light
+            set emphasized_text  brgreen  # base01
+            set normal_text      bryellow # base00
+            set secondary_text   brcyan   # base1
+            set background_light white    # base2
+            set background       brwhite  # base3
+          else
+            set emphasized_text  brcyan   # base1
+            set normal_text      brblue   # base0
+            set secondary_text   brgreen  # base01
+            set background_light black    # base02
+            set background       brblack  # base03
+          end
 
-        # Set color variables
-        if test "$term_background" = light
-          set emphasized_text  brgreen  # base01
-          set normal_text      bryellow # base00
-          set secondary_text   brcyan   # base1
-          set background_light white    # base2
-          set background       brwhite  # base3
-        else
-          set emphasized_text  brcyan   # base1
-          set normal_text      brblue   # base0
-          set secondary_text   brgreen  # base01
-          set background_light black    # base02
-          set background       brblack  # base03
-        end
+          # Set Fish colors that change when background changes
+          set -g fish_color_command                    $emphasized_text --bold  # color of commands
+          set -g fish_color_param                      $normal_text             # color of regular command parameters
+          set -g fish_color_comment                    $secondary_text          # color of comments
+          set -g fish_color_autosuggestion             $secondary_text          # color of autosuggestions
+          set -g fish_pager_color_prefix               $emphasized_text --bold  # color of the pager prefix string
+          set -g fish_pager_color_description          $selection_text          # color of the completion description
+          set -g fish_pager_color_selected_prefix      $background
+          set -g fish_pager_color_selected_completion  $background
+          set -g fish_pager_color_selected_description $background
+        ''
+        + optionalString config.programs.bat.enable ''
 
-        # Set Fish colors that change when background changes
-        set -g fish_color_command                    $emphasized_text --bold  # color of commands
-        set -g fish_color_param                      $normal_text             # color of regular command parameters
-        set -g fish_color_comment                    $secondary_text          # color of comments
-        set -g fish_color_autosuggestion             $secondary_text          # color of autosuggestions
-        set -g fish_pager_color_prefix               $emphasized_text --bold  # color of the pager prefix string
-        set -g fish_pager_color_description          $selection_text          # color of the completion description
-        set -g fish_pager_color_selected_prefix      $background
-        set -g fish_pager_color_selected_completion  $background
-        set -g fish_pager_color_selected_description $background
-      '' + optionalString config.programs.bat.enable ''
+          # Use correct theme for `bat`.
+          set -xg BAT_THEME "Solarized ($term_background)"
+        ''
+        + optionalString (elem pkgs.bottom config.home.packages) ''
 
-        # Use correct theme for `bat`.
-        set -xg BAT_THEME "Solarized ($term_background)"
-      '' + optionalString (elem pkgs.bottom config.home.packages) ''
+          # Use correct theme for `btm`.
+          if test "$term_background" = light
+            alias btm "btm --theme default-light"
+          else
+            alias btm "btm --theme default"
+          end
+        ''
+        + optionalString config.programs.neovim.enable ''
 
-        # Use correct theme for `btm`.
-        if test "$term_background" = light
-          alias btm "btm --color default-light"
-        else
-          alias btm "btm --color default"
-        end
-      '' + optionalString config.programs.neovim.enable ''
-
-      # Set `background` of all running Neovim instances.
-      for server in (${pkgs.neovim-remote}/bin/nvr --serverlist)
-        ${pkgs.neovim-remote}/bin/nvr -s --nostart --servername $server \
-          -c "set background=$term_background" &
-      end
-      '';
+          # Set `background` of all running Neovim instances.
+          for server in (${pkgs.neovim-remote}/bin/nvr --serverlist)
+            ${pkgs.neovim-remote}/bin/nvr -s --nostart --servername $server \
+              -c "set background=$term_background" &
+          end
+        '';
       onVariable = "term_background";
     };
   };
@@ -157,7 +176,7 @@ in
   # Fish configuration ------------------------------------------------------------------------- {{{
 
   # Aliases
-  programs.fish.shellAliases = with pkgs; {
+  home.shellAliases = with pkgs; {
     # Nix related
     drb = "darwin-rebuild build --flake ${nixConfigDirectory}";
     drs = "sudo darwin-rebuild switch --flake ${nixConfigDirectory}";
@@ -188,6 +207,43 @@ in
     gxd="git diff --ignore-space-change | gitx --diff";
   };
 
+  programs.fish.shellAbbrs = {
+    nixpkgs-review-pr = {
+      expansion = ''
+        echo -n x86_64-darwin aarch64-{darwin,linux} | \
+          parallel -u -d ' ' -q fish -i -c 'nixpkgs-review pr --post-result --system {} %'
+      '';
+      setCursor = true;
+    };
+    nix-build-all-systems = {
+      expansion = ''
+        echo -n x86_64-darwin aarch64-{darwin,linux} | \
+          parallel -u -d ' ' nix build -L -f . --system {} %
+      '';
+      setCursor = true;
+    };
+    nix-rm-results = ''
+      ${pkgs.fd}/bin/fd --hidden --no-ignore --type l '^result-?' --exclude 'Library/**' \
+        --exec rm '{}'
+    '';
+    sysx86d = {
+      expansion = "--system x86_64-darwin";
+      position = "anywhere";
+    };
+    sysx86l = {
+      expansion = "--system x86_64-linux";
+      position = "anywhere";
+    };
+    sysarmd = {
+      expansion = "--system aarch64-darwin";
+      position = "anywhere";
+    };
+    sysarml = {
+      expansion = "--system aarch64-linux";
+      position = "anywhere";
+    };
+  };
+
   # Configuration that should be above `loginShellInit` and `interactiveShellInit`.
   programs.fish.shellInit = ''
     set -U fish_term24bit 1
@@ -206,7 +262,6 @@ in
     fish_add_path -a ~/.local/bin ~/bin
   '';
 
-
   programs.fish.interactiveShellInit = ''
     set -g fish_greeting ""
     ${pkgs.pay-respects}/bin/pay-respects fish --alias | source
@@ -214,6 +269,9 @@ in
     # Run function to set colors that are dependant on `$term_background` and to register them so
     # they are triggerd when the relevent event happens or variable changes.
     set-shell-colors
+
+    # Activate notification event handler
+    functions notify-done > /dev/null
 
     # Set Fish colors that aren't dependant the `$term_background`.
     set -g fish_color_quote        cyan      # color of commands
@@ -230,4 +288,3 @@ in
   # }}}
 }
 # vim: foldmethod=marker
-

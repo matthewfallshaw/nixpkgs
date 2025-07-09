@@ -1,8 +1,7 @@
 {
-  system.primaryUser = "matt";
-
   system.defaults.NSGlobalDomain = {
     "com.apple.trackpad.scaling" = 3.0;
+    AppleICUForce24HourTime = true;
     # AppleInterfaceStyleSwitchesAutomatically = true;
     AppleKeyboardUIMode = 3;
     AppleMeasurementUnits = "Centimeters";
@@ -53,14 +52,5 @@
     FXEnableExtensionChangeWarning = true;
     NewWindowTarget = "Home";
     ShowPathbar = true;
-  };
-
-  # Firewall - updated for newer nix-darwin
-  networking.applicationFirewall = {
-    enable = true;
-    blockAllIncoming = false;
-    allowSigned = true;
-    allowSignedApp = true;
-    enableStealthMode = true;
   };
 }

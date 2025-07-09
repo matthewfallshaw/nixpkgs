@@ -1,12 +1,11 @@
 {
-  config,
   lib,
   pkgs,
   ...
 }:
 
 {
-  # Nix configuration ------------------------------------------------------------------------------
+  # Nix configuration -----------------------------------------------------------------------------
 
   nix.settings = {
     substituters = [
@@ -38,11 +37,10 @@
     keep-outputs = true;
   };
 
-  # Enable the nix daemon
-  nix.enable = true;
+  # Don't need channels since I use flakes
+  nix.channel.enable = false;
 
-
-  # Shells -----------------------------------------------------------------------------------------
+  # Shells ----------------------------------------------------------------------------------------
 
   # Add shells installed by nix to /etc/shells file
   environment.shells = with pkgs; [
@@ -54,16 +52,6 @@
   # Make Fish the default shell
   programs.fish.enable = true;
   programs.fish.useBabelfish = true;
-  programs.fish.babelfishPackage = pkgs.babelfish;
-  # Needed to address bug where $PATH is not properly set for fish:
-  # https://github.com/LnL7/nix-darwin/issues/122
-  programs.fish.shellInit = ''
-    for p in (string split : ${config.environment.systemPath})
-      if not contains $p $fish_user_paths
-        set -g fish_user_paths $fish_user_paths $p
-      end
-    end
-  '';
   environment.variables.SHELL = "${pkgs.fish}/bin/fish";
 
   # Install and setup ZSH to work with nix(-darwin) as well

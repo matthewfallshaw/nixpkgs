@@ -4,216 +4,155 @@
   inputs = {
     # Package sets
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixos-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
 
     # Environment/system management
-    darwin.url = "github:LnL7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    # _1password-shell-plugins = {
-    #   url = "github:1Password/shell-plugins";
-    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
-    #   inputs.flake-utils.follows = "flake-utils";
-    # };
+    darwin = {
+      url = "github:nix-darwin/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    _1password-shell-plugins = {
+      url = "github:1Password/shell-plugins";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.flake-utils.follows = "flake-utils";
+    };
 
-    # Neovim plugins
-
-    # Other sources
-    flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
+    # Flake utilities
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
     flake-utils.url = "github:numtide/flake-utils";
-    prefmanager.url = "github:malob/prefmanager";
-    prefmanager.inputs.nixpkgs.follows = "nixpkgs-unstable";
-    prefmanager.inputs.flake-compat.follows = "flake-compat";
-    prefmanager.inputs.flake-utils.follows = "flake-utils";
+
+    # Utility for watching macOS `defaults`.
+    prefmanager = {
+      url = "github:malob/prefmanager";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.flake-compat.follows = "flake-compat";
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
-  outputs = { self, darwin, home-manager, flake-utils, ... }@inputs:
+  outputs =
+    {
+      self,
+      darwin,
+      home-manager,
+      flake-utils,
+      ...
+    }@inputs:
     let
-      # Some building blocks ------------------------------------------------------------------- {{{
+      inherit (self.lib)
+        attrValues
+        makeOverridable
+        mkForce
+        optionalAttrs
+        singleton
+        ;
 
-      inherit (darwin.lib) darwinSystem;
-      inherit (inputs.nixpkgs-unstable.lib) attrValues makeOverridable optionalAttrs singleton;
+      homeStateVersion = "25.11";
 
-      # Configuration for `nixpkgs`
-      nixpkgsConfig = {
+      nixpkgsDefaults = {
         config = {
           allowUnfree = true;
         };
-        overlays = attrValues self.overlays ++ [
-          # Sub in x86 version of packages that don't build on Apple Silicon yet
-          (final: prev: (optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
-            inherit (final.pkgs-x86)
-              home-assistant-cli
-              idris2
-              nix-index
-              niv;
-          }))
-        ];
+        overlays =
+          attrValues self.overlays
+          ++ [ inputs.prefmanager.overlays.prefmanager ]
+          ++ singleton (
+            final: prev:
+            (optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+              # Sub in x86 version of packages that don't build on Apple Silicon.
+              # inherit (final.pkgs-x86) [...];
+            })
+            // {
+              # Add other overlays here if needed.
+            }
+          );
       };
 
-      homeManagerStateVersion = "24.11";
-
-      primaryUserInfo = {
+      primaryUserDefaults = {
         username = "matt";
         fullName = "Matt Fallshaw";
         email = "m@fallshaw.me";
         nixConfigDirectory = "/Users/matt/.config/nixpkgs";
       };
-
-      # Modules shared by most `nix-darwin` personal configurations.
-      nixDarwinCommonModules = attrValues self.darwinModules ++ [
-        # `home-manager` module
-        home-manager.darwinModules.home-manager
-        (
-          { config, ... }:
-          let
-            inherit (config.users) primaryUser;
-          in
-          {
-            nixpkgs = nixpkgsConfig;
-            # Hack to support legacy workflows that use `<nixpkgs>` etc.
-            # nix.nixPath = { nixpkgs = "${primaryUser.nixConfigDirectory}/nixpkgs.nix"; };
-            nix.nixPath = { nixpkgs = "${inputs.nixpkgs-unstable}"; };
-            # `home-manager` config
-            users.users.${primaryUser.username}.home = "/Users/${primaryUser.username}";
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.${primaryUser.username} = {
-              imports = attrValues self.homeManagerModules;
-              home.stateVersion = homeManagerStateVersion;
-              home.user-info = config.users.primaryUser;
-            };
-            # Add a registry entry for this flake
-            nix.registry.my.flake = self;
-          }
-        )
-      ];
-      # }}}
     in
     {
+      # Add some additional functions to `lib`.
+      lib = inputs.nixpkgs-unstable.lib.extend (
+        _: _: {
+          mkDarwinSystem = import ./lib/mkDarwinSystem.nix inputs;
+          lsnix = import ./lib/lsnix.nix;
+        }
+      );
 
-      # System outputs ------------------------------------------------------------------------- {{{
-
-      # My `nix-darwin` configs
-      darwinConfigurations = rec {
-        # Minimal configurations to bootstrap systems
-        bootstrap-x86 = makeOverridable darwinSystem {
-          system = "x86_64-darwin";
-          modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsConfig; } ];
-        };
-        bootstrap-arm = bootstrap-x86.override { system = "aarch64-darwin"; };
-
-        notnux6 = darwinSystem {
-          system = "aarch64-darwin";
-          modules = nixDarwinCommonModules ++ [
-            {
-              users.primaryUser = primaryUserInfo;
-              networking.computerName = "notnux6";
-              networking.hostName = "notnux6";
-              networking.knownNetworkServices = [
-                "Wi-Fi"
-                "USB 10/100/1000 LAN"
-              ];
-            }
-          ];
-        };
-
-        # Config with small modifications needed/desired for CI with GitHub workflow
-        githubCI = darwinSystem {
-          system = "x86_64-darwin";
-          modules = nixDarwinCommonModules ++ [
-            ({ lib, ... }: {
-              users.primaryUser = primaryUserInfo // {
-                username = "runner";
-                nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
-              };
-              homebrew.enable = lib.mkForce false;
-            })
-          ];
-        };
-      };
-
-      # Config I use with Linux cloud VMs
-      # Build and activate on new system with:
-      # `nix build .#homeConfigurations.matt.activationPackage; ./result/activate`
-      homeConfigurations.matt = home-manager.lib.homeManagerConfiguration {
-        pkgs = import inputs.nixpkgs-unstable {
-          system = "x86_64-linux";
-          inherit (nixpkgsConfig) config overlays;
-        };
-        modules = attrValues self.homeManagerModules ++ singleton ({ config, ... }: {
-          home.username = "matt";
-          home.homeDirectory = "/home/matt";
-          home.stateVersion = homeManagerStateVersion;
-          home.user-info = primaryUserInfo // {
-            nixConfigDirectory = "${config.home.homeDirectory}/.config/nixpkgs";
-          };
-        });
-      };
-      # }}}
-
-      # Non-system outputs --------------------------------------------------------------------- {{{
+      # Overlays --------------------------------------------------------------------------------{{{
 
       overlays = {
         # Overlays to add different versions `nixpkgs` into package set
         pkgs-master = _: prev: {
           pkgs-master = import inputs.nixpkgs-master {
             inherit (prev.stdenv) system;
-            inherit (nixpkgsConfig) config;
+            inherit (nixpkgsDefaults) config;
           };
         };
         pkgs-stable = _: prev: {
           pkgs-stable = import inputs.nixpkgs-stable {
             inherit (prev.stdenv) system;
-            inherit (nixpkgsConfig) config;
+            inherit (nixpkgsDefaults) config;
           };
         };
         pkgs-unstable = _: prev: {
           pkgs-unstable = import inputs.nixpkgs-unstable {
             inherit (prev.stdenv) system;
-            inherit (nixpkgsConfig) config;
+            inherit (nixpkgsDefaults) config;
           };
         };
-
-       prefmanager = _: prev: {
-           inherit (inputs.prefmanager.packages.${prev.stdenv.system}) prefmanager;
-        };
+        apple-silicon =
+          _: prev:
+          optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+            # Add access to x86 packages system is running Apple Silicon
+            pkgs-x86 = import inputs.nixpkgs-unstable {
+              system = "x86_64-darwin";
+              inherit (nixpkgsDefaults) config;
+            };
+          };
 
         # Overlay that adds various additional utility functions to `vimUtils`
         vimUtils = import ./overlays/vimUtils.nix;
 
         # Overlay that adds some additional Neovim plugins
-        vimPlugins = final: prev:
+        vimPlugins =
+          final: prev:
           let
             inherit (self.overlays.vimUtils final prev) vimUtils;
           in
           {
-            vimPlugins = prev.vimPlugins.extend (_: _:
-              {
-                # Add plugins here
+            vimPlugins = prev.vimPlugins.extend (
+              _: _:
+              # Useful for testing/using Vim plugins that aren't in `nixpkgs`.
+              vimUtils.buildVimPluginsFromFlakeInputs inputs [
+                # Add flake input names here for a Vim plugin repos
+              ]
+              // {
+                # Other Vim plugins
               }
             );
           };
 
-        lua53Packages = import ./overlays/lua.nix;
-
-        # Overlay useful on Macs with Apple Silicon
-        apple-silicon = _: prev: optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
-          # Add access to x86 packages system is running Apple Silicon
-          pkgs-x86 = import inputs.nixpkgs-unstable {
-            system = "x86_64-darwin";
-            inherit (nixpkgsConfig) config;
-          };
-        };
-
-        # Overlay to include node packages listed in `./pkgs/node-packages/package.json`
-        # Run `nix run my#nodePackages.node2nix -- -14` to update packages.
-        nodePackages = _: prev: {
-          nodePackages = prev.nodePackages // import ./pkgs/node-packages { pkgs = prev; };
+        tweaks = final: _: {
+          # Add temporary overrides here
         };
       };
+      # }}}
+
+      # Modules -------------------------------------------------------------------------------- {{{
 
       darwinModules = {
         # My configurations
@@ -223,13 +162,10 @@
         malo-homebrew = import ./darwin/homebrew.nix;
 
         # Modules I've created
-        programs-nix-index = import ./modules/darwin/programs/nix-index.nix;
         users-primaryUser = import ./modules/darwin/users.nix;
       };
 
       homeManagerModules = {
-        configs-osagitfilter = import ./home/configs/git-osagitfilter.nix;
-
         # My configurations
         malo-colors = import ./home/colors.nix;
         malo-config-files = import ./home/config-files.nix;
@@ -237,6 +173,7 @@
         malo-git = import ./home/git.nix;
         malo-git-aliases = import ./home/git-aliases.nix;
         malo-gh-aliases = import ./home/gh-aliases.nix;
+        malo-ghostty = import ./home/ghostty.nix;
         malo-neovim = import ./home/neovim.nix;
         malo-packages = import ./home/packages.nix;
         malo-starship = import ./home/starship.nix;
@@ -245,42 +182,142 @@
         # Modules I've created
         colors = import ./modules/home/colors;
         programs-neovim-extras = import ./modules/home/programs/neovim/extras.nix;
-        home-user-info = { lib, ... }: {
-          options.home.user-info =
-            (self.darwinModules.users-primaryUser { inherit lib; }).options.users.primaryUser;
-        };
+        home-user-info =
+          { lib, ... }:
+          {
+            options.home.user-info =
+              (self.darwinModules.users-primaryUser {
+                inherit lib;
+              }).options.users.primaryUser;
+          };
+
+        # Other
+        _1password-shell-plugins = inputs._1password-shell-plugins.hmModules.default;
       };
       # }}}
 
-    } // flake-utils.lib.eachDefaultSystem (system: {
-      # Add re-export `nixpkgs` packages with overlays.
-      # This is handy in combination with `nix registry add my /Users/matt/.config/nixpkgs`
-      legacyPackages = import inputs.nixpkgs-unstable {
-        inherit system;
-        inherit (nixpkgsConfig) config;
-        overlays = attrValues {
-          inherit (self.overlays)
-            pkgs-master
-            pkgs-stable
-            apple-silicon
-            nodePackages;
+      # System configurations ------------------------------------------------------------------ {{{
+
+      darwinConfigurations = {
+        # Minimal macOS configurations to bootstrap systems
+        bootstrap-x86 = makeOverridable darwin.lib.darwinSystem {
+          system = "x86_64-darwin";
+          modules = [
+            ./darwin/bootstrap.nix
+            { nixpkgs = nixpkgsDefaults; }
+          ];
+        };
+        bootstrap-arm = self.darwinConfigurations.bootstrap-x86.override {
+          system = "aarch64-darwin";
+        };
+
+        # My Apple Silicon macOS laptop config
+        notnux6 = makeOverridable self.lib.mkDarwinSystem (
+          primaryUserDefaults
+          // {
+            modules =
+              attrValues self.darwinModules
+              ++ singleton {
+                nixpkgs = nixpkgsDefaults;
+                networking.computerName = "notnux6";
+                networking.hostName = "notnux6";
+                networking.knownNetworkServices = [
+                  "Wi-Fi"
+                  "USB 10/100/1000 LAN"
+                ];
+                nix.registry.my.flake = inputs.self;
+              };
+            extraModules = singleton {
+              nix.linux-builder = {
+                enable = true;
+                ephemeral = true;
+                maxJobs = 8;
+                config.virtualisation = {
+                  cores = 8;
+                  darwin-builder.memorySize = 16 * 1024;
+                };
+              };
+            };
+            inherit homeStateVersion;
+            homeModules = attrValues self.homeManagerModules;
+          }
+        );
+
+        # Config with small modifications needed/desired for CI with GitHub workflow
+        githubCI = self.darwinConfigurations.notnux6.override {
+          username = "runner";
+          nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
+          extraModules = singleton {
+            environment.etc.shells.enable = mkForce false;
+            environment.etc."nix/nix.conf".enable = mkForce false;
+            homebrew.enable = mkForce false;
+            # TODO: Remove when VM on GitHub updates to Sonoma
+            ids.uids.nixbld = 300;
           };
+        };
       };
 
+      # Config I use with non-NixOS Linux systems (e.g., cloud VMs etc.)
+      # Build and activate on new system with:
+      # `nix build .#homeConfigurations.malo.activationPackage && ./result/activate`
+      homeConfigurations.malo = makeOverridable home-manager.lib.homeManagerConfiguration {
+        pkgs = import inputs.nixpkgs-unstable (nixpkgsDefaults // { system = "x86_64-linux"; });
+        modules =
+          attrValues self.homeManagerModules
+          ++ singleton (
+            { config, ... }:
+            {
+              home.username = config.home.user-info.username;
+              home.homeDirectory = "/home/${config.home.username}";
+              home.stateVersion = homeStateVersion;
+              home.user-info = primaryUserDefaults // {
+                nixConfigDirectory = "${config.home.homeDirectory}/.config/nixpkgs";
+              };
+            }
+          );
+      };
+
+      # Config with small modifications needed/desired for CI with GitHub workflow
+      homeConfigurations.runner = self.homeConfigurations.malo.override (old: {
+        modules =
+          old.modules
+          ++ singleton {
+            home.username = mkForce "runner";
+            home.homeDirectory = mkForce "/home/runner";
+            home.user-info.nixConfigDirectory = mkForce "/home/runner/work/nixpkgs/nixpkgs";
+          };
+      });
+      # }}}
+
+    }
+    // flake-utils.lib.eachDefaultSystem (system: {
+      # Re-export `nixpkgs-unstable` with overlays.
+      # This is handy in combination with setting `nix.registry.my.flake = inputs.self`.
+      # Allows doing things like `nix run my#prefmanager -- watch --all`
+      legacyPackages = import inputs.nixpkgs-unstable (nixpkgsDefaults // { inherit system; });
+
+      # Development shells ----------------------------------------------------------------------{{{
       # Shell environments for development
+      # With `nix.registry.my.flake = inputs.self`, development shells can be created by running,
+      # e.g., `nix develop my#python`.
       devShells =
         let
           pkgs = self.legacyPackages.${system};
         in
         {
+          default = pkgs.mkShell {
+            name = "default";
+            buildInputs = attrValues { inherit (pkgs) nixd nixfmt-rfc-style; };
+          };
           python = pkgs.mkShell {
             name = "python310";
-            inputsFrom = attrValues {
+            buildInputs = attrValues {
               inherit (pkgs.pkgs-master.python310Packages) black isort;
               inherit (pkgs) poetry python310 pyright;
             };
           };
         };
+      # }}}
     });
 }
 # vim: foldmethod=marker

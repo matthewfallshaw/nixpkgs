@@ -1,30 +1,58 @@
-{ name, config, lib, ... }:
+{
+  name,
+  config,
+  lib,
+  ...
+}:
 
 let
   inherit (lib)
     attrNames
     attrValues
+    generators
     hasPrefix
     listToAttrs
     literalExpression
     mapAttrs
+    mapAttrsToList
     mkOption
     range
-    types;
+    types
+    ;
 
-  baseColorOptions = listToAttrs (map
-    (i: { name = "color${toString i}"; value = mkOption { type = types.str; }; })
-    (range 0 15)
+  hexColorType = types.strMatching "#[0-9a-fA-F]{6}";
+
+  baseColorOptions = listToAttrs (
+    map (i: {
+      name = "color${toString i}";
+      value = mkOption { type = hexColorType; };
+    }) (range 0 15)
   );
 
-  mkColorOption = args: mkOption (args // {
-    type = types.enum (attrNames config.colors ++ attrValues config.colors ++ attrNames config.namedColors);
-    apply = v: config.colors.${v} or config.namedColors.${v} or v;
-  });
+  mkColorOption =
+    args:
+    mkOption (
+      args
+      // {
+        type = types.either hexColorType (
+          types.enum (attrNames config.colors ++ attrNames config.namedColors)
+        );
+        apply = v: config.colors.${v} or config.namedColors.${v} or v;
+      }
+    );
 
-  kittyBaseColorOptions = listToAttrs (map
-    (i: { name = "color${toString i}"; value = mkColorOption { default = "color${toString i}"; }; })
-    (range 0 15)
+  mkKittyBaseColorOptions = listToAttrs (
+    map (i: {
+      name = "color${toString i}";
+      value = mkColorOption { default = "color${toString i}"; };
+    }) (range 0 15)
+  );
+
+  mkGhosttyPaletteColorOptions = listToAttrs (
+    map (i: {
+      name = "${toString i}";
+      value = mkColorOption { default = "color${toString i}"; };
+    }) (range 0 15)
   );
 
 in
@@ -45,26 +73,26 @@ in
 
     namedColors = mkOption {
       type = types.attrsOf (types.enum (attrNames config.colors ++ attrValues config.colors));
-      default = {};
+      default = { };
       apply = mapAttrs (_: v: if hasPrefix "color" v then config.colors.${v} else v);
     };
 
     terminal = mkOption {
       type = types.submodule {
         options = {
-          bg = mkColorOption {};
-          fg = mkColorOption {};
-          cursorBg = mkColorOption {};
-          cursorFg = mkColorOption {};
-          selectionBg = mkColorOption {};
-          selectionFg = mkColorOption {};
+          bg = mkColorOption { };
+          fg = mkColorOption { };
+          cursorBg = mkColorOption { };
+          cursorFg = mkColorOption { };
+          selectionBg = mkColorOption { };
+          selectionFg = mkColorOption { };
         };
       };
     };
 
     pkgThemes.kitty = mkOption {
       type = types.submodule {
-        options = kittyBaseColorOptions // {
+        options = mkKittyBaseColorOptions // {
           # Get defaults from `config.terminal`
           background = mkColorOption { default = config.terminal.bg; };
           foreground = mkColorOption { default = config.terminal.fg; };
@@ -73,12 +101,31 @@ in
           selection_background = mkColorOption { default = config.terminal.selectionBg; };
           selection_foreground = mkColorOption { default = config.terminal.selectionFg; };
 
-          url_color = mkColorOption {};
-          tab_bar_background = mkColorOption {};
-          active_tab_background = mkColorOption {};
-          active_tab_foreground = mkColorOption {};
-          inactive_tab_foreground = mkColorOption {};
-          inactive_tab_background = mkColorOption {};
+          url_color = mkColorOption { };
+          tab_bar_background = mkColorOption { };
+          active_tab_background = mkColorOption { };
+          active_tab_foreground = mkColorOption { };
+          inactive_tab_foreground = mkColorOption { };
+          inactive_tab_background = mkColorOption { };
+        };
+      };
+    };
+
+    pkgThemes.ghostty = mkOption {
+      default = { };
+      type = types.submodule {
+        options = {
+          palette = mkOption {
+            default = { };
+            type = types.submodule { options = mkGhosttyPaletteColorOptions; };
+            apply = mapAttrsToList (generators.mkKeyValueDefault { } "=");
+          };
+          background = mkColorOption { default = config.terminal.bg; };
+          foreground = mkColorOption { default = config.terminal.fg; };
+          cursor-color = mkColorOption { default = config.terminal.cursorBg; };
+          cursor-text = mkColorOption { default = config.terminal.cursorFg; };
+          selection-background = mkColorOption { default = config.terminal.selectionBg; };
+          selection-foreground = mkColorOption { default = config.terminal.selectionFg; };
         };
       };
     };

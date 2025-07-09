@@ -4,14 +4,14 @@ let
   inherit (lib) mkIf;
   caskPresent = cask: lib.any (x: x.name == cask) config.homebrew.casks;
   brewEnabled = config.homebrew.enable;
+  brewShellInit = mkIf brewEnabled ''
+    eval "$(${config.homebrew.brewPrefix}/brew shellenv)"
+  '';
 in
 
 {
-  system.primaryUser = "matt";
-
-  environment.shellInit = mkIf brewEnabled ''
-    eval "$(${config.homebrew.brewPrefix}/brew shellenv)"
-  '';
+  environment.shellInit = brewShellInit;
+  programs.zsh.shellInit = brewShellInit; # `zsh` doesn't inherit `environment.shellInit`
 
   # https://docs.brew.sh/Shell-Completion#configuring-completions-in-fish
   # For some reason if the Fish completions are added at the end of `fish_complete_path` they don't
@@ -33,9 +33,8 @@ in
   homebrew.global.brewfile = true;
 
   homebrew.taps = [
-    "homebrew/cask-drivers"
-    "homebrew/cask-fonts"
-    "homebrew/cask-versions"
+    # "homebrew/cask"
+    # "homebrew/core"
     "homebrew/services"
     "nrlquaker/createzap"
   ];
@@ -71,16 +70,17 @@ in
     "circuitjs1"
     "db-browser-for-sqlite"
     "dbeaver-community"
-    "docker"
+    "docker-desktop"
     # "dotnet"
+    "ghostty"
     # "github"            # GitHub Desktop
     # "iterm2"
-    "macvim"            # deletion candidate
-    "neovide"
-    "paraview"
+    "macvim-app"            # deletion candidate
+    "neovide-app"
+    # "paraview"
     "sublime-merge"
-    "temurin"           # PlantUML renderer
-    "vagrant"
+    # "temurin"           # PlantUML renderer
+    #"vagrant"
     "visual-studio-code"
 
     # Crypto
@@ -90,13 +90,13 @@ in
     # Hardware hacking
     # "autodesk-fusion360"
     "freecad"
-    "kicad"
+    #"kicad"
     # "meshmixer"
     "openscad"
     "prusaslicer"
     "raspberry-pi-imager"
     # "superslicer"
-    "ultimaker-cura"    # deletion candidate
+    # "ultimaker-cura"    # deletion candidate
 
     # Services from Homebrew
     "markdown-service-tools"
@@ -123,7 +123,7 @@ in
     "google-drive"
     "grandperspective"
     "hammerspoon"
-    "horos"             # Dicom & medical viewer
+    # "horos"             # Dicom & medical viewer
     "imageoptim"
     "inkscape"
     "karabiner-elements"
@@ -139,17 +139,17 @@ in
     "spotify"
     "steam"
     "suspicious-package"
-    "tableau-reader"
-    "todoist"
-    "toggl-track"
+    # "tableau-reader"
+    "todoist-app"
+    # "toggl-track"
     "tor-browser"
     "transmission"
     "typinator"
     "ubersicht"
-    "unison"
+    "unison-app"
     "viscosity"
     "vlc"
-    "webcatalog"
+    # "webcatalog"
     # "gcenx/wine/wineskin"
     "Kegworks-App/kegworks/kegworks"   # successor to wineskin ?
     "xquartz"
@@ -167,20 +167,33 @@ in
   ];
 
   # Configuration related to casks
-  # home-manager.users.${config.users.primaryUser.username} =
-  #   mkIf (caskPresent "1password" && config ? home-manager)
-  #     {
-  #       programs.ssh.enable = true;
-  #       programs.ssh.extraConfig = ''
-  #         # Only set `IdentityAgent` not connected remotely via SSH.
-  #         # This allows using agent forwarding when connecting remotely.
-  #         Match host * exec "test -z $SSH_TTY"
-  #           IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-  #       '';
-  #     };
+  home-manager.users.${config.users.primaryUser.username} =
+    mkIf (caskPresent "1password" && config ? home-manager)
+      {
+        # https://developer.1password.com/docs/ssh/get-started
+        programs.ssh.enable = true;
+        programs.ssh.extraConfig = ''
+          # Only set `IdentityAgent` not connected remotely via SSH.
+          # This allows using agent forwarding when connecting remotely.
+          Match host * exec "test -z $SSH_TTY"
+            IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+        '';
+        # https://developer.1password.com/docs/ssh/git-commit-signing/
+        programs.git.signing = {
+          format = "ssh";
+          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJRE89kenq6taAlJpiF2KOJo7OY9IX2tc5xauNJT1Tjb";
+          signer = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+          signByDefault = true;
+        };
+      };
 
-  # For cli packages that aren't currently available for macOS in `nixpkgs`.Packages should be
-  # installed in `../home/default.nix` whenever possible.
+  # Hack: https://github.com/ghostty-org/ghostty/discussions/2832
+  environment.variables.XDG_DATA_DIRS = mkIf (caskPresent "ghostty") [
+    "$GHOSTTY_SHELL_INTEGRATION_XDG_DIR"
+  ];
+
+  # For cli packages that aren't currently available for macOS in `nixpkgs`. Packages should be
+  # installed in `../home/packages.nix` whenever possible.
   homebrew.brews = [
     "alerter"
     # "ext4fuse"

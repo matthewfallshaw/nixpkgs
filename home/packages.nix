@@ -8,17 +8,17 @@
 let
   inherit (lib) attrValues mkIf elem;
 
-  mkOpRunAliases = cmds:
-    lib.genAttrs cmds (cmd: mkIf (elem pkgs.${cmd} config.home.packages) "op run -- ${cmd}");
+  mkOpRunAliases =
+    cmds: lib.genAttrs cmds (cmd: mkIf (elem pkgs.${cmd} config.home.packages) "op run -- ${cmd}");
 in
 
 {
   # 1Password CLI plugin integration
   # https://developer.1password.com/docs/cli/shell-plugins/nix
-  # programs._1password-shell-plugins.enable = true;
-  # programs._1password-shell-plugins.plugins = attrValues {
-  #   inherit (pkgs) gh cachix;
-  # };
+  programs._1password-shell-plugins.enable = true;
+  programs._1password-shell-plugins.plugins = attrValues {
+    inherit (pkgs) gh cachix;
+  };
   # Setup tools to work with 1Password
   # home.sessionVariables = {
   #   GITHUB_TOKEN = "op://Personal/GitHub Personal Access Token/credential";
@@ -55,11 +55,21 @@ in
     eamodio.gitlens
   ];
 
+  # Eza, a modern, maintained replacement for ls, written in rust
+  # https://eza.rocks
+  # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.eza.enable
+  programs.eza.enable = true;
+  programs.eza.git = true;
+  programs.eza.icons = "auto";
+  programs.eza.extraOptions = [ "--group-directories-first" ];
+  home.sessionVariables.EZA_COLORS = "xx=0"; # https://github.com/eza-community/eza/issues/994
+  home.sessionVariables.EZA_ICON_SPACING = 2;
+
   # SSH
   # https://nix-community.github.io/home-manager/options.html#opt-programs.ssh.enable
   # Some options also set in `../darwin/homebrew.nix`.
-  # programs.ssh.enable = true;
-  # programs.ssh.controlPath = "~/.ssh/%C"; # ensures the path is unique but also fixed length
+  programs.ssh.enable = true;
+  programs.ssh.controlPath = "~/.ssh/%C"; # ensures the path is unique but also fixed length
 
   # Zoxide, a faster way to navigate the filesystem
   # https://github.com/ajeetdsouza/zoxide
@@ -79,7 +89,7 @@ in
         abduco # lightweight session management
         bandwhich # display current network utilization by process
         bottom # fancy version of `top` with ASCII graphs
-        browsh # in terminal browser
+        # browsh # in terminal browser
         coreutils # GNU Core Utilities
         curl
         cmake # cross-Platform Makefile Generator
@@ -95,7 +105,7 @@ in
         rdfind # find duplicate files and optionally replace them with {hard|sym}links
         ripgrep # better version of `grep`
         tealdeer # rust implementation of `tldr`
-        pay-respects # do what I mean on the command line (replacement for thefuck)
+        # thefuck
         unrar # extract RAR archives
         upterm # secure terminal sharing
         wget # get all of the things
@@ -105,7 +115,7 @@ in
       # Dev stuff
       inherit (pkgs)
         bundix # ruby nixified executable generator
-        claude-code # Claude AI code assistant
+        # claude-code # Claude AI code assistant
         cloc # source code line counter
         deno
         # dotnet-sdk # Microsoft .NET SDK  TODO
@@ -160,7 +170,8 @@ in
         # moses
         # std-strict
         tl
-      ;
+        ;
+      inherit (pkgs.pkgs-master) claude-code;
       inherit (pkgs.haskellPackages)
         cabal-install
         hlint
@@ -168,7 +179,6 @@ in
         hpack
         implicit-hie
         ;
-      # agda = pkgs.agda.withPackages (ps: [ ps.standard-library ]);
 
       # Useful nix related tools
       inherit (pkgs)
@@ -188,6 +198,8 @@ in
         cocoapods
         m-cli # useful macOS CLI commands
         prefmanager # tool for working with macOS defaults
+        swift-format
+        swiftlint
         ;
     }
   );
