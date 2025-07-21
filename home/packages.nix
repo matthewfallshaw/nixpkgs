@@ -70,6 +70,22 @@ in
   # Some options also set in `../darwin/homebrew.nix`.
   programs.ssh.enable = true;
   programs.ssh.controlPath = "~/.ssh/%C"; # ensures the path is unique but also fixed length
+  programs.ssh.matchBlocks = {
+    "ha homeassistant.local" = {
+      hostname = "homeassistant.local";
+      user = "root";
+      # identityFile = "~/.ssh/id_rsa";
+      # identityFile = "~/.ssh/id_ed25519";
+    };
+    "xl octopixl.local" = {
+      hostname = "octopixl.local";
+      user = "pi";
+    };
+    "bear bear.local" = {
+      hostname = "bear.local";
+      user = "pi";
+    };
+  };
 
   # Zoxide, a faster way to navigate the filesystem
   # https://github.com/ajeetdsouza/zoxide
