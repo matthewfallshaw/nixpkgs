@@ -142,6 +142,7 @@ in
         # github-desktop
         # github-copilot-cli
         gnupg
+        go
         google-clasp # Google Apps Script command line tools
         google-cloud-sdk
         graphviz
