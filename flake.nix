@@ -172,6 +172,7 @@
         malo-fish = import ./home/fish.nix;
         malo-git = import ./home/git.nix;
         malo-git-aliases = import ./home/git-aliases.nix;
+        git-osagitfilter = import ./home/configs/git-osagitfilter.nix;
         malo-gh-aliases = import ./home/gh-aliases.nix;
         malo-ghostty = import ./home/ghostty.nix;
         malo-neovim = import ./home/neovim.nix;

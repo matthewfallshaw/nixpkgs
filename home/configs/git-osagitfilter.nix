@@ -6,7 +6,7 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "doekman";
       repo = "osagitfilter";
-      rev = "3de0962";
+      rev = "5fa2368";
       sha256 = "S4B7cLzFTAkeyzaByYTIFMlXvE5mgFtSo0YPr8cdu+s=";
     };
     installPhase = ''
