@@ -107,7 +107,7 @@ local servers_config = {
   pyright = {},
   sourcekit = {},
 
-  tsserver = {
+  ts_ls = {
     setup = {
       root_dir = lspconf.util.root_pattern("package.json"),
       single_file_support = false,

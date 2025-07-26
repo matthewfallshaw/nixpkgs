@@ -146,8 +146,9 @@
             );
           };
 
-        tweaks = final: _: {
+        tweaks = final: prev: {
           # Add temporary overrides here
+          neovim = final.pkgs-master.neovim;
         };
       };
       # }}}

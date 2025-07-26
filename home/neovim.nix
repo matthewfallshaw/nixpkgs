@@ -31,6 +31,26 @@ let
     '';
   requireConf = p: "require 'malo.${builtins.replaceStrings [ "." ] [ "-" ] p.pname}'";
 
+  # Helper to generate "only-outside-VSCode" specs
+  onlyTerminal = p: { use = p; vscode = false; opt = true; };
+
+  completionPlugins = with pkgs.vimPlugins; [
+    # dependencies first that do not themselves require 'cmp'
+    (onlyTerminal lspkind-nvim)
+    (onlyTerminal cmp-nvim-lsp)
+    (onlyTerminal copilot-cmp)
+    (onlyTerminal luasnip)
+
+    # main engine
+    { use = nvim-cmp; vscode = false; config = requireConf nvim-cmp; }
+
+    # cmp sources that require the engine
+    (onlyTerminal cmp-async-path)
+    (onlyTerminal cmp-buffer)
+    (onlyTerminal cmp-nvim-lsp-signature-help)
+    (onlyTerminal cmp_luasnip)
+  ];
+
   # Function to create `programs.neovim.plugins` entries inspired by `packer.nvim`.
   packer =
     {
@@ -66,7 +86,7 @@ let
       }";
       autoload = !opt && vscode && ft == [ ] && event == [ ];
       configFinal = concatStringsSep "\n" (
-        optional (!autoload && !opt) "vim.cmd 'packadd ${use.pname}'" ++ optional (config != "") config
+        optional (!autoload) "vim.cmd 'packadd ${use.pname}'" ++ optional (config != "") config
       );
     in
     {
@@ -145,7 +165,7 @@ in
   # Add plugins using my `packer` function.
   programs.neovim.plugins =
     with pkgs.vimPlugins;
-    map packer [
+    map packer (completionPlugins ++ [
       # Apperance, interface, UI, etc.
       {
         use = bufferline-nvim;
@@ -212,21 +232,6 @@ in
           }
         '';
       }
-      {
-        use = nvim-cmp;
-        deps = [
-          cmp-async-path
-          cmp-buffer
-          cmp-nvim-lsp
-          cmp-nvim-lsp-signature-help
-          copilot-cmp
-          lspkind-nvim
-
-          luasnip
-          cmp_luasnip
-        ];
-        config = requireConf nvim-cmp;
-      }
 
       # Language servers, linters, etc.
       {
@@ -244,7 +249,6 @@ in
         ];
         config = requireConf nvim-lspconfig;
       }
-      { use = vim-openscad; }
 
       # Language support/utilities
       {
@@ -260,6 +264,7 @@ in
         use = vim-polyglot;
         config = requireConf vim-polyglot;
       }
+      { use = vim-openscad; }
 
       # Editor behavior
       # { use = comment-nvim; config = "require'comment'.setup()"; }
@@ -307,7 +312,7 @@ in
         opt = true;
       }
       { use = bufferize-vim; }  # Send vim command output to a scratch buffer
-    ];
+    ]);
 
   # From personal addon module `../modules/home/programs/neovim/extras.nix`
   programs.neovim.extras.termBufferAutoChangeDir = true;

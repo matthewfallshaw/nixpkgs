@@ -1,9 +1,9 @@
 # CLAUDE.md - Guidelines for NixOS/nix-darwin Configuration
 
 ## Build/Deploy Commands
-- Build configuration: `darwin-rebuild build --flake .` (alias: `drb`)
-- Apply configuration: `darwin-rebuild switch --flake .` (alias: `drs`)
-- Update flake inputs: `nix flake update` (alias: `flakeup`)
+- Build configuration: `darwin-rebuild build --flake .` (alias: `drb`)  # run this yourself to test changes
+- Apply configuration: `darwin-rebuild switch --flake .` (alias: `drs`) # ask me to run this instead of running it yourself
+- Update flake inputs: `nix flake update` (alias: `flakeup`)            # ask me to run this instead of running it yourself
 
 ## Nixpkgs Setup Overview
 
@@ -81,4 +81,4 @@ The flake is registered as `my` in the nix registry, allowing:
 
 ## General
 - Seek to actually understand what's going on. Don't just hack around a problem by building an overlay. Try to keep the codebase simple, but actually fixing problems at the root.
-- **IMPORTANT**: Nix flakes use git to determine what files exist. New files must be `git add`ed before nix will see them, even if they're not committed yet.
+- **IMPORTANT**: Nix flakes use git to determine what files exist. New files must be `git add`ed before nix will see them, even if they're not committed yet. However, once git is tracking a file, changes to that file don't need to be staged for nix to use them.
