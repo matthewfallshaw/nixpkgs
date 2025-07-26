@@ -1,4 +1,4 @@
-{pkgs, ... }:
+{ pkgs, lib, config, ... }:
 
 {
   # Networking
@@ -14,31 +14,34 @@
     terminal-notifier
   ];
 
-  # environment.systemPath = [
-  #   # User paths
-  #   "/Users/matt/.local/bin"
-  #   "/Users/matt/bin"
-
-  #   # Nix paths
-  #   "/Users/matt/.nix-profile/bin"
-  #   "/etc/profiles/per-user/matt/bin"
-  #   "/run/current-system/sw/bin"
-  #   "/nix/var/nix/profiles/default/bin"
-
-  #   # Homebrew paths (prioritized before system)
-  #   "/opt/homebrew/bin"
-  #   "/opt/homebrew/sbin"
-
-  #   # Additional tools
-  #   "/opt/X11/bin"
-
-  #   # System paths (intentionally later)
-  #   "/usr/local/bin"
-  #   "/usr/bin"
-  #   "/usr/sbin"
-  #   "/bin"
-  #   "/sbin"
-  # ];
+  # Set complete system PATH with desired order
+  environment.systemPath = with lib; 
+  let
+    caskPresent = cask: lib.any (x: x.name == cask) config.homebrew.casks;
+    openscadPath = optionals (caskPresent "openscad") [ "/Applications/OpenSCAD.app/Contents/MacOS" ];
+  in mkForce ([
+    # User paths first (for easy overrides)
+    "/Users/matt/.local/bin"
+    "/Users/matt/bin"
+    
+    # Nix paths (before Homebrew)
+    "/Users/matt/.nix-profile/bin"
+    "/etc/profiles/per-user/matt/bin" 
+    "/run/current-system/sw/bin"
+    "/nix/var/nix/profiles/default/bin"
+    
+    # Homebrew paths
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+  ] ++ openscadPath ++ [
+    
+    # System paths
+    "/usr/local/bin"
+    "/usr/bin"
+    "/bin"
+    "/usr/sbin"
+    "/sbin"
+  ]);
 
   # Fonts
   fonts.packages = with pkgs; [

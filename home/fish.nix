@@ -259,7 +259,7 @@ in
     set -xg HASS_TOKEN (security find-generic-password -a utilities -s HomeAssistantToken -w)
     set -xg HASS_SERVER "http://homeassistant.local:8123"
 
-    fish_add_path -a ~/.local/bin ~/bin
+    # fish_add_path -a ~/.local/bin ~/bin  # Handled by environment.systemPath
   '';
 
   programs.fish.interactiveShellInit = ''

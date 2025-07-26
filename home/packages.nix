@@ -181,7 +181,7 @@ in
 
       inherit (pkgs.lua53Packages)
         # Lua
-        # busted
+        busted
         # fun
         luafilesystem
         # moses

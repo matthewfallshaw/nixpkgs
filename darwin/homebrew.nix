@@ -10,8 +10,9 @@ let
 in
 
 {
-  environment.shellInit = brewShellInit;
-  programs.zsh.shellInit = brewShellInit; # `zsh` doesn't inherit `environment.shellInit`
+  # environment.shellInit = brewShellInit;
+  # programs.zsh.shellInit = brewShellInit; # `zsh` doesn't inherit `environment.shellInit`
+  # Note: Homebrew PATH is now managed directly in environment.systemPath
 
   # https://docs.brew.sh/Shell-Completion#configuring-completions-in-fish
   # For some reason if the Fish completions are added at the end of `fish_complete_path` they don't
@@ -205,8 +206,5 @@ in
     "trash"
   ];
 
-  # Include OpenSCAD path in environment.systemPath if OpenSCAD cask is present in homebrew.nix
-  environment.systemPath = if (caskPresent "openscad")
-    then [ "/Applications/OpenSCAD.app/Contents/MacOS" ]
-    else [];
+  # OpenSCAD path is now managed in darwin/general.nix with conditional logic
 }
