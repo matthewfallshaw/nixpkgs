@@ -69,8 +69,11 @@ in
   # https://nix-community.github.io/home-manager/options.html#opt-programs.ssh.enable
   # Some options also set in `../darwin/homebrew.nix`.
   programs.ssh.enable = true;
-  programs.ssh.controlPath = "~/.ssh/%C"; # ensures the path is unique but also fixed length
+  programs.ssh.enableDefaultConfig = false;
   programs.ssh.matchBlocks = {
+    "*" = {
+      controlPath = "~/.ssh/%C"; # ensures the path is unique but also fixed length
+    };
     "ha homeassistant.local" = {
       hostname = "homeassistant.local";
       user = "root";
@@ -95,7 +98,7 @@ in
   # Zsh
   # https://nix-community.github.io/home-manager/options.xhtml#opt-programs.zsh.enable
   programs.zsh.enable = true;
-  programs.zsh.dotDir = ".config/zsh";
+  programs.zsh.dotDir = "${config.xdg.configHome}/zsh";
   programs.zsh.history.path = "${config.xdg.stateHome}/zsh_history";
 
   home.packages = attrValues (
@@ -131,7 +134,6 @@ in
       # Dev stuff
       inherit (pkgs)
         bundix # ruby nixified executable generator
-        # claude-code # Claude AI code assistant
         cloc # source code line counter
         deno
         # dotnet-sdk # Microsoft .NET SDK  TODO
@@ -153,8 +155,12 @@ in
         jq # query json
         nodejs
         pnpm # fast, disk space efficient (nodejs) package manager
-        ruby
         # R
+        ruby
+
+        rustc
+        cargo
+
         s3cmd
         stack
         typescript
@@ -186,9 +192,10 @@ in
         luafilesystem
         # moses
         # std-strict
+        cyan
         tl
         ;
-      inherit (pkgs.pkgs-master) claude-code;
+      inherit (pkgs.pkgs-master) claude-code; # Claude AI code assistant
       inherit (pkgs.haskellPackages)
         cabal-install
         hlint

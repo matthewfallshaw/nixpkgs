@@ -9,6 +9,7 @@
   programs.git.extraConfig = {
     diff.colorMoved = "default";
     pull.rebase = true;
+    rebase.autoStash = true;
     init.defaultBranch = "main";
     push.autoSetupRemote = true;
   };

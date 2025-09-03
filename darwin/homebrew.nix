@@ -82,7 +82,7 @@ in
     "sublime-merge"
     # "temurin"           # PlantUML renderer
     #"vagrant"
-    "visual-studio-code"
+    #"visual-studio-code"   # rely on nix packages instead
 
     # Crypto
     "electron-cash"
