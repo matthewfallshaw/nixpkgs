@@ -90,6 +90,7 @@ in
 
     # Hardware hacking
     # "autodesk-fusion360"
+    "cloudcompare"
     "freecad"
     #"kicad"
     # "meshmixer"

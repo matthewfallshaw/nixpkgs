@@ -118,13 +118,13 @@ in
         findutils # find, locate, updatedb, xargs
         fswatch # a file change monitor
         hyperfine # benchmarking tool
+        moreutils # additional Unix utilities
         mosh # wrapper for `ssh` that better and not dropping connections
-        parallel # runs commands in parallel
+        # parallel # runs commands in parallel [conflict with moreutils]
         pwgen # password generator
         rdfind # find duplicate files and optionally replace them with {hard|sym}links
         ripgrep # better version of `grep`
         tealdeer # rust implementation of `tldr`
-        # thefuck
         unrar # extract RAR archives
         upterm # secure terminal sharing
         wget # get all of the things
@@ -137,8 +137,6 @@ in
         cloc # source code line counter
         deno
         # dotnet-sdk # Microsoft .NET SDK  TODO
-        esphome # ESPHome command line tools
-        # fritzing # Hardware hacking
         # ghc # Glasgow Haskell Compiler
         # git-lfs # git large file store
         # github-desktop
@@ -149,7 +147,6 @@ in
         google-cloud-sdk
         graphviz
         # haskell-language-server
-        home-assistant-cli # Command-line tool for Home Assistant
         html-tidy
         # idris2
         jq # query json
@@ -164,10 +161,12 @@ in
         s3cmd
         stack
         typescript
+
+        ## Hardware hacking
+        # fritzing
+        esphome # ESPHome command line tools
+        home-assistant-cli # Command-line tool for Home Assistant
         ;
-      # inherit (pkgs.gitAndTools)
-      #   gh                 # github.com command line
-      # ;
       inherit (pkgs.nodePackages)
         npm-check-updates
         # rollup
