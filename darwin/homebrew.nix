@@ -36,7 +36,7 @@ in
   homebrew.taps = [
     # "homebrew/cask"
     # "homebrew/core"
-    "homebrew/services"
+    # "homebrew/services"
     "nrlquaker/createzap"
   ];
 
@@ -58,7 +58,7 @@ in
     Pages = 409201541;
     "Pixelmator Pro" = 1289583905;
     # Slack = 803453959;
-    Vimari = 1480933944;            # Safari Vimium equiv
+    Vimari = 1480933944; # Safari Vimium equiv
     "WiFi Explorer" = 494803304;
     "The Unarchiver" = 425424353;
     Xcode = 497799835;
@@ -76,7 +76,7 @@ in
     "ghostty"
     # "github"            # GitHub Desktop
     # "iterm2"
-    "macvim-app"            # deletion candidate
+    "macvim-app" # deletion candidate
     "neovide-app"
     # "paraview"
     "sublime-merge"
@@ -153,7 +153,7 @@ in
     "vlc"
     # "webcatalog"
     # "gcenx/wine/wineskin"
-    "Kegworks-App/kegworks/kegworks"   # successor to wineskin ?
+    "Kegworks-App/kegworks/kegworks" # successor to wineskin ?
     "xquartz"
     "yed"
     "yt-music"

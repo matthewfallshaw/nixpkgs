@@ -162,6 +162,10 @@ in
         stack
         typescript
 
+        ## Formatters
+        shfmt
+        nixfmt
+
         ## Hardware hacking
         # fritzing
         esphome # ESPHome command line tools
@@ -172,17 +176,19 @@ in
         # rollup
         # speed-test # nice speed-test tool
         yarn
-      ;
+        ;
       # Include Python packages using withPackages
-      pythonPackages = pkgs.python3.withPackages (ps: with ps; [
-        # ifcopenshell
-        mypy
-        numpy
-        pandas
-        # pandas-stubs
-        pylint
-        yapf
-      ]);
+      pythonPackages = pkgs.python3.withPackages (
+        ps: with ps; [
+          # ifcopenshell
+          mypy
+          numpy
+          pandas
+          # pandas-stubs
+          pylint
+          yapf
+        ]
+      );
 
       inherit (pkgs.lua53Packages)
         # Lua

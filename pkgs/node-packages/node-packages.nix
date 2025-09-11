@@ -1039,13 +1039,13 @@ let
         sha512 = "6BN9trH7bp3qvnrRyzsBz+g3lZxTNZTbVO2EV1CS0WIcDbawYVdYvGflME/9QP0h0pYlCDBCTjYa9nZzMDpyxQ==";
       };
     };
-    "follow-redirects-1.15.9" = {
+    "follow-redirects-1.15.11" = {
       name = "follow-redirects";
       packageName = "follow-redirects";
-      version = "1.15.9";
+      version = "1.15.11";
       src = fetchurl {
-        url = "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.9.tgz";
-        sha512 = "gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==";
+        url = "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.11.tgz";
+        sha512 = "deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ==";
       };
     };
     "for-each-0.3.5" = {
@@ -2164,13 +2164,13 @@ let
         sha512 = "9UZCFRHQdNrfTpGg8+1INIg93B6zE0aXMVFkw1WFwvO4SlZywU6aLg5Of0Ap/PgcbSw4LNxvMWXMeugwMCX0AA==";
       };
     };
-    "npm-check-updates-18.0.1" = {
+    "npm-check-updates-18.1.0" = {
       name = "npm-check-updates";
       packageName = "npm-check-updates";
-      version = "18.0.1";
+      version = "18.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-18.0.1.tgz";
-        sha512 = "MO7mLp/8nm6kZNLLyPgz4gHmr9tLoU+pWPLdXuGAx+oZydBHkHWN0ibTonsrfwC2WEQNIQxuZagYwB67JQpAuw==";
+        url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-18.1.0.tgz";
+        sha512 = "1TQ6fO4HxVW4K/TWUPOa1KRbaL0Y9+CgDJeTkrA3c4YFgaW8uoxllCKlm4OM/28C9E9NR3MlkxtcFs0Z1VaCPg==";
       };
     };
     "nth-check-1.0.2" = {
@@ -3610,7 +3610,7 @@ let
           sources."ms-2.0.0"
         ];
       })
-      sources."follow-redirects-1.15.9"
+      sources."follow-redirects-1.15.11"
       sources."for-each-0.3.5"
       sources."for-in-1.0.2"
       sources."for-own-0.1.5"
@@ -3742,7 +3742,7 @@ let
       sources."mute-stream-0.0.8"
       sources."node-forge-0.8.5"
       sources."normalize-url-4.5.1"
-      sources."npm-check-updates-18.0.1"
+      sources."npm-check-updates-18.1.0"
       sources."nth-check-1.0.2"
       sources."object-inspect-1.13.4"
       sources."object-keys-1.1.1"

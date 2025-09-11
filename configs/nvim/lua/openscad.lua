@@ -4,8 +4,8 @@
 local _ = {
   append = function(array, other)
     local t = {}
-    for i,v in ipairs(array) do t[i] = v end
-    for i,v in ipairs(other) do t[#t+1] = v end
+    for i, v in ipairs(array) do t[i] = v end
+    for i, v in ipairs(other) do t[#t + 1] = v end
   end
 }
 
@@ -41,10 +41,10 @@ end
 
 local function add_data(job_id, data)
   if data then
-    if type(data)=='table' then
+    if type(data) == 'table' then
       M.lines.job_id.lines = _.append(M.lines.job_id.lines, data)
     else
-      print('add_data: '..vim.inspect(data))
+      print('add_data: ' .. vim.inspect(data))
     end
   end
 end
@@ -73,12 +73,12 @@ end
 local utils = require 'malo.utils'
 local bufkeymaps = utils.bufkeymaps
 
----@type fun(s:string)
+---@type fun(s:string): string, integer
 local function with_crs(s)
   return string.gsub(s, '[\n\r]', '<CR>')
 end
 
-bufkeymaps{ mode = 'i', opts = { 'noremap' }, maps = {
+bufkeymaps { mode = 'i', opts = { 'noremap' }, maps = {
 
   { ';;b', with_crs [[
 include <BOSL2/std.scad>
@@ -134,9 +134,9 @@ module assy() {
 function M.Make(format)
   local fmt = format or M.default_format
   local infile = expand_escape('%')
-  local outfile = expand_escape('%:r')..'.'..fmt
+  local outfile = expand_escape('%:r') .. '.' .. fmt
 
-  local cmd = 'openscad '..infile..' -o '..outfile
+  local cmd = 'openscad ' .. infile .. ' -o ' .. outfile
 
   local winnr = vim.fn.win_getid()
   local bufnr = vim.api.nvim_win_get_buf(winnr)
@@ -165,9 +165,9 @@ end
 function M.ReMake(name, format)
   local fmt = format or M.default_format
   local infile = expand_escape('%')
-  local outfile = expand_escape('%:p:h/')..name..'.'..fmt
+  local outfile = expand_escape('%:p:h/') .. name .. '.' .. fmt
 
-  local cmd = 'openscad '..infile..' -o '..outfile
+  local cmd = 'openscad ' .. infile .. ' -o ' .. outfile
 
   local winnr = vim.fn.win_getid()
   local bufnr = vim.api.nvim_win_get_buf(winnr)
@@ -199,9 +199,9 @@ function M.MakeModes(format)
   local outfile_fragment = expand_escape('%:r')
 
   local cmd =
-    [[rg "^\s*(?:else )?if ?\(MODE==\"?([^\"\)]+)\"?\).*" ]]..infile..[[ -r '$1' | rg -v '^assy|^nil|^_' ]]..
-    [[| parallel ]]..
-    [[openscad -D MODE='\"{}\"' ]]..infile..[[ -o ]]..outfile_fragment..[[_{}.]]..fmt
+      [[rg "^\s*(?:else )?if ?\(MODE==\"?([^\"\)]+)\"?\).*" ]] .. infile .. [[ -r '$1' | rg -v '^assy|^nil|^_' ]] ..
+      [[| parallel ]] ..
+      [[openscad -D MODE='\"{}\"' ]] .. infile .. [[ -o ]] .. outfile_fragment .. [[_{}.]] .. fmt
 
   local winnr = vim.fn.win_getid()
   local bufnr = vim.api.nvim_win_get_buf(winnr)
@@ -231,14 +231,14 @@ function M.New(name)
   local n = shellescape(name)
 
   vim.cmd('Mkdir(..n..)')
-  vim.cmd('edit("'..n..'/'..n..'.scad")')
+  vim.cmd('edit("' .. n .. '/' .. n .. '.scad")')
 end
 
 function M.TNew(name)
   local n = shellescape(name)
 
   vim.cmd('Mkdir(..n..)')
-  vim.cmd('tabedit("'..n..'/'..n..'.scad")')
+  vim.cmd('tabedit("' .. n .. '/' .. n .. '.scad")')
 end
 
 return M

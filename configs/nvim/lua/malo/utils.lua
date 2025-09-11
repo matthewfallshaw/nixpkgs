@@ -3,9 +3,8 @@
 -- Create locals for all needed globals so we have access to them
 local unpack = unpack
 local vim = vim
-local import = require'pl.utils'.import
+local func = require 'pl.func'
 local seq = require 'pl.seq'
-import 'pl.func'
 
 -- Clear environment
 local _ENV = {}
@@ -20,7 +19,7 @@ function M.spread(f) return function(t) f(unpack(t)) end end
 function M.const(f) return function() return f end end
 
 function M.keymaps(t)
-  seq(t.maps):foreach( M.spread(bind(vim.keymap.set, t.modes, _1, _2, t.opts)) )
+  seq(t.maps):foreach(M.spread(func.bind(vim.keymap.set, t.modes, func._1, func._2, t.opts)))
 end
 
 function M.augroup(t)
