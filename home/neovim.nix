@@ -38,7 +38,6 @@ let
     # dependencies first that do not themselves require 'cmp'
     (onlyTerminal lspkind-nvim)
     (onlyTerminal cmp-nvim-lsp)
-    (onlyTerminal copilot-cmp)
     (onlyTerminal luasnip)
 
     # main engine
@@ -169,6 +168,7 @@ in
       # Apperance, interface, UI, etc.
       {
         use = bufferline-nvim;
+        vscode = false;
         deps = [
           nvim-web-devicons
           scope-nvim
@@ -177,11 +177,13 @@ in
       }
       {
         use = galaxyline-nvim;
+        vscode = false;
         deps = [ nvim-web-devicons ];
         config = requireConf galaxyline-nvim;
       }
       {
         use = gitsigns-nvim;
+        vscode = false;
         config = requireConf gitsigns-nvim;
       }
       {
@@ -195,6 +197,7 @@ in
       }
       {
         use = noice-nvim;
+        vscode = false;
         deps = [
           nui-nvim
           nvim-notify
@@ -203,6 +206,7 @@ in
       }
       {
         use = telescope-nvim;
+        vscode = false;
         config = requireConf telescope-nvim;
         deps = [
           nvim-web-devicons
@@ -223,19 +227,11 @@ in
       }
 
       # Completions
-      {
-        use = copilot-lua;
-        config = ''
-          require'copilot'.setup {
-            suggestion = { enabled = false },
-            panel = { enabled = false },
-          }
-        '';
-      }
 
       # Language servers, linters, etc.
       {
         use = lsp_lines-nvim;
+        vscode = false;
         config = ''
           require'lsp_lines'.setup()
           vim.diagnostic.config({ virtual_lines = { only_current_line = true } })'';
@@ -243,6 +239,7 @@ in
       { use = haskell-tools-nvim; }
       {
         use = nvim-lspconfig;
+        vscode = false;
         deps = [
           neodev-nvim
           telescope-nvim

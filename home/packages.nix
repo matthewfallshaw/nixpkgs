@@ -140,7 +140,6 @@ in
         # ghc # Glasgow Haskell Compiler
         # git-lfs # git large file store
         # github-desktop
-        # github-copilot-cli
         gnupg
         go
         google-clasp # Google Apps Script command line tools
