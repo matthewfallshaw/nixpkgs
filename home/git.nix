@@ -19,9 +19,9 @@
     ".DS_Store"
   ];
 
-  programs.git.userEmail = config.home.user-info.email;
+  programs.git.userEmail = "5561+matthewfallshaw@users.noreply.github.com";
   programs.git.userName = config.home.user-info.fullName;
-  programs.git.attributes = ["*.scpt filter=osa"];
+  programs.git.attributes = [ "*.scpt filter=osa" ];
 
   # Enhanced diffs
   # programs.git.delta.enable = true;

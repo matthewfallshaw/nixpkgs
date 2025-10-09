@@ -78,7 +78,7 @@
       primaryUserDefaults = {
         username = "matt";
         fullName = "Matt Fallshaw";
-        email = "m@fallshaw.me";
+        email = "spammers.are.terrible.people@fallshaw.me";
         nixConfigDirectory = "/Users/matt/.config/nixpkgs";
       };
     in

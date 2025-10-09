@@ -185,6 +185,7 @@ in
           pandas
           # pandas-stubs
           pylint
+          trafilatura # curl + cleanup & format translation
           yapf
         ]
       );
