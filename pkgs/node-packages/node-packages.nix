@@ -4,6 +4,15 @@
 
 let
   sources = {
+    "@anthropic-ai/claude-code-2.0.21" = {
+      name = "_at_anthropic-ai_slash_claude-code";
+      packageName = "@anthropic-ai/claude-code";
+      version = "2.0.21";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.21.tgz";
+        sha512 = "02NcxPVjioLjo4/djzIt4aAYkYqnZsHgdzgMexLURYLR9q1+B+OLkKddKwOHL8fas3WnUGV1oyybu73BfHqQ4A==";
+      };
+    };
     "@sindresorhus/is-0.14.0" = {
       name = "_at_sindresorhus_slash_is";
       packageName = "@sindresorhus/is";
@@ -164,6 +173,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/async-function/-/async-function-1.0.0.tgz";
         sha512 = "hsU18Ae8CDTR6Kgu9DYf0EbCr/a5iGL0rytQDobUcdpYOKokk8LEjVphnXkDkgpi0wYVsqrXuP0bZxJaTqdgoA==";
+      };
+    };
+    "async-generator-function-1.0.0" = {
+      name = "async-generator-function";
+      packageName = "async-generator-function";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/async-generator-function/-/async-generator-function-1.0.0.tgz";
+        sha512 = "+NAXNqgCrB95ya4Sr66i1CL2hqLVckAk7xwRYWdcm39/ELQ6YNn1aw5r0bdQtqNZgQpEWzc5yc/igXc7aL5SLA==";
       };
     };
     "async-limiter-1.0.1" = {
@@ -562,13 +580,13 @@ let
         sha512 = "pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==";
       };
     };
-    "debug-4.4.1" = {
+    "debug-4.4.3" = {
       name = "debug";
       packageName = "debug";
-      version = "4.4.1";
+      version = "4.4.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/debug/-/debug-4.4.1.tgz";
-        sha512 = "KcKCqiftBJcZr++7ykoDIEwSa3XWowTfNPo92BYxjXiyYEVrUQh2aLyhxBCwww+heortUFxEJYcRzosstTEBYQ==";
+        url = "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz";
+        sha512 = "RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==";
       };
     };
     "decode-uri-component-0.2.2" = {
@@ -1111,13 +1129,22 @@ let
         sha512 = "xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==";
       };
     };
-    "get-intrinsic-1.3.0" = {
+    "generator-function-2.0.1" = {
+      name = "generator-function";
+      packageName = "generator-function";
+      version = "2.0.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/generator-function/-/generator-function-2.0.1.tgz";
+        sha512 = "SFdFmIJi+ybC0vjlHN0ZGVGHc3lgE0DxPAT0djjVg+kjOnSqclqmj0KQ7ykTOLP6YxoqOvuAODGdcHJn+43q3g==";
+      };
+    };
+    "get-intrinsic-1.3.1" = {
       name = "get-intrinsic";
       packageName = "get-intrinsic";
-      version = "1.3.0";
+      version = "1.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.3.0.tgz";
-        sha512 = "9fSjSaos/fRIVIp+xSJlE6lfwhES7LNtKaCBIamHsjr2na1BiABJPo0mOjjz8GJDURarmCPGqaiVg5mfjb98CQ==";
+        url = "https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.3.1.tgz";
+        sha512 = "fk1ZVEeOX9hVZ6QzoBNEC55+Ucqg4sTVwrVuigZhuRPESVFpMyXnd3sbXvPOwp7Y9riVyANiqhEuRF0G1aVSeQ==";
       };
     };
     "get-proto-1.0.1" = {
@@ -1570,13 +1597,13 @@ let
         sha512 = "zymm5+u+sCsSWyD9qNaejV3DFvhCKclKdizYaJUuHA83RLjb7nSuGnddCHGv0hk+KY7BMAlsWeK4Ueg6EV6XQg==";
       };
     };
-    "is-generator-function-1.1.0" = {
+    "is-generator-function-1.1.2" = {
       name = "is-generator-function";
       packageName = "is-generator-function";
-      version = "1.1.0";
+      version = "1.1.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/is-generator-function/-/is-generator-function-1.1.0.tgz";
-        sha512 = "nPUB5km40q9e8UfN/Zc24eLlzdSf9OfKByBw9CIdw4H1giPMeA0OIJvbchsCu4npfI2QcMVBsGEBHKZ7wLTWmQ==";
+        url = "https://registry.npmjs.org/is-generator-function/-/is-generator-function-1.1.2.tgz";
+        sha512 = "upqt1SkGkODW9tsGNG5mtXTXtECizwtS2kA161M+gJPc1xdb/Ax629af6YrTwcOeQHbewrPNlE5Dx7kzvXTizA==";
       };
     };
     "is-installed-globally-0.3.2" = {
@@ -2164,13 +2191,13 @@ let
         sha512 = "9UZCFRHQdNrfTpGg8+1INIg93B6zE0aXMVFkw1WFwvO4SlZywU6aLg5Of0Ap/PgcbSw4LNxvMWXMeugwMCX0AA==";
       };
     };
-    "npm-check-updates-18.1.0" = {
+    "npm-check-updates-19.1.1" = {
       name = "npm-check-updates";
       packageName = "npm-check-updates";
-      version = "18.1.0";
+      version = "19.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-18.1.0.tgz";
-        sha512 = "1TQ6fO4HxVW4K/TWUPOa1KRbaL0Y9+CgDJeTkrA3c4YFgaW8uoxllCKlm4OM/28C9E9NR3MlkxtcFs0Z1VaCPg==";
+        url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-19.1.1.tgz";
+        sha512 = "vy/uNbaK6Xfj/QzM8OXeALZak67E0uHjUlbdT1YGy4bdj0xlBU6AVd+8bscY8vlDpyzL6Y7mxcrX8kzEDeEpNg==";
       };
     };
     "nth-check-1.0.2" = {
@@ -3475,6 +3502,7 @@ let
     packageName = "mandatory-name";
     src = ./.;
     dependencies = [
+      sources."@anthropic-ai/claude-code-2.0.21"
       sources."@sindresorhus/is-0.14.0"
       sources."@szmarczak/http-timer-1.1.2"
       sources."@tuya/tuya-connector-nodejs-2.1.2"
@@ -3499,6 +3527,7 @@ let
       sources."arraybuffer.prototype.slice-1.0.4"
       sources."async-2.6.4"
       sources."async-function-1.0.0"
+      sources."async-generator-function-1.0.0"
       sources."async-limiter-1.0.1"
       sources."atob-2.1.2"
       sources."available-typed-arrays-1.0.7"
@@ -3552,7 +3581,7 @@ let
       sources."data-view-buffer-1.0.2"
       sources."data-view-byte-length-1.0.2"
       sources."data-view-byte-offset-1.0.1"
-      sources."debug-4.4.1"
+      sources."debug-4.4.3"
       sources."decode-uri-component-0.2.2"
       sources."decompress-response-3.3.0"
       sources."deep-extend-0.6.0"
@@ -3618,7 +3647,8 @@ let
       sources."function-bind-1.1.2"
       sources."function.prototype.name-1.1.8"
       sources."functions-have-names-1.2.3"
-      sources."get-intrinsic-1.3.0"
+      sources."generator-function-2.0.1"
+      sources."get-intrinsic-1.3.1"
       sources."get-proto-1.0.1"
       sources."get-stream-4.1.0"
       sources."get-symbol-description-1.1.0"
@@ -3667,7 +3697,7 @@ let
       sources."is-extendable-0.1.1"
       sources."is-finalizationregistry-1.1.1"
       sources."is-fullwidth-code-point-3.0.0"
-      sources."is-generator-function-1.1.0"
+      sources."is-generator-function-1.1.2"
       sources."is-installed-globally-0.3.2"
       sources."is-interactive-1.0.0"
       sources."is-map-2.0.3"
@@ -3742,7 +3772,7 @@ let
       sources."mute-stream-0.0.8"
       sources."node-forge-0.8.5"
       sources."normalize-url-4.5.1"
-      sources."npm-check-updates-18.1.0"
+      sources."npm-check-updates-19.1.1"
       sources."nth-check-1.0.2"
       sources."object-inspect-1.13.4"
       sources."object-keys-1.1.1"

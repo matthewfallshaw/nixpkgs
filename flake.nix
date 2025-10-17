@@ -126,6 +126,9 @@
         # Overlay that adds various additional utility functions to `vimUtils`
         vimUtils = import ./overlays/vimUtils.nix;
 
+        # Overlay that adds node2nix generated packages
+        node-packages = import ./overlays/node-packages.nix;
+
         # Overlay that adds some additional Neovim plugins
         vimPlugins =
           final: prev:
