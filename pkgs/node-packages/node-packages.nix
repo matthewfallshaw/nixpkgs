@@ -4,13 +4,13 @@
 
 let
   sources = {
-    "@anthropic-ai/claude-code-2.0.21" = {
+    "@anthropic-ai/claude-code-2.0.25" = {
       name = "_at_anthropic-ai_slash_claude-code";
       packageName = "@anthropic-ai/claude-code";
-      version = "2.0.21";
+      version = "2.0.25";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.21.tgz";
-        sha512 = "02NcxPVjioLjo4/djzIt4aAYkYqnZsHgdzgMexLURYLR9q1+B+OLkKddKwOHL8fas3WnUGV1oyybu73BfHqQ4A==";
+        url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.25.tgz";
+        sha512 = "5gooMB9DCLmzatQ+b2R0/pP2WxUSADcmpF77Qf3fIDpTf30UFreLXl2pe1exJ2kInsfiPK7PvDuJip5MDEv4CQ==";
       };
     };
     "@sindresorhus/is-0.14.0" = {
@@ -3502,7 +3502,7 @@ let
     packageName = "mandatory-name";
     src = ./.;
     dependencies = [
-      sources."@anthropic-ai/claude-code-2.0.21"
+      sources."@anthropic-ai/claude-code-2.0.25"
       sources."@sindresorhus/is-0.14.0"
       sources."@szmarczak/http-timer-1.1.2"
       sources."@tuya/tuya-connector-nodejs-2.1.2"
