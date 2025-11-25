@@ -163,7 +163,6 @@ in
     # Other
     "logitech-camera-settings"
     "logitech-options"
-    "logitech-unifying"
     "onyx"
     "macfuse"
 

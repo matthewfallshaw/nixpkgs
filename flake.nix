@@ -65,7 +65,7 @@
           ++ [ inputs.prefmanager.overlays.prefmanager ]
           ++ singleton (
             final: prev:
-            (optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+            (optionalAttrs (prev.stdenv.hostPlatform.system == "aarch64-darwin") {
               # Sub in x86 version of packages that don't build on Apple Silicon.
               # inherit (final.pkgs-x86) [...];
             })
@@ -115,7 +115,7 @@
         };
         apple-silicon =
           _: prev:
-          optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+          optionalAttrs (prev.stdenv.hostPlatform.system == "aarch64-darwin") {
             # Add access to x86 packages system is running Apple Silicon
             pkgs-x86 = import inputs.nixpkgs-unstable {
               system = "x86_64-darwin";

@@ -112,7 +112,7 @@ in
         coreutils # GNU Core Utilities
         curl
         cmake # cross-Platform Makefile Generator
-        du-dust # fancy version of `du`
+        dust # fancy version of `du`
         eza # fancy version of `ls`
         fd # fancy version of `find`
         findutils # find, locate, updatedb, xargs

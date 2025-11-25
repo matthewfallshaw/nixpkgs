@@ -4,13 +4,13 @@
 
 let
   sources = {
-    "@anthropic-ai/claude-code-2.0.26" = {
+    "@anthropic-ai/claude-code-2.0.53" = {
       name = "_at_anthropic-ai_slash_claude-code";
       packageName = "@anthropic-ai/claude-code";
-      version = "2.0.26";
+      version = "2.0.53";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.26.tgz";
-        sha512 = "bk/sxGdTEbI0N7g+pTwYq5CNUjdAcvIKXvf/x5oRV9q24b42uq3gijrZGycSbWmtYTIjbzFAHeWw5n7Ic43/6w==";
+        url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.0.53.tgz";
+        sha512 = "a2Z0aNPLvWeK+ckVJMATiLOFrNzRJDQQsSKHl04dpvLnM/QSPaFwLvBaJGl1tMogeq6Ahx+7NKCDVb+8d+2FXQ==";
       };
     };
     "@sindresorhus/is-0.14.0" = {
@@ -2191,13 +2191,13 @@ let
         sha512 = "9UZCFRHQdNrfTpGg8+1INIg93B6zE0aXMVFkw1WFwvO4SlZywU6aLg5Of0Ap/PgcbSw4LNxvMWXMeugwMCX0AA==";
       };
     };
-    "npm-check-updates-19.1.1" = {
+    "npm-check-updates-19.1.2" = {
       name = "npm-check-updates";
       packageName = "npm-check-updates";
-      version = "19.1.1";
+      version = "19.1.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-19.1.1.tgz";
-        sha512 = "vy/uNbaK6Xfj/QzM8OXeALZak67E0uHjUlbdT1YGy4bdj0xlBU6AVd+8bscY8vlDpyzL6Y7mxcrX8kzEDeEpNg==";
+        url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-19.1.2.tgz";
+        sha512 = "FNeFCVgPOj0fz89hOpGtxP2rnnRHR7hD2E8qNU8SMWfkyDZXA/xpgjsL3UMLSo3F/K13QvJDnbxPngulNDDo/g==";
       };
     };
     "nth-check-1.0.2" = {
@@ -3502,7 +3502,7 @@ let
     packageName = "mandatory-name";
     src = ./.;
     dependencies = [
-      sources."@anthropic-ai/claude-code-2.0.26"
+      sources."@anthropic-ai/claude-code-2.0.53"
       sources."@sindresorhus/is-0.14.0"
       sources."@szmarczak/http-timer-1.1.2"
       sources."@tuya/tuya-connector-nodejs-2.1.2"
@@ -3772,7 +3772,7 @@ let
       sources."mute-stream-0.0.8"
       sources."node-forge-0.8.5"
       sources."normalize-url-4.5.1"
-      sources."npm-check-updates-19.1.1"
+      sources."npm-check-updates-19.1.2"
       sources."nth-check-1.0.2"
       sources."object-inspect-1.13.4"
       sources."object-keys-1.1.1"

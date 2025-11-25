@@ -9,7 +9,8 @@
       "Bash(nix search:*)",
       "WebFetch(domain:github.com)",
       "WebSearch",
-      "Bash(functions drb)"
+      "Bash(functions drb)",
+      "Bash(darwin-rebuild build:*)"
     ],
     "deny": []
   }

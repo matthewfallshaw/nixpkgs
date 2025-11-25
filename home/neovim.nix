@@ -32,7 +32,11 @@ let
   requireConf = p: "require 'malo.${builtins.replaceStrings [ "." ] [ "-" ] p.pname}'";
 
   # Helper to generate "only-outside-VSCode" specs
-  onlyTerminal = p: { use = p; vscode = false; opt = true; };
+  onlyTerminal = p: {
+    use = p;
+    vscode = false;
+    opt = true;
+  };
 
   completionPlugins = with pkgs.vimPlugins; [
     # dependencies first that do not themselves require 'cmp'
@@ -41,7 +45,11 @@ let
     (onlyTerminal luasnip)
 
     # main engine
-    { use = nvim-cmp; vscode = false; config = requireConf nvim-cmp; }
+    {
+      use = nvim-cmp;
+      vscode = false;
+      config = requireConf nvim-cmp;
+    }
 
     # cmp sources that require the engine
     (onlyTerminal cmp-async-path)
@@ -142,7 +150,8 @@ in
 
   # Put neovim configuration located in this repository into place in a way that edits to the
   # configuration don't require rebuilding the `home-manager` environment to take effect.
-  xdg.configFile."nvim/plugins.vim".source = mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/plugins.vim";
+  xdg.configFile."nvim/plugins.vim".source =
+    mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/plugins.vim";
   xdg.configFile."nvim/lua".source = mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/lua";
   xdg.configFile."nvim/colors".source =
     mkOutOfStoreSymlink "${nixConfigDirectory}/configs/nvim/colors";
@@ -164,152 +173,155 @@ in
   # Add plugins using my `packer` function.
   programs.neovim.plugins =
     with pkgs.vimPlugins;
-    map packer (completionPlugins ++ [
-      # Apperance, interface, UI, etc.
-      {
-        use = bufferline-nvim;
-        vscode = false;
-        deps = [
-          nvim-web-devicons
-          scope-nvim
-        ];
-        config = requireConf bufferline-nvim;
-      }
-      {
-        use = galaxyline-nvim;
-        vscode = false;
-        deps = [ nvim-web-devicons ];
-        config = requireConf galaxyline-nvim;
-      }
-      {
-        use = gitsigns-nvim;
-        vscode = false;
-        config = requireConf gitsigns-nvim;
-      }
-      {
-        use = indent-blankline-nvim;
-        vscode = false;
-        config = requireConf indent-blankline-nvim;
-      }
-      {
-        use = lush-nvim;
-        vscode = true;
-      }
-      {
-        use = noice-nvim;
-        vscode = false;
-        deps = [
-          nui-nvim
-          nvim-notify
-        ];
-        config = requireConf noice-nvim;
-      }
-      {
-        use = telescope-nvim;
-        vscode = false;
-        config = requireConf telescope-nvim;
-        deps = [
-          nvim-web-devicons
-          telescope-file-browser-nvim
-          telescope-fzf-native-nvim
-          telescope_hoogle
-          telescope-symbols-nvim
-          telescope-zoxide
-        ];
-      }
-      {
-        use = toggleterm-nvim;
-        config = requireConf toggleterm-nvim;
-      }
-      {
-        use = zoomwintab-vim;
-        opt = true;
-      }
+    map packer (
+      completionPlugins
+      ++ [
+        # Apperance, interface, UI, etc.
+        {
+          use = bufferline-nvim;
+          vscode = false;
+          deps = [
+            nvim-web-devicons
+            scope-nvim
+          ];
+          config = requireConf bufferline-nvim;
+        }
+        {
+          use = galaxyline-nvim;
+          vscode = false;
+          deps = [ nvim-web-devicons ];
+          config = requireConf galaxyline-nvim;
+        }
+        {
+          use = gitsigns-nvim;
+          vscode = false;
+          config = requireConf gitsigns-nvim;
+        }
+        {
+          use = indent-blankline-nvim;
+          vscode = false;
+          config = requireConf indent-blankline-nvim;
+        }
+        {
+          use = lush-nvim;
+          vscode = true;
+        }
+        {
+          use = noice-nvim;
+          vscode = false;
+          deps = [
+            nui-nvim
+            nvim-notify
+          ];
+          config = requireConf noice-nvim;
+        }
+        {
+          use = telescope-nvim;
+          vscode = false;
+          config = requireConf telescope-nvim;
+          deps = [
+            nvim-web-devicons
+            telescope-file-browser-nvim
+            telescope-fzf-native-nvim
+            telescope_hoogle
+            telescope-symbols-nvim
+            telescope-zoxide
+          ];
+        }
+        {
+          use = toggleterm-nvim;
+          config = requireConf toggleterm-nvim;
+        }
+        {
+          use = zoomwintab-vim;
+          opt = true;
+        }
 
-      # Completions
+        # Completions
 
-      # Language servers, linters, etc.
-      {
-        use = lsp_lines-nvim;
-        vscode = false;
-        config = ''
-          require'lsp_lines'.setup()
-          vim.diagnostic.config({ virtual_lines = { only_current_line = true } })'';
-      }
-      { use = haskell-tools-nvim; }
-      {
-        use = nvim-lspconfig;
-        vscode = false;
-        deps = [
-          neodev-nvim
-          telescope-nvim
-        ];
-        config = requireConf nvim-lspconfig;
-      }
+        # Language servers, linters, etc.
+        {
+          use = lsp_lines-nvim;
+          vscode = false;
+          config = ''
+            require'lsp_lines'.setup()
+            vim.diagnostic.config({ virtual_lines = { only_current_line = true } })'';
+        }
+        { use = haskell-tools-nvim; }
+        {
+          use = nvim-lspconfig;
+          vscode = false;
+          deps = [
+            neodev-nvim
+            telescope-nvim
+          ];
+          config = requireConf nvim-lspconfig;
+        }
 
-      # Language support/utilities
-      {
-        use = nvim-treesitter.withAllGrammars;
-        vscode = false;
-        config = requireConf nvim-treesitter;
-      }
-      {
-        use = vim-haskell-module-name;
-        vscode = true;
-      }
-      {
-        use = vim-polyglot;
-        config = requireConf vim-polyglot;
-      }
-      { use = vim-openscad; }
+        # Language support/utilities
+        {
+          use = nvim-treesitter.withAllGrammars;
+          vscode = false;
+          config = requireConf nvim-treesitter;
+        }
+        {
+          use = vim-haskell-module-name;
+          vscode = true;
+        }
+        {
+          use = vim-polyglot;
+          config = requireConf vim-polyglot;
+        }
+        { use = vim-openscad; }
 
-      # Editor behavior
-      # { use = comment-nvim; config = "require'comment'.setup()"; }
-      {
-        use = editorconfig-vim;
-        setup = "vim.g.EditorConfig_exclude_patterns = { 'fugitive://.*' }";
-      }
-      {
-        use = tabular;
-        vscode = true;
-      }
-      {
-        use = vim-surround;
-        vscode = true;
-      }
-      {
-        use = nvim-lastplace;
-        config = "require'nvim-lastplace'.setup()";
-      }
-      {
-        use = vim-pencil;
-        setup = "vim.g['pencil#wrapModeDefault'] = 'soft'";
-        config = "vim.fn['pencil#init'](); vim.wo.spell = true";
-        ft = [
-          "markdown"
-          "text"
-        ];
-      }
-      { use = lexima-vim; }  # Auto close pairs
-      { use = Recover-vim; }
-      { use = vim-cool; }    # disables search highlighting when you are done searching and re-enables it when you search again
-      { use = vim-repeat; }
-      { use = vim-rooter; }
-      { use = vim-unimpaired; }
+        # Editor behavior
+        # { use = comment-nvim; config = "require'comment'.setup()"; }
+        {
+          use = editorconfig-vim;
+          setup = "vim.g.EditorConfig_exclude_patterns = { 'fugitive://.*' }";
+        }
+        {
+          use = tabular;
+          vscode = true;
+        }
+        {
+          use = vim-surround;
+          vscode = true;
+        }
+        {
+          use = nvim-lastplace;
+          config = "require'nvim-lastplace'.setup()";
+        }
+        {
+          use = vim-pencil;
+          setup = "vim.g['pencil#wrapModeDefault'] = 'soft'";
+          config = "vim.fn['pencil#init'](); vim.wo.spell = true";
+          ft = [
+            "markdown"
+            "text"
+          ];
+        }
+        { use = lexima-vim; } # Auto close pairs
+        { use = Recover-vim; }
+        { use = vim-cool; } # disables search highlighting when you are done searching and re-enables it when you search again
+        { use = vim-repeat; }
+        { use = vim-rooter; }
+        { use = vim-unimpaired; }
 
-      # Misc
-      { use = direnv-vim; }
-      {
-        use = vim-eunuch;
-        vscode = true;
-      }
-      { use = vim-fugitive; }
-      {
-        use = which-key-nvim;
-        opt = true;
-      }
-      { use = bufferize-vim; }  # Send vim command output to a scratch buffer
-    ]);
+        # Misc
+        { use = direnv-vim; }
+        {
+          use = vim-eunuch;
+          vscode = true;
+        }
+        { use = vim-fugitive; }
+        {
+          use = which-key-nvim;
+          opt = true;
+        }
+        { use = bufferize-vim; } # Send vim command output to a scratch buffer
+      ]
+    );
 
   # From personal addon module `../modules/home/programs/neovim/extras.nix`
   programs.neovim.extras.termBufferAutoChangeDir = true;
@@ -346,7 +358,7 @@ in
 
       #Other
       yaml-language-server
-      sumneko-lua-language-server
+      lua-language-server
       vscode-langservers-extracted
       ;
   };

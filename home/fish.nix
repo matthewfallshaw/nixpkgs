@@ -81,6 +81,19 @@ in
       '';
     };
 
+    n2n = {
+      description = "Regenerate node packages from package.json";
+      body = ''
+        set -l original_dir (pwd)
+        cd ${nixConfigDirectory}/pkgs/node-packages
+        and node2nix --nodejs-18 -i package.json
+        and cd ${nixConfigDirectory}
+        set -l exit_status $status
+        cd $original_dir
+        return $exit_status
+      '';
+    };
+
     # TODO: Replace with Ghostty's native command completion notifications when available
     # Custom notification function using escape sequences - avoids done plugin conflicts
     notify-done = {
@@ -169,20 +182,6 @@ in
       '';
       onVariable = "term_background";
     };
-
-    drn = {
-      description = "Regenerate node packages and rebuild darwin configuration";
-      body = ''
-        set -l original_dir (pwd)
-        cd ${nixConfigDirectory}/pkgs/node-packages
-        and node2nix --nodejs-18 -i package.json
-        and cd ${nixConfigDirectory}
-        and drs
-        set -l exit_status $status
-        cd $original_dir
-        return $exit_status
-      '';
-    };
   };
   # }}}
 
@@ -193,7 +192,11 @@ in
     # Nix related
     drb = "darwin-rebuild build --flake ${nixConfigDirectory}";
     drs = "sudo darwin-rebuild switch --flake ${nixConfigDirectory}";
-    flakeup = "nix flake update ${nixConfigDirectory}";
+    drn = "n2n && drs";  # see also `n2n` function above
+    flakeup = "nix flake update --flake ${nixConfigDirectory}";
+    nfu = "nix flake update --flake ${nixConfigDirectory}";
+    ngc = "nix-collect-garbage -d";
+    no = "nix-store --optimise";
     nb = "nix build";
     nd = "nix develop";
     nf = "nix flake";
@@ -203,8 +206,8 @@ in
     # Other
     ":q" = "exit";
     cat = "${bat}/bin/bat";
-    du = "${du-dust}/bin/dust";
-    g = "${gitAndTools.git}/bin/git";
+    du = "${dust}/bin/dust";
+    g = "${git}/bin/git";
     la = "ll -a";
     ll = "ls -l --time-style long-iso --icons";
     ls = "${eza}/bin/eza";
@@ -213,11 +216,6 @@ in
     "hass-cli" = "hass-cli --token $HASS_TOKEN --server $HASS_SERVER";
     sd = "smerge mergetool";
     smergediff = "smerge mergetool";
-
-    # Gitx.app (http://rowanj.github.io/gitx/)
-    gx = "gitx";
-    gxc = "gitx --commit";
-    gxd = "git diff --ignore-space-change | gitx --diff";
   };
 
   programs.fish.shellAbbrs = {
