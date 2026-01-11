@@ -65,31 +65,6 @@ in
   home.sessionVariables.EZA_COLORS = "xx=0"; # https://github.com/eza-community/eza/issues/994
   home.sessionVariables.EZA_ICON_SPACING = 2;
 
-  # SSH
-  # https://nix-community.github.io/home-manager/options.html#opt-programs.ssh.enable
-  # Some options also set in `../darwin/homebrew.nix`.
-  programs.ssh.enable = true;
-  programs.ssh.enableDefaultConfig = false;
-  programs.ssh.matchBlocks = {
-    "*" = {
-      controlPath = "~/.ssh/%C"; # ensures the path is unique but also fixed length
-    };
-    "ha homeassistant.local" = {
-      hostname = "homeassistant.local";
-      user = "root";
-      # identityFile = "~/.ssh/id_rsa";
-      # identityFile = "~/.ssh/id_ed25519";
-    };
-    "xl octopixl.local" = {
-      hostname = "octopixl.local";
-      user = "pi";
-    };
-    "bear bear.local" = {
-      hostname = "bear.local";
-      user = "pi";
-    };
-  };
-
   # Zoxide, a faster way to navigate the filesystem
   # https://github.com/ajeetdsouza/zoxide
   # https://nix-community.github.io/home-manager/options.html#opt-programs.zoxide.enable
@@ -138,7 +113,7 @@ in
         deno
         # dotnet-sdk # Microsoft .NET SDK  TODO
         # ghc # Glasgow Haskell Compiler
-        # git-lfs # git large file store
+        git-lfs # git large file store
         # github-desktop
         gnupg
         go

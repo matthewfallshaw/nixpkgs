@@ -180,6 +180,7 @@
         malo-ghostty = import ./home/ghostty.nix;
         malo-neovim = import ./home/neovim.nix;
         malo-packages = import ./home/packages.nix;
+        ssh = import ./home/ssh.nix;
         malo-starship = import ./home/starship.nix;
         malo-starship-symbols = import ./home/starship-symbols.nix;
 
