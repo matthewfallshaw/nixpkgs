@@ -79,6 +79,7 @@
         username = "matt";
         fullName = "Matt Fallshaw";
         email = "spammers.are.terrible.people@fallshaw.me";
+        githubUsername = "matthewfallshaw";
         nixConfigDirectory = "/Users/matt/.config/nixpkgs";
       };
     in

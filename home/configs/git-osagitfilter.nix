@@ -22,7 +22,7 @@ let
 in
 
 {
-  programs.git.extraConfig.filter.osa = {
+  programs.git.settings.filter.osa = {
     clean = "${osagitfilter}/bin/osagitfilter clean %f";
 		smudge = "${osagitfilter}/bin/osagitfilter smudge %f";
 		required = "true";

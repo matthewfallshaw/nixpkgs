@@ -18,6 +18,10 @@ in
       type = with types; nullOr str;
       default = null;
     };
+    githubUsername = mkOption {
+      type = with types; nullOr str;
+      default = null;
+    };
     nixConfigDirectory = mkOption {
       type = with types; nullOr str;
       default = null;

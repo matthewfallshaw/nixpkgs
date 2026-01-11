@@ -15,18 +15,19 @@
   ];
 
   # Set complete system PATH with desired order
-  environment.systemPath = with lib; 
+  environment.systemPath = with lib;
   let
+    username = config.users.primaryUser.username;
     caskPresent = cask: lib.any (x: x.name == cask) config.homebrew.casks;
     openscadPath = optionals (caskPresent "openscad") [ "/Applications/OpenSCAD.app/Contents/MacOS" ];
   in mkForce ([
     # User paths first (for easy overrides)
-    "/Users/matt/.local/bin"
-    "/Users/matt/bin"
-    
+    "/Users/${username}/.local/bin"
+    "/Users/${username}/bin"
+
     # Nix paths (before Homebrew)
-    "/Users/matt/.nix-profile/bin"
-    "/etc/profiles/per-user/matt/bin" 
+    "/Users/${username}/.nix-profile/bin"
+    "/etc/profiles/per-user/${username}/bin" 
     "/run/current-system/sw/bin"
     "/nix/var/nix/profiles/default/bin"
     

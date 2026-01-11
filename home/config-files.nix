@@ -51,9 +51,9 @@ in
     templates = {
       scm-init = "git";
       params = {
-        author-name = config.programs.git.userName;
-        author-email = config.programs.git.userEmail;
-        github-username = "matthewfallshaw";
+        author-name = config.programs.git.settings.user.name;
+        author-email = config.programs.git.settings.user.email;
+        github-username = config.home.user-info.githubUsername;
       };
     };
     nix.enable = true;

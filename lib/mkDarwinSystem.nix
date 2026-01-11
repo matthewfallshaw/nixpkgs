@@ -4,6 +4,7 @@ inputs:
   username,
   fullName,
   email,
+  githubUsername,
   nixConfigDirectory, # directory on the system where this flake is located
   system ? "aarch64-darwin",
 
@@ -37,6 +38,7 @@ inputs.darwin.lib.darwinSystem {
               username
               fullName
               email
+              githubUsername
               nixConfigDirectory
               ;
           };
