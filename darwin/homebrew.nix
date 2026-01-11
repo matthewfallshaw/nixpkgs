@@ -203,6 +203,7 @@ in
     "mupdf-tools"
     "rtl_433"
     # "rbenv"
+    "gromgit/fuse/sshfs-mac"
     "switchaudio-osx"
     # "terminal-notifier"
     "trash"

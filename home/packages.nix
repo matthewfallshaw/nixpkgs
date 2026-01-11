@@ -142,7 +142,7 @@ in
 
         ## Hardware hacking
         # fritzing
-        esphome # ESPHome command line tools
+        # esphome # ESPHome command line tools
         home-assistant-cli # Command-line tool for Home Assistant
         ;
       inherit (pkgs.nodePackages)

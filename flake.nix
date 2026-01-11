@@ -129,6 +129,9 @@
         # Overlay that adds node2nix generated packages
         node-packages = import ./overlays/node-packages.nix;
 
+        # Fix for google-clasp build failure with newer npm
+        google-clasp-fix = import ./overlays/google-clasp-fix.nix;
+
         # Overlay that adds some additional Neovim plugins
         vimPlugins =
           final: prev:
