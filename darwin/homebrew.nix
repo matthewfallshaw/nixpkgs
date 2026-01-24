@@ -92,7 +92,7 @@ in
     # "autodesk-fusion360"
     "cloudcompare"
     "freecad"
-    #"kicad"
+    "kicad"
     # "meshmixer"
     "openscad"
     "prusaslicer"

@@ -73,10 +73,12 @@ in
             echo "$dir"
             cd "$dir"
           else
-            echo "mktemp directory $dir does not exist"
+            echo "Error: mktemp directory $dir does not exist" >&2
+            return 1
           end
         else
-          echo "mktemp didn't work"
+          echo "Error: mktemp failed" >&2
+          return 1
         end
       '';
     };
@@ -91,6 +93,54 @@ in
         set -l exit_status $status
         cd $original_dir
         return $exit_status
+      '';
+    };
+
+    denv-py = {
+      description = "Bootstrap Python project with venv and direnv";
+      body = ''
+        # Check dependencies
+        if not command -q uv
+          echo "Error: uv not found" >&2
+          return 1
+        end
+        if not command -q direnv
+          echo "Error: direnv not found" >&2
+          return 1
+        end
+
+        # Check if we need to create a .venv
+        if not test -d .venv
+          # Determine if this is/should be a Python project
+          set -l is_python_project 0
+
+          # Check for empty directory (including hidden files)
+          set -l dir_contents (ls -A)
+          if test (count $dir_contents) -eq 0
+            set is_python_project 1
+          # Check for Python project indicators
+          else if test -f pyproject.toml; or test -f requirements.txt; or test -f setup.py; or test -f setup.cfg
+            set is_python_project 1
+          end
+
+          if test $is_python_project -eq 1
+            uv venv; or return
+          else
+            echo "Error: Not a Python project and directory is not empty" >&2
+            return 1
+          end
+        end
+
+        # Now we should have a .venv, handle .envrc
+        if test -f .envrc
+          if not grep -q "source .venv/bin/activate" .envrc
+            echo "Error: .envrc exists but doesn't activate .venv" >&2
+            return 1
+          end
+        else
+          echo "source .venv/bin/activate" > .envrc; or return
+          direnv allow; or return
+        end
       '';
     };
 

@@ -277,6 +277,11 @@ in
         # Editor behavior
         # { use = comment-nvim; config = "require'comment'.setup()"; }
         {
+          use = vscode-neovim-fix-word-wrap;
+          vscode = true;
+          config = "require('vscode-neovim-fix-word-wrap').setup()";
+        }
+        {
           use = editorconfig-vim;
           setup = "vim.g.EditorConfig_exclude_patterns = { 'fugitive://.*' }";
         }

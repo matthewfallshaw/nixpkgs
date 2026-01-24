@@ -4,17 +4,17 @@
   inputs = {
     # Package sets
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     # Environment/system management
     darwin = {
-      url = "github:nix-darwin/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
     };
     _1password-shell-plugins = {
       url = "github:1Password/shell-plugins";
@@ -34,6 +34,12 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
       inputs.flake-compat.follows = "flake-compat";
       inputs.flake-utils.follows = "flake-utils";
+    };
+
+    # Vim plugins
+    vscode-neovim-fix-word-wrap = {
+      url = "github:YouSame2/vscode-neovim-fix-word-wrap";
+      flake = false;
     };
   };
 
@@ -148,6 +154,9 @@
               ]
               // {
                 # Other Vim plugins
+                vscode-neovim-fix-word-wrap = (vimUtils.buildVimPluginFromFlakeInput inputs "vscode-neovim-fix-word-wrap").overrideAttrs {
+                  doCheck = false;
+                };
               }
             );
           };

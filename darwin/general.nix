@@ -35,7 +35,7 @@
     "/opt/homebrew/bin"
     "/opt/homebrew/sbin"
   ] ++ openscadPath ++ [
-    
+
     # System paths
     "/usr/local/bin"
     "/usr/bin"
@@ -43,6 +43,9 @@
     "/usr/sbin"
     "/sbin"
   ]);
+
+  # Make PATH available to GUI applications launched by launchd
+  launchd.user.envVariables.PATH = config.environment.systemPath;
 
   # Fonts
   fonts.packages = with pkgs; [

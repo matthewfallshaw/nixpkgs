@@ -4,13 +4,13 @@
 
 let
   sources = {
-    "@anthropic-ai/claude-code-2.1.4" = {
+    "@anthropic-ai/claude-code-2.1.19" = {
       name = "_at_anthropic-ai_slash_claude-code";
       packageName = "@anthropic-ai/claude-code";
-      version = "2.1.4";
+      version = "2.1.19";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.4.tgz";
-        sha512 = "6kkQe7t4RbyYmX0us8iWW6OTo59k1mHI7UycOIsGuB17rq0VVKof0QWIFDIsTYd9zFP+eTM5TosAajfyycN4iA==";
+        url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.19.tgz";
+        sha512 = "/bUlQuX/6nKr1Zqfi/9Q6xf7WonUBk72ZfKKENU4WVrIFWqTv/0JJsoW/dHol9QBNHvyfKIeBbYu4avHNRAnuQ==";
       };
     };
     "@sindresorhus/is-0.14.0" = {
@@ -1903,13 +1903,13 @@ let
         sha512 = "7vp2Acd2+Kz4XkzxGxaB1FWOi8KjWIWsgdfD5MCb86DWvlLqhRPM+d6Pro3iNEL5VT9mstz5hKAlcd+QR6H3aA==";
       };
     };
-    "lodash-4.17.21" = {
+    "lodash-4.17.23" = {
       name = "lodash";
       packageName = "lodash";
-      version = "4.17.21";
+      version = "4.17.23";
       src = fetchurl {
-        url = "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz";
-        sha512 = "v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==";
+        url = "https://registry.npmjs.org/lodash/-/lodash-4.17.23.tgz";
+        sha512 = "LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==";
       };
     };
     "lodash.assignin-4.2.0" = {
@@ -3415,13 +3415,13 @@ let
         sha512 = "K4jVyjnBdgvc86Y6BkaLZEN933SwYOuBFkdmBu9ZfkcAbdVbpITnDmjvZ/aQjRXQrv5EPkTnD1s39GiiqbngCw==";
       };
     };
-    "which-typed-array-1.1.19" = {
+    "which-typed-array-1.1.20" = {
       name = "which-typed-array";
       packageName = "which-typed-array";
-      version = "1.1.19";
+      version = "1.1.20";
       src = fetchurl {
-        url = "https://registry.npmjs.org/which-typed-array/-/which-typed-array-1.1.19.tgz";
-        sha512 = "rEvr90Bck4WZt9HHFC4DJMsjvu7x+r6bImz0/BrbWb7A2djJ8hnZMrWnHo9F8ssv0OMErasDhftrfROTyqSDrw==";
+        url = "https://registry.npmjs.org/which-typed-array/-/which-typed-array-1.1.20.tgz";
+        sha512 = "LYfpUkmqwl0h9A2HL09Mms427Q1RZWuOHsukfVcKRq9q95iQxdw0ix1JQrqbcDR9PH1QDwf5Qo8OZb5lksZ8Xg==";
       };
     };
     "widest-line-3.1.0" = {
@@ -3493,7 +3493,7 @@ let
     packageName = "mandatory-name";
     src = ./.;
     dependencies = [
-      sources."@anthropic-ai/claude-code-2.1.4"
+      sources."@anthropic-ai/claude-code-2.1.19"
       sources."@sindresorhus/is-0.14.0"
       sources."@szmarczak/http-timer-1.1.2"
       sources."@tuya/tuya-connector-nodejs-2.1.2"
@@ -3723,7 +3723,7 @@ let
       sources."kind-of-3.2.2"
       sources."latest-version-5.1.0"
       sources."lazy-cache-1.0.4"
-      sources."lodash-4.17.21"
+      sources."lodash-4.17.23"
       sources."lodash.assignin-4.2.0"
       sources."lodash.bind-4.2.1"
       sources."lodash.defaults-4.2.0"
@@ -3963,7 +3963,7 @@ let
       sources."which-boxed-primitive-1.1.1"
       sources."which-builtin-type-1.2.1"
       sources."which-collection-1.0.2"
-      sources."which-typed-array-1.1.19"
+      sources."which-typed-array-1.1.20"
       sources."widest-line-3.1.0"
       sources."word-regex-0.1.2"
       sources."wordwrap-0.0.3"
