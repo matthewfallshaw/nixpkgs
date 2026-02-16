@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@anthropic-ai/claude-code": ">=2.0.21",
     "@tuyapi/cli": ">=1.18.0",
     "clipdown": ">=1.0.0",
     "npm-check-updates": ">=16.14.0",

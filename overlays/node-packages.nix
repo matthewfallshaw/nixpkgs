@@ -15,7 +15,6 @@ let
   customNodePackages =
     prev.lib.genAttrs
       [
-        "claude-code"
         "npm-check-updates"
         "clipdown"
         "purescript-language-server"
@@ -26,7 +25,6 @@ let
           # Map package names to binary names (if different)
           binName =
             {
-              "claude-code" = "claude";
               "npm-check-updates" = "ncu";
             }
             .${name} or name;

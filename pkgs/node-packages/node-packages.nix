@@ -4,15 +4,6 @@
 
 let
   sources = {
-    "@anthropic-ai/claude-code-2.1.19" = {
-      name = "_at_anthropic-ai_slash_claude-code";
-      packageName = "@anthropic-ai/claude-code";
-      version = "2.1.19";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-2.1.19.tgz";
-        sha512 = "/bUlQuX/6nKr1Zqfi/9Q6xf7WonUBk72ZfKKENU4WVrIFWqTv/0JJsoW/dHol9QBNHvyfKIeBbYu4avHNRAnuQ==";
-      };
-    };
     "@sindresorhus/is-0.14.0" = {
       name = "_at_sindresorhus_slash_is";
       packageName = "@sindresorhus/is";
@@ -2182,13 +2173,13 @@ let
         sha512 = "9UZCFRHQdNrfTpGg8+1INIg93B6zE0aXMVFkw1WFwvO4SlZywU6aLg5Of0Ap/PgcbSw4LNxvMWXMeugwMCX0AA==";
       };
     };
-    "npm-check-updates-19.3.1" = {
+    "npm-check-updates-19.3.2" = {
       name = "npm-check-updates";
       packageName = "npm-check-updates";
-      version = "19.3.1";
+      version = "19.3.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-19.3.1.tgz";
-        sha512 = "v92fHH8fmf9VVmQwwL5JWpX8GDEe8BDyrz4w3GF6D6JBUZKpQNcTfBBgxVkCcAPzVUjCHSZEXYmZAAKfLTsDBA==";
+        url = "https://registry.npmjs.org/npm-check-updates/-/npm-check-updates-19.3.2.tgz";
+        sha512 = "9rr3z7znFjCSuaFxHGTFR2ZBOvLWaJcpLKmIquoTbDBNrwAGiHhv4MZyty6EJ9Xo/aMn35+2ISPSMgWIXx5Xkg==";
       };
     };
     "nth-check-1.0.2" = {
@@ -2479,13 +2470,13 @@ let
         sha512 = "EXtzRZmC+YGmGlDFbXKxQiMZNwCLEO6BANKXG4iCtSIM0yqc/pappSx3RIKr4r0uh5JsBckOXeKrB3Iz7mdQpQ==";
       };
     };
-    "qs-6.14.1" = {
+    "qs-6.15.0" = {
       name = "qs";
       packageName = "qs";
-      version = "6.14.1";
+      version = "6.15.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/qs/-/qs-6.14.1.tgz";
-        sha512 = "4EK3+xJl8Ts67nLYNwqw/dsFVnCf+qR7RgXSK9jEEm9unao3njwMDdmsdvoKBKHzxd7tCYz5e5M+SnMjdtXGQQ==";
+        url = "https://registry.npmjs.org/qs/-/qs-6.15.0.tgz";
+        sha512 = "mAZTtNCeetKMH+pSjrb76NAM8V9a05I9aBZOHztWy/UqcJdQYNsf59vrRKWnojAT9Y+GbIvoTBC++CPHqpDBhQ==";
       };
     };
     "range-parser-1.2.1" = {
@@ -3493,7 +3484,6 @@ let
     packageName = "mandatory-name";
     src = ./.;
     dependencies = [
-      sources."@anthropic-ai/claude-code-2.1.19"
       sources."@sindresorhus/is-0.14.0"
       sources."@szmarczak/http-timer-1.1.2"
       sources."@tuya/tuya-connector-nodejs-2.1.2"
@@ -3760,7 +3750,7 @@ let
       sources."mute-stream-0.0.8"
       sources."node-forge-0.8.5"
       sources."normalize-url-4.5.1"
-      sources."npm-check-updates-19.3.1"
+      sources."npm-check-updates-19.3.2"
       sources."nth-check-1.0.2"
       sources."object-inspect-1.13.4"
       sources."object-keys-1.1.1"
@@ -3808,7 +3798,7 @@ let
       sources."pupa-2.1.1"
       sources."purescript-language-server-0.18.5"
       sources."qrcode-terminal-0.12.0"
-      sources."qs-6.14.1"
+      sources."qs-6.15.0"
       sources."range-parser-1.2.1"
       sources."rc-1.2.8"
       sources."readable-stream-3.6.2"

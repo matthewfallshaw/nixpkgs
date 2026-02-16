@@ -146,7 +146,6 @@ in
         home-assistant-cli # Command-line tool for Home Assistant
         ;
       inherit (pkgs.nodePackages)
-        claude-code
         clipdown
         npm-check-updates
         purescript-language-server
@@ -178,7 +177,6 @@ in
         cyan
         tl
         ;
-      # inherit (pkgs.pkgs-master) claude-code; # Claude AI code assistant
       inherit (pkgs.haskellPackages)
         cabal-install
         hlint

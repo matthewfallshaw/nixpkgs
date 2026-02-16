@@ -66,7 +66,7 @@ This is a comprehensive nix-darwin + home-manager configuration with the followi
 - `home/`: home-manager user configuration modules
 - `modules/`: Shared modules for both darwin and home-manager
 - `overlays/`: Custom nixpkgs overlays
-- `pkgs/`: Custom package definitions (node-packages, claude-code)
+- `pkgs/`: Custom package definitions (node-packages)
 
 ### Registry Integration
 
