@@ -261,6 +261,39 @@
           }
         );
 
+
+        # My Apple Silicon macOS laptop config (M5 Max)
+        notnux7 = makeOverridable self.lib.mkDarwinSystem (
+          primaryUserDefaults
+          // {
+            modules =
+              attrValues self.darwinModules
+              ++ singleton {
+                nixpkgs = nixpkgsDefaults;
+                networking.computerName = "notnux7";
+                networking.hostName = "notnux7";
+                networking.knownNetworkServices = [
+                  "Wi-Fi"
+                  "Thunderbolt Bridge"
+                ];
+                nix.registry.my.flake = inputs.self;
+              };
+            extraModules = singleton {
+              nix.linux-builder = {
+                enable = true;
+                ephemeral = true;
+                maxJobs = 8;
+                config.virtualisation = {
+                  cores = 8;
+                  darwin-builder.memorySize = 16 * 1024;
+                };
+              };
+            };
+            inherit homeStateVersion;
+            homeModules = attrValues self.homeManagerModules;
+          }
+        );
+
         # Config with small modifications needed/desired for CI with GitHub workflow
         githubCI = self.darwinConfigurations.notnux6.override {
           username = "runner";
