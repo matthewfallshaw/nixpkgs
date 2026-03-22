@@ -24,7 +24,7 @@
       hostname = "bear.local";
       user = "pi";
     };
-    "lead leadcnc leadcnc.local fnc fluidnc" = {
+    "lead leadcnc leadcnc.local" = {
       hostname = "leadcnc.local";
       user = "pi";
     };
