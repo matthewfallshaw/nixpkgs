@@ -28,25 +28,23 @@ in
   '';
 
   homebrew.enable = true;
-  # homebrew.enable = false;
   homebrew.onActivation.autoUpdate = true;
   homebrew.onActivation.cleanup = "zap";
   homebrew.global.brewfile = true;
 
   homebrew.taps = [
-    # "homebrew/cask"
-    # "homebrew/core"
-    # "homebrew/services"
     "nrlquaker/createzap"
+    "vjeantet/tap" # for alerter
+    "sikarugir-app/sikarugir" # for sikarugir cask (zap cleanup tries to untap otherwise)
   ];
 
-  # Prefer installing application from the Mac App Store
+  # Apps from the Mac App Store
   homebrew.masApps = {
-    # "1Password" = 1333542190;
     "Accelerate for Safari" = 1459809092;
     Calca = 635758264;
     "Contacts Sync For Google Gmail" = 451691288;
     # Evernote = 406056744;
+    # FIXME: Evernote is installed. Where did it come from if not here?
     Gapplin = 768053424;
     # GarageBand = 682658836;
     "Icon Slate" = 439697913;
@@ -57,7 +55,7 @@ in
     Numbers = 409203825;
     Pages = 409201541;
     "Pixelmator Pro" = 1289583905;
-    # Slack = 803453959;
+    # Slack = 803453959; # provided by Bellroy
     Vimari = 1480933944; # Safari Vimium equiv
     "WiFi Explorer" = 494803304;
     "The Unarchiver" = 425424353;
@@ -72,10 +70,7 @@ in
     "db-browser-for-sqlite"
     "dbeaver-community"
     "docker-desktop"
-    # "dotnet"
-    "ghostty"
-    # "github"            # GitHub Desktop
-    # "iterm2"
+    "iterm2"
     "macvim-app" # deletion candidate
     "neovide-app"
     # "paraview"
@@ -89,16 +84,16 @@ in
     "electrum"
 
     # Hardware hacking
-    # "autodesk-fusion360"
+    # "autodesk-fusion360"  # manual install from insider program https://feedback.autodesk.com/project/home.html?cap=326ccb1f-9653-409c-8884-c57523f9e054&display=personal
     "cloudcompare"
     "freecad"
     "kicad"
-    # "meshmixer"
+    "meshlab"
+    # "meshmixer"          # no longer in Homebrew; Autodesk discontinued it
     "openscad"
     "prusaslicer"
     "raspberry-pi-imager"
     # "superslicer"
-    # "ultimaker-cura"    # deletion candidate
 
     # Services from Homebrew
     "markdown-service-tools"
@@ -109,7 +104,6 @@ in
     "qlmarkdown"
     "qlstephen"
     "quicklook-csv"
-    "quicklook-json"
 
     # Other GUI apps
     "1password"
@@ -134,16 +128,16 @@ in
     "keycue"
     "launchcontrol"
     "nvalt"
+    "obsidian"
+    "private-internet-access"
     "quicksilver"
+    "setapp"
     "signal"
     "shortcutdetective"
-    "skype"
     "spotify"
     "steam"
     "suspicious-package"
-    # "tableau-reader"
     "todoist-app"
-    # "toggl-track"
     "tor-browser"
     "transmission"
     "typinator"
@@ -151,10 +145,8 @@ in
     "unison-app"
     "viscosity"
     "vlc"
-    # "webcatalog"
 
-    # "gcenx/wine/wineskin"
-    "Kegworks-App/kegworks/kegworks" # successor to wineskin ?
+    "Sikarugir-App/sikarugir/sikarugir" # successor to wineskin → kegworks → sikarugir
 
     "xquartz"
     "yed"
@@ -167,6 +159,8 @@ in
     "macfuse"
 
     "microsoft-edge"
+    "microsoft-excel"
+    "microsoft-word"
   ];
 
   # Configuration related to casks
@@ -190,24 +184,16 @@ in
         };
       };
 
-  # Hack: https://github.com/ghostty-org/ghostty/discussions/2832
-  environment.variables.XDG_DATA_DIRS = mkIf (caskPresent "ghostty") [
-    "$GHOSTTY_SHELL_INTEGRATION_XDG_DIR"
-  ];
-
   # For cli packages that aren't currently available for macOS in `nixpkgs`. Packages should be
   # installed in `../home/packages.nix` whenever possible.
   homebrew.brews = [
-    "alerter"
-    # "ext4fuse"
+    "mas" # nix-darwin puts pkgs.mas 2.2.2 on PATH but brew bundle needs `mas get` (3.x+)
+    "vjeantet/tap/alerter"
     "mupdf-tools"
     "rtl_433"
-    # "rbenv"
-    "gromgit/fuse/sshfs-mac"
     "switchaudio-osx"
-    # "terminal-notifier"
     "trash"
   ];
 
-  # OpenSCAD path is now managed in darwin/general.nix with conditional logic
+  # OpenSCAD path is now managed in darwin/general.nix
 }

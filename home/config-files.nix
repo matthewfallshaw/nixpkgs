@@ -7,6 +7,8 @@ let
     dataHome
     stateHome
     ;
+  inherit (config.home.user-info) nixConfigDirectory;
+  inherit (config.lib.file) mkOutOfStoreSymlink;
 in
 
 {
@@ -66,4 +68,16 @@ in
   xdg.configFile."wget/wgetrc".text = ''
     hsts-file = ${dataHome}/wget/hsts
   '';
+
+  # Karabiner-Elements
+  # Config is edited in-place by Karabiner, so use an out-of-store symlink
+  # so changes persist without a nix rebuild.
+  xdg.configFile."karabiner".source =
+    mkOutOfStoreSymlink "${nixConfigDirectory}/configs/karabiner";
+
+  # Custom scripts
+  home.file.".local/bin/adopt-config" = {
+    source = ../scripts/adopt-config;
+    executable = true;
+  };
 }

@@ -2,6 +2,10 @@ pkgs/ruby-gems/vendor
 pkgs/ruby-gems/.bundle
 pkgs/python-packages/requirements_frozen.txt
 
+__pycache__/
+.setup-progress
+.setup-old-machine
+
 private.nix
 private.nix
 

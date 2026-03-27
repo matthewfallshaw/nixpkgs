@@ -2,8 +2,39 @@
 
 Modified from @malob's [config](https://github.com/malob/nixpkgs)
 
+## Day-to-day usage
 
-# ~My~ +Malob's+ Nix Configs
+### Rebuilding
+
+- Build and test: `darwin-rebuild build --flake .` (alias: `drb`)
+- Apply: `darwin-rebuild switch --flake .` (alias: `drs`)
+- Update flake inputs: `nix flake update` (alias: `flakeup`)
+
+### Putting app config under management
+
+Use `adopt-config` to move an app's config to iCloud (`~/Documents/system/`) and replace it with a symlink:
+
+```
+adopt-config ~/Library/Application\ Support/Cursor/User
+adopt-config ~/.config/some-app
+adopt-config ~/.claude
+```
+
+This ensures config syncs across machines via iCloud. The script prints a `Symlink()` line to paste into `setup/steps.py` so the symlink is recreated on future machines.
+
+Source: `scripts/adopt-config` (installed to `~/.local/bin/` by nix).
+
+Locations that **won't work** with symlinks (the script will refuse these):
+- `~/Library/Preferences/*.plist` — `cfprefsd` caches these; use `defaults` or `darwin/defaults.nix`
+- `~/Library/Containers/` — sandboxed apps break with symlinks
+
+### New machine setup
+
+See `TODO.md` for the full migration workflow.
+
+---
+
+# +Malob's+ Nix Configs (original README below)
 
 ![Build Nix envs](https://github.com/malob/nixpkgs/workflows/Build%20Nix%20envs/badge.svg)
 

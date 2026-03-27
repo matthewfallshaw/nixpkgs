@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+# Move a config file or directory under iCloud management and replace it with a symlink.
+#
+# Usage: adopt-config <path>
+#
+# Example:
+#   adopt-config ~/Library/Application\ Support/Cursor
+#   adopt-config ~/.config/some-app
+#   adopt-config ~/.claude
+#
+# The path is moved to ~/Documents/system/<relative-path> and a symlink is
+# created in its place.  Prints a Symlink() line for pasting into steps.py.
+set -euo pipefail
+
+CLOUD_BASE="${HOME}/Documents/system"
+
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+bold='\033[1m'
+reset='\033[0m'
+
+info()  { echo -e "${bold}${green}==>${reset} ${bold}$*${reset}"; }
+warn()  { echo -e "${bold}${yellow}==> WARNING:${reset} $*"; }
+error() { echo -e "${bold}${red}==> ERROR:${reset} $*" >&2; }
+die()   { error "$@"; exit 1; }
+
+usage() {
+    echo "Usage: adopt-config <path>"
+    echo
+    echo "Moves a config file or directory under iCloud management"
+    echo "(~/Documents/system/) and replaces it with a symlink."
+    exit 1
+}
+
+# --- Argument handling ------------------------------------------------------
+
+[[ $# -eq 1 ]] || usage
+[[ "$1" != "-h" && "$1" != "--help" ]] || usage
+
+# Resolve the source path
+src="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
+
+# Validate: must exist
+[[ -e "$src" ]] || die "Path does not exist: $src"
+
+# Validate: must be under $HOME
+case "$src" in
+    "${HOME}/"*) ;;
+    *) die "Path must be under your home directory: $src" ;;
+esac
+
+# Validate: refuse paths that don't work with symlinks
+rel="${src#"${HOME}/"}"
+case "$rel" in
+    Library/Preferences/*)
+        die "~/Library/Preferences/ is managed by cfprefsd and won't follow symlinks." \
+            "Use 'defaults export/import' or nix-darwin defaults.write instead."
+        ;;
+    Library/Containers/*)
+        die "~/Library/Containers/ is sandboxed — symlinks will break the app."
+        ;;
+esac
+
+# Validate: already a symlink
+if [[ -L "$src" ]]; then
+    die "Already a symlink: $src -> $(readlink "$src")"
+fi
+
+# --- Compute destination ----------------------------------------------------
+
+dest="${CLOUD_BASE}/${rel}"
+
+# --- Dry run ----------------------------------------------------------------
+
+echo
+info "adopt-config dry run"
+echo
+echo "  Source:      ~/${rel}"
+echo "  Destination: ~/Documents/system/${rel}"
+echo
+echo "  Will:"
+echo "    1. Create parent directories under ~/Documents/system/"
+echo "    2. Move ~/${rel} -> ~/Documents/system/${rel}"
+echo "    3. Symlink ~/${rel} -> ~/Documents/system/${rel}"
+echo
+
+if [[ -e "$dest" ]]; then
+    warn "Destination already exists: $dest"
+    warn "This will be a merge/overwrite situation — aborting for safety."
+    warn "Resolve manually, then re-run."
+    exit 1
+fi
+
+# --- Confirm ----------------------------------------------------------------
+
+read -p "Proceed? [y/N] " -n 1 -r
+echo
+[[ $REPLY =~ ^[Yy]$ ]] || { info "Aborted."; exit 0; }
+
+# --- Execute ----------------------------------------------------------------
+
+mkdir -p "$(dirname "$dest")"
+mv "$src" "$dest"
+ln -s "$dest" "$src"
+
+echo
+info "Done."
+echo
+echo "  ~/${rel} -> ~/Documents/system/${rel}"
+echo
+
+# Tilde-ify for steps.py
+tilde_link="~/${rel}"
+tilde_target="~/Documents/system/${rel}"
+
+echo "For steps.py:"
+echo
+echo "        symlink(\"${tilde_link}\","
+echo "                \"${tilde_target}\"),"
+echo

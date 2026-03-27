@@ -52,6 +52,7 @@ inputs.darwin.lib.darwinSystem {
           users.users.${username}.home = "/Users/${username}";
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.backupFileExtension = "before-nix-darwin";
           home-manager.users.${username} = {
             imports = homeModules ++ extraHomeModules;
             home.stateVersion = homeStateVersion;

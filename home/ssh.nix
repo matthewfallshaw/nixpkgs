@@ -10,11 +10,21 @@
     "*" = {
       controlPath = "~/.ssh/%C"; # ensures the path is unique but also fixed length
     };
+    "notnux6 notnux6.local" = {
+      hostname = "notnux6.local";
+      user = "matt";
+      identityFile = "~/.ssh/id_ed25519.pub";
+      extraOptions.IdentitiesOnly = "yes";
+    };
+    "notnux7 notnux7.local" = {
+      hostname = "notnux7.local";
+      user = "matt";
+      identityFile = "~/.ssh/id_ed25519.pub";
+      extraOptions.IdentitiesOnly = "yes";
+    };
     "ha homeassistant homeassistant.local" = {
       hostname = "homeassistant.local";
       user = "root";
-      # identityFile = "~/.ssh/id_rsa";
-      # identityFile = "~/.ssh/id_ed25519";
     };
     "xl octopixl octopixl.local" = {
       hostname = "octopixl.local";

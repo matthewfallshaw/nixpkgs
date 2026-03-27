@@ -43,8 +43,13 @@
 
   # Trackpad
   system.defaults.trackpad = {
-    Clicking = false;
+    Clicking = true;
     TrackpadRightClick = true;
+  };
+
+  # iTerm2
+  system.defaults.CustomUserPreferences."com.googlecode.iterm2" = {
+    AlternateMouseScroll = true; # mouse wheel scrolls in less, man, etc.
   };
 
   # Finder

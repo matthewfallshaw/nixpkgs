@@ -7,7 +7,7 @@ let
       owner = "doekman";
       repo = "osagitfilter";
       rev = "5fa2368";
-      sha256 = "S4B7cLzFTAkeyzaByYTIFMlXvE5mgFtSo0YPr8cdu+s=";
+      sha256 = "DZ503dgjoePmfuNw8ijE2/4OEXHQl3Xk3aeN1H96dyY=";
     };
     installPhase = ''
       mkdir -p $out/bin

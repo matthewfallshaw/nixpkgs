@@ -14,11 +14,46 @@
     push.autoSetupRemote = true;
     user.email = "5561+${config.home.user-info.githubUsername}@users.noreply.github.com";
     user.name = config.home.user-info.fullName;
+
+    # Merge/diff tools
+    merge.tool = "smerge";
+    diff.tool = "smerge";
+    mergetool.smerge.cmd = ''smerge mergetool "$BASE" "$LOCAL" "$REMOTE" "$MERGED" -o "$MERGED"'';
+    mergetool.smerge.trustExitCode = true;
+    difftool.smerge.cmd = ''smerge mergetool "$BASE" "$LOCAL" "$REMOTE"'';
+    mergetool.keepBackup = false;
+
+    # macOS credential helper
+    credential.helper = "osxkeychain";
+
+    # LFS
+    filter.lfs.clean = "git-lfs clean -- %f";
+    filter.lfs.smudge = "git-lfs smudge -- %f";
+    filter.lfs.process = "git-lfs filter-process";
+    filter.lfs.required = true;
+
+    # Whitespace
+    core.whitespace = "fix";
+    apply.whitespace = "nowarn";
+
+    # Submodules
+    status.submodulesummary = true;
   };
 
   programs.git.ignores = [
     "*~"
+    ".*.sw?"
     ".DS_Store"
+    "._*"
+    ".AppleDouble"
+    ".LSOverride"
+    ".Spotlight-V100"
+    ".TemporaryItems"
+    ".Trashes"
+    ".VolumeIcon.icns"
+    ".com.apple.timemachine.donotpresent"
+    ".fseventsd"
+    ".DocumentRevisions-V100"
   ];
 
   programs.git.attributes = [ "*.scpt filter=osa" ];

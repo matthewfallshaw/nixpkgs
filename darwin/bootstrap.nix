@@ -57,6 +57,9 @@
   # Install and setup ZSH to work with nix(-darwin) as well
   programs.zsh.enable = true;
 
+  # Lix installer creates nixbld group with GID 350 (nix-darwin default is 30000)
+  ids.gids.nixbld = 350;
+
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
